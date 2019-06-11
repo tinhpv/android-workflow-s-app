@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.login.LoginActivity"
+    android:background="@drawable/gradient">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="45dp"
+        android:text="@string/app_brand"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/avenir_black"
+        android:gravity="center"
+        android:layout_marginTop="80dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_description_login"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:lines="2"
+        android:fontFamily="@font/avenir_light"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center|bottom">
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/avenir_light"
+            android:text="@string/login_button"
+            android:textColor="#30414D"
+            android:textSize="20dp"
+            android:textAllCaps="false"
+            android:drawableLeft="@mipmap/google_icon"
+            android:drawableRight="@mipmap/arrow_right"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/button_radius"
+            android:onClick="handleGoogleSignInTapped"/>
+    </LinearLayout>
+
+</LinearLayout>
