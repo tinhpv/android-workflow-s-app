@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.ui.home.HomeActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(GoogleSignInAccount account) {
         if (null != account) {
             Log.d(TAG, "Sign-In successfully!");
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
         } else {
             Log.d(TAG, "Sign-In fail!");
         } // end if

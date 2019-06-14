@@ -2,5 +2,10 @@
     <string name="app_name">Workflow_S</string>
     <string name="app_brand">WORKFLOW S!</string>
     <string name="app_description_login">lightweight but powerful way to manage the workflow.</string>
+
+    <!--button title-->
     <string name="login_button">Login with Google</string>
+    <string name="button_template">Template</string>
+    <string name="button_checklist">Checklist</string>
+    <string name="button_activity">Activity</string>
 </resources>
