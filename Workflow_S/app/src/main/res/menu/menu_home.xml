@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.HomeActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:title="Search"
+        android:orderInCategory="1"
+        android:icon="@mipmap/search_icon"
+        app:showAsAction="ifRoom">
+    </item>
+
+    <item
+        android:id="@+id/action_notif"
+        android:title="Notification"
+        android:orderInCategory="1"
+        android:icon="@mipmap/notif_icon"
+        app:showAsAction="ifRoom">
+    </item>
+
+</menu>
