@@ -8,4 +8,9 @@
     <string name="button_template">Template</string>
     <string name="button_checklist">Checklist</string>
     <string name="button_activity">Activity</string>
+
+    <!--flag for recycler view-->
+    <string name="checklist_home_rv">CHECKLIST_RECYCLER</string>
+    <string name="task_home_rv">TASK_RECYCLER</string>
+
 </resources>

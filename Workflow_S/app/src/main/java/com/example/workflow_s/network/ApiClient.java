@@ -11,8 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
-
 public class ApiClient {
+
     public static final String BASE_URL = "https://workflow3i.azurewebsites.net/api/";
     private static Retrofit retrofit = null;
 

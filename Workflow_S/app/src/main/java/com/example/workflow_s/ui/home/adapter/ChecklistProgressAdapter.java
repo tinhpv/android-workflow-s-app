@@ -57,14 +57,14 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     @Override
     public void onBindViewHolder(@NonNull ChecklistProgressViewHolder checklistProgressViewHolder, int i) {
         // TODO - MODIFY VIEWHOLDER'S CONTENT
-        checklistProgressViewHolder.mTextView.setText("ABC_XYZ");
+        checklistProgressViewHolder.mTextView.setText(mChecklists.get(i).getName());
     }
 
     @Override
     public int getItemCount() {
         // TODO - MODIFY SIZE LIST
-        int numberOfItems = mChecklists.size();
+        //int numberOfItems = mChecklists.size();
         //return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
-        return 3;
+        return 4;
     }
 }

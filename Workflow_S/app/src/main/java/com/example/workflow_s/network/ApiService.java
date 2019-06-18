@@ -13,7 +13,9 @@ import retrofit2.http.GET;
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
-public interface ApiInterface {
+public interface ApiService {
     @GET("Checklists")
     Call<List<Checklist>> getAllChecklists();
+
+
 }

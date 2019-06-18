@@ -19,4 +19,10 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!--navigation drawer style-->
+    <style name="NavigationViewItem">
+        <item name="android:fontFamily">@font/avenir_heavy</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
 </resources>
