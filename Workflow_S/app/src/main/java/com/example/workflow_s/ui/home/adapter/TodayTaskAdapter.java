@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 
 import org.w3c.dom.Text;
 
@@ -28,7 +29,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
     private final int MAX_ITEM_NUMBER = 5;
 
     // DataSource for RecyclerView
-    private List<Checklist> mChecklists;
+    private List<Task> mTasks;
 
 
     // VIEWHOLDER
@@ -42,8 +43,8 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
         }
     }
 
-    public TodayTaskAdapter(List<Checklist> checklists) {
-        mChecklists = checklists;
+    public TodayTaskAdapter(List<Task> tasks) {
+        mTasks = tasks;
     }
 
     @NonNull

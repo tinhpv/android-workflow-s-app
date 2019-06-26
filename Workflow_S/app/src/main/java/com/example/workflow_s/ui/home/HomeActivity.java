@@ -1,12 +1,9 @@
 package com.example.workflow_s.ui.home;
 
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,11 +17,12 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.workflow_s.utils.Constant;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +34,12 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView checklistProgressRecyclerView, todayTaskRecyclerView;
     private RecyclerView.Adapter mChecklistProgressAdapter, mTodayTaskAdapter;
     private RecyclerView.LayoutManager checklistProgressLayoutManager, todayTaskLayoutManager;
-    private List<Checklist> mChecklists, mTasks;
+    private List<Task> mTasks;
 
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
     private String[] mNavigationDrawerItemTitles;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-
     private HomeContract.HomePresenter mPresenter;
 
 
@@ -50,7 +47,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        makeCollapsingToolbarLookGood();
+        setupToolbar();
         makeDashboardButtonLookGood();
         setupRecyclerView();
         setupNavigationDrawer();
@@ -58,8 +55,11 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void initData() {
+        String userId = SharedPreferenceUtils.retrieveData(this, getString(R.string.pref_userId));
+        String orgId = SharedPreferenceUtils.retrieveData(this, getString(R.string.pref_orgId));
+
         mPresenter = new HomePresenterImpl(this, new HomeInteractor());
-        mPresenter.loadDataFromServer();
+        mPresenter.loadRunningChecklists(userId, orgId);
     }
 
     @Override
@@ -122,17 +122,9 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(this, "Notification selected", Toast.LENGTH_SHORT).show();
                 return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
-
-
-    @Override
-    public void setDataToRecyclerView(ArrayList<Checklist> datasource) {
-        mChecklistProgressAdapter = new ChecklistProgressAdapter((List<Checklist>) datasource);
-        checklistProgressRecyclerView.setAdapter(mChecklistProgressAdapter);
-
-    }
-
 
     private void setupNavigationDrawer() {
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.menu_items_title);
@@ -154,7 +146,7 @@ public class HomeActivity extends AppCompatActivity
         checklistProgressLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         checklistProgressRecyclerView.setLayoutManager(checklistProgressLayoutManager);
 
-        // TODO - HAVENT'T SET THE ADAPTER FOR TASK RV
+        // DONE - HAVENT'T SET THE ADAPTER FOR TASK RV
         // checklist today's task recycler view
         todayTaskRecyclerView = findViewById(R.id.rv_today_task);
         todayTaskRecyclerView.setHasFixedSize(true);
@@ -162,7 +154,7 @@ public class HomeActivity extends AppCompatActivity
         todayTaskRecyclerView.setLayoutManager(todayTaskLayoutManager);
 
         mTasks = new ArrayList<>();
-        mTodayTaskAdapter = new TodayTaskAdapter((List<Checklist>) mTasks);
+        mTodayTaskAdapter = new TodayTaskAdapter((List<Task>) mTasks);
         todayTaskRecyclerView.setAdapter(mTodayTaskAdapter);
 
     }
@@ -177,14 +169,22 @@ public class HomeActivity extends AppCompatActivity
         btnActivity.setBackgroundResource(0);
     }
 
-    private void makeCollapsingToolbarLookGood() {
+    private void setupToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.avenir_black);
-        collapsingToolbarLayout.setCollapsedTitleTypeface(typeface);
-        collapsingToolbarLayout.setExpandedTitleTypeface(typeface);
+        toolbar.setTitleTextAppearance(this, R.style.Toolbar);
     }
 
+
+    @Override
+    public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
+        mChecklistProgressAdapter = new ChecklistProgressAdapter(datasource);
+        checklistProgressRecyclerView.setAdapter(mChecklistProgressAdapter);
+    }
+
+    @Override
+    public void setDataToTasksRecyclerView(ArrayList<Task> datasource) {
+        mTodayTaskAdapter = new TodayTaskAdapter(datasource);
+        todayTaskRecyclerView.setAdapter(mTodayTaskAdapter);
+    }
 }

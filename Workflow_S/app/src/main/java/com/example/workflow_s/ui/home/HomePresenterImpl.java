@@ -1,6 +1,9 @@
 package com.example.workflow_s.ui.home;
 
+import android.util.Log;
+
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
 
@@ -11,8 +14,12 @@ import java.util.ArrayList;
  **/
 
 
-public class HomePresenterImpl implements HomeContract.HomePresenter, HomeContract.GetHomeDataInteractor.OnFinishedListener {
+public class HomePresenterImpl implements HomeContract.HomePresenter,
+        HomeContract.GetHomeDataInteractor.OnFinishedGetRunningChecklistsListener,
+        HomeContract.GetHomeDataInteractor.OnFinishedGetDueTasksListener {
 
+
+    private static final String TAG = "HOME_PRESENTER";
     private HomeContract.HomeView mHomeView;
     private HomeContract.GetHomeDataInteractor mGetHomeDataInteractor;
 
@@ -22,13 +29,18 @@ public class HomePresenterImpl implements HomeContract.HomePresenter, HomeContra
     }
 
     @Override
-    public void onFinished(ArrayList<Checklist> checklistArrayList) {
-        mHomeView.setDataToRecyclerView(checklistArrayList);
+    public void onFinishedGetChecklists(ArrayList<Checklist> checklistArrayList) {
+        mHomeView.setDataToChecklistRecyclerView(checklistArrayList);
+    }
+
+    @Override
+    public void onFinishedGetTasks(ArrayList<Task> taskArrayList) {
+        mHomeView.setDataToTasksRecyclerView(taskArrayList);
     }
 
     @Override
     public void onFailure(Throwable t) {
-
+        Log.d(TAG, "onFailure: " + t.getMessage());
     }
 
     @Override
@@ -37,7 +49,13 @@ public class HomePresenterImpl implements HomeContract.HomePresenter, HomeContra
     }
 
     @Override
-    public void loadDataFromServer() {
-        mGetHomeDataInteractor.getNoticeArrayList(this);
+    public void loadRunningChecklists(String userId, String orgId) {
+        mGetHomeDataInteractor.getAllRunningChecklists(userId, orgId, this);
     }
+
+    @Override
+    public void loadDueTasks(String userId) {
+        mGetHomeDataInteractor.getAllDueTasks(userId, this);
+    }
+
 }

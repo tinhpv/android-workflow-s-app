@@ -1,11 +1,14 @@
 package com.example.workflow_s.ui.home.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
@@ -23,7 +26,7 @@ import java.util.List;
 public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressAdapter.ChecklistProgressViewHolder> {
 
     // Constants
-    private final int MAX_ITEM_NUMBER = 5;
+    private final int MAX_ITEM_NUMBER = 4;
 
     // DataSource for RecyclerView
     private List<Checklist> mChecklists;
@@ -31,11 +34,17 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     // VIEW-HOLDER
     public class ChecklistProgressViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
+        public TextView mChecklistName;
+        public TextView mChecklistTaskProgress;
+        public TextView mTemplate;
+        public ProgressBar mProgressChecklistBar;
 
         public ChecklistProgressViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_checklist_name);
+            mChecklistName = itemView.findViewById(R.id.tv_checklist_name);
+            mChecklistTaskProgress = itemView.findViewById(R.id.tv_checklist_progress);
+            mTemplate = itemView.findViewById(R.id.tv_template_name);
+            mProgressChecklistBar = itemView.findViewById(R.id.pb_checklist_home);
         }
     }
 
@@ -54,17 +63,27 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         return viewHolder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ChecklistProgressViewHolder checklistProgressViewHolder, int i) {
-        // TODO - MODIFY VIEWHOLDER'S CONTENT
-        checklistProgressViewHolder.mTextView.setText(mChecklists.get(i).getName());
+        // DONE - MODIFY VIEWHOLDER'S CONTENT
+        checklistProgressViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
+        checklistProgressViewHolder.mChecklistTaskProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
+        int doneTask = mChecklists.get(i).getDoneTask();
+        int totalTask = mChecklists.get(i).getTotalTask();
+
+        if (totalTask == 0) {
+            checklistProgressViewHolder.mProgressChecklistBar.setProgress(0, true);
+        } else {
+            int progress = (int) ((doneTask / totalTask * 1.0) * 100);
+            checklistProgressViewHolder.mProgressChecklistBar.setProgress(progress, true);
+        } // end if
     }
 
     @Override
     public int getItemCount() {
-        // TODO - MODIFY SIZE LIST
-        //int numberOfItems = mChecklists.size();
-        //return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
-        return 4;
+        // DONE - MODIFY SIZE LIST
+        int numberOfItems = mChecklists.size();
+        return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
     }
 }

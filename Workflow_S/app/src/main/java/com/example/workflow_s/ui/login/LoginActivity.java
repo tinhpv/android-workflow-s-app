@@ -7,6 +7,7 @@ package com.example.workflow_s.ui.login;
  **/
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Organization;
+import com.example.workflow_s.model.User;
+import com.example.workflow_s.network.ApiClient;
+import com.example.workflow_s.network.ApiService;
+import com.example.workflow_s.ui.authentication.AuthenticationActivity;
 import com.example.workflow_s.ui.home.HomeActivity;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -22,18 +29,30 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class LoginActivity extends AppCompatActivity implements LoginContract.LoginView {
 
     private static final String TAG = "LOGIN_ACTIVITY";
     final private int REQUEST_CODE_SIGN_IN = 123;
     private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInAccount mGoogleAccount;
+    private User currentUser = null;
+
+    private LoginContract.LoginPresenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initializeGoogleSignIn();
+        initData();
     }
+
 
     @Override
     protected void onStart() {
@@ -43,6 +62,20 @@ public class LoginActivity extends AppCompatActivity {
         updateUI(account);
     }
 
+    private void initData() {
+        mLoginPresenter = new LoginPresenterImpl(this, new LoginInteractor());
+    }
+
+    private void initializeCurrentUser(GoogleSignInAccount account) {
+        String id = account.getId();
+        String name = account.getDisplayName();
+        String email = account.getEmail();
+        String type = getResources().getString(R.string.google);
+        String role = "";
+        String token = "";
+        String avatar = account.getPhotoUrl().toString();
+        this.currentUser = new User(id, name, email, type, role, avatar, "");
+    }
 
 
     private void initializeGoogleSignIn() {
@@ -66,13 +99,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            updateUI(account);
+            mGoogleAccount = completedTask.getResult(ApiException.class);
+            if (null != mGoogleAccount) {
+                initializeCurrentUser(mGoogleAccount);
+                mLoginPresenter.addUserToDB(currentUser);
+            }
         } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
-        }
+            Log.w(TAG, "signInResult:failed code = " + e.getStatusCode());
+        } // end try
     }
+
 
     public void handleGoogleSignInTapped(View view) {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -86,6 +122,33 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+    }
+
+    @Override
+    public void saveCurrentUserToPreference(User user) {
+        SharedPreferenceUtils.saveCurrentUserData(this, user, null);
+    }
+
+    @Override
+    public void saveCurrentOrganizationToPreference(Organization organization) {
+        SharedPreferenceUtils.saveCurrentUserData(this, null, organization);
+    }
+
+    @Override
+    public void navigateToCodeVerifyActivity() {
+        Intent intent = new Intent(this, AuthenticationActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFinishedAddUser() {
+        mLoginPresenter.getCurrentOrganization(currentUser.getId());
     }
 
 

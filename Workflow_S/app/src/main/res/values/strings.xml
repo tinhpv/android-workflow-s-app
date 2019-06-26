@@ -9,8 +9,22 @@
     <string name="button_checklist">Checklist</string>
     <string name="button_activity">Activity</string>
 
+    <!--toolbar title-->
+    <string name="activity_name">Activity</string>
+
     <!--flag for recycler view-->
     <string name="checklist_home_rv">CHECKLIST_RECYCLER</string>
     <string name="task_home_rv">TASK_RECYCLER</string>
+
+    <!--login type-->
+    <string name="google">GOOGLE</string>
+    <string name="login_role_user">USER</string>
+    <string name="pref_userId">userId</string>
+    <string name="pref_username">userName</string>
+    <string name="pref_email">email</string>
+    <string name="pref_avatar">avatar</string>
+    <string name="pref_token">userToken</string>
+    <string name="pref_orgId">orgId</string>
+    <string name="pref_orgName">orgName</string>
 
 </resources>

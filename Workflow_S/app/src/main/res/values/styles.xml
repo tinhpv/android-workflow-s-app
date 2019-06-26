@@ -6,18 +6,30 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="drawerArrowStyle">@style/DrawerHamburgerStyle</item>
     </style>
 
-    <!--Collapsing toolbar style-->
-    <style name="ExpandedAppBar" parent="TextAppearance.AppCompat.Large">
-        <item name="android:textSize">30sp</item>
+    <style name="DrawerHamburgerStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="HeaderBar">
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="Toolbar">
+        <item name="android:fontFamily">@font/avenir_heavy</item>
+        <item name="android:textSize">24dp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="CollapsedAppBar" parent="TextAppearance.AppCompat.Small">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/white</item>
+
+    <style name="TabText" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/avenir_light</item>
+        <item name="android:textSize">20dp</item>
     </style>
+
 
     <!--navigation drawer style-->
     <style name="NavigationViewItem">
