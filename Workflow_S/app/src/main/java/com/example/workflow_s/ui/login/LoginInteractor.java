@@ -1,14 +1,9 @@
 package com.example.workflow_s.ui.login;
 
-import android.content.Intent;
-import android.util.Log;
-
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
-import com.example.workflow_s.ui.home.HomeActivity;
-import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
