@@ -10,6 +10,5 @@ package com.example.workflow_s.utils;
 public abstract class Constant {
     public static final int CODE_LENGTH = 6;
     public static final String PREFS_NAME = "WORKFLOW_S_PREFERENCE";
-    public static final String IMG_BASE_URL = "https://workflow3i.azurewebsites.net/img/";
 }
 
