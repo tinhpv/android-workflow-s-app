@@ -1,6 +1,7 @@
 package com.example.workflow_s.network;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
@@ -42,5 +43,11 @@ public interface ApiService {
 
     @GET("/api/Users/getverifycode/{id}")
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
+
+    @GET("/api/TaskItems/taskitems/{checklistId}")
+    Call<List<Task>> getTaskFromChecklist(@Path("checklistId") long checklistId);
+
+    @GET("/api/ContentDetails/contentdetail/{taskid}")
+    Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
 }
