@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,12 +48,8 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         }
     }
 
-    public ChecklistProgressAdapter() {
-    }
-
-    public void setChecklists(List<Checklist> checklists) {
+    public ChecklistProgressAdapter(List<Checklist> checklists) {
         mChecklists = checklists;
-        this.notifyDataSetChanged();
     }
 
     @NonNull
@@ -88,11 +83,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     @Override
     public int getItemCount() {
         // DONE - MODIFY SIZE LIST
-        if (mChecklists == null) {
-            return 0;
-        } else {
-            int numberOfItems = mChecklists.size();
-            return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
-        } // end if
+        int numberOfItems = mChecklists.size();
+        return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
     }
 }
