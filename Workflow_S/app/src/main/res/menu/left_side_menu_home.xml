@@ -2,37 +2,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
         <item
-            android:id="@+id/nav_organization"
+            android:id="@+id/nav_organization_fragment"
             android:icon="@mipmap/organization_icon_small"
             android:title="Organization"/>
     </group>
 
     <group>
         <item
-            android:id="@+id/nav_home_item"
+            android:id="@+id/nav_home_fragment"
             android:icon="@mipmap/home_icon_small"
             android:title="Home" />
         <item
-            android:id="@+id/nav_template_item"
+            android:id="@+id/nav_template_fragment"
             android:icon="@mipmap/template_icon_small"
             android:title="Template" />
     </group>
 
     <group>
         <item
-            android:id="@+id/nav_checklist"
+            android:id="@+id/nav_checklist_fragment"
             android:icon="@mipmap/running_icon_small"
             android:title="Active checklist" />
     </group>
 
     <group>
         <item
-            android:id="@+id/nav_activity"
+            android:id="@+id/nav_activity_fragment"
             android:icon="@mipmap/activity_icon_small"
             android:title="Activity" />
 
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_settings_fragment"
             android:icon="@mipmap/setting_icon_small"
             android:title="Template" />
     </group>

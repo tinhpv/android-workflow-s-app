@@ -8,7 +8,7 @@ package com.example.workflow_s.utils;
 
 
 public abstract class Constant {
-    public static final int RV_CHECKLIST_TAG = 1;
-    public static final int RV_TASK_TAG = 2;
+    public static final int CODE_LENGTH = 6;
+    public static final String PREFS_NAME = "WORKFLOW_S_PREFERENCE";
 }
 

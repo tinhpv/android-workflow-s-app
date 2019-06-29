@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.home;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
 
@@ -14,20 +15,29 @@ import java.util.ArrayList;
 public interface HomeContract {
     interface HomePresenter {
         void onDestroy();
-        void loadDataFromServer();
+        void loadRunningChecklists(String userId, String orgId);
+        void loadDueTasks(String userId);
     }
 
     interface HomeView {
-        void setDataToRecyclerView(ArrayList<Checklist> datasource);
+        void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
+        void setDataToTasksRecyclerView(ArrayList<Task> datasource);
     }
 
     interface GetHomeDataInteractor {
 
-        interface OnFinishedListener {
-            void onFinished(ArrayList<Checklist> checklistArrayList);
+        interface OnFinishedGetRunningChecklistsListener {
+            void onFinishedGetChecklists(ArrayList<Checklist> checklistArrayList);
             void onFailure(Throwable t);
         }
 
-        void getNoticeArrayList(OnFinishedListener onFinishedListener);
+        interface OnFinishedGetDueTasksListener {
+            void onFinishedGetTasks(ArrayList<Task> taskArrayList);
+            void onFailure(Throwable t);
+        }
+
+        void getAllRunningChecklists(String userId, String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
+        void getAllDueTasks(String userId, OnFinishedGetDueTasksListener onFinishedListener);
+
     }
 }

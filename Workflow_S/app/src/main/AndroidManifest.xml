@@ -12,8 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.HomeActivity"></activity>
-        <activity android:name=".ui.base.BaseActivity" />
+        <activity android:name=".ui.main.MainActivity">
+        </activity>
+        <activity android:name=".ui.authentication.AuthenticationActivity"></activity>
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -22,6 +24,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
