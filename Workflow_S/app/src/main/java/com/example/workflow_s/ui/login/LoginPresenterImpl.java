@@ -32,6 +32,7 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     }
 
     @Override
+<<<<<<< HEAD
     public void checkRoleUser(String userRole) {
 //        if (userRole.isEmpty()) {
 //            mLoginView.navigateToCodeVerifyActivity();
@@ -43,6 +44,8 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     }
 
     @Override
+=======
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
     public void addUserToDB(User user) {
         mGetLoginDataInteractor.saveUserToDB(user, this);
     }
@@ -52,16 +55,34 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
         mLoginView = null;
     }
 
+<<<<<<< HEAD
     // API Callback
     @Override
     public void onFinished(User user) {
 //        mLoginView.saveCurrentUserToPreference(user);
         mLoginView.onFinishedAddUser(user);
+=======
+
+    // API Callback
+    @Override
+    public void onFinished(User user) {
+        mLoginView.onFinishedAddUser();
+        mLoginView.saveCurrentUserToPreference(user);
+
+        if (user.getRole().isEmpty()) {
+            mLoginView.navigateToCodeVerifyActivity();
+        } else {
+            mLoginView.navigateToHomeActivity();
+        }
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
     }
 
     @Override
     public void onFinished(Organization currentOrganization) {
+<<<<<<< HEAD
         mLoginView.onFinishedGetOrg();
+=======
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
         mLoginView.saveCurrentOrganizationToPreference(currentOrganization);
     }
 

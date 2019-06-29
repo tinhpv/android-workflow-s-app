@@ -88,11 +88,16 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     @Override
     public int getItemCount() {
         // DONE - MODIFY SIZE LIST
+<<<<<<< HEAD
         if (mChecklists == null) {
             return 0;
         } else {
             int numberOfItems = mChecklists.size();
             return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
         } // end if
+=======
+        int numberOfItems = mChecklists.size();
+        return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
     }
 }

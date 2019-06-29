@@ -7,19 +7,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+<<<<<<< HEAD
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.ui.main.MainActivity;
+=======
+import android.widget.Toast;
+
+import com.example.workflow_s.R;
+import com.example.workflow_s.ui.home.HomeActivity;
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.goodiebag.pinview.Pinview;
 
+<<<<<<< HEAD
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-24
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
+=======
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 public class AuthenticationActivity extends AppCompatActivity implements AuthenticationContract.AuthenticationView {
 
     private EditText mPhoneNumberEdt;
@@ -89,7 +99,11 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
 
     @Override
     public void onFinishedSubmitVerifyCode() {
+<<<<<<< HEAD
         Intent intent = new Intent(this, MainActivity.class);
+=======
+        Intent intent = new Intent(this, HomeActivity.class);
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
         startActivity(intent);
     }
 }

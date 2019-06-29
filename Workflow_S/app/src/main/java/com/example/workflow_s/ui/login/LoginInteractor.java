@@ -1,9 +1,20 @@
 package com.example.workflow_s.ui.login;
 
+<<<<<<< HEAD
+=======
+import android.content.Intent;
+import android.util.Log;
+
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
+<<<<<<< HEAD
+=======
+import com.example.workflow_s.ui.home.HomeActivity;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 
 import retrofit2.Call;
 import retrofit2.Callback;

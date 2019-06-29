@@ -6,4 +6,8 @@
     <color name="colorPrimaryText">#30414C</color>
     <color name="backgroundColor">#e9e9e9</color>
     <color name="unselectedItem">#e9e9e9</color>
+<<<<<<< HEAD
+=======
+    <color name="silver">#979595</color>
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 </resources>

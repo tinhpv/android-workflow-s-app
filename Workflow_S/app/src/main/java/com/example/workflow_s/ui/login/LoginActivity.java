@@ -7,6 +7,7 @@ package com.example.workflow_s.ui.login;
  **/
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +17,15 @@ import android.view.View;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+<<<<<<< HEAD
 import com.example.workflow_s.ui.authentication.AuthenticationActivity;
 import com.example.workflow_s.ui.main.MainActivity;
+=======
+import com.example.workflow_s.network.ApiClient;
+import com.example.workflow_s.network.ApiService;
+import com.example.workflow_s.ui.authentication.AuthenticationActivity;
+import com.example.workflow_s.ui.home.HomeActivity;
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,6 +34,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+<<<<<<< HEAD
+=======
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 public class LoginActivity extends AppCompatActivity implements LoginContract.LoginView {
 
     private static final String TAG = "LOGIN_ACTIVITY";
@@ -64,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         String type = getResources().getString(R.string.google);
         String role = "";
         String token = "";
+<<<<<<< HEAD
         String avatar = "";
         if (null != account.getPhotoUrl()) {
             avatar = account.getPhotoUrl().toString();
@@ -71,6 +89,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
 
         this.currentUser = new User(id, name, email, type, role, avatar, token);
+=======
+        String avatar = account.getPhotoUrl().toString();
+        this.currentUser = new User(id, name, email, type, role, avatar, "");
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
     }
 
 
@@ -137,12 +159,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     }
 
     @Override
+<<<<<<< HEAD
     public void navigateToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+=======
+    public void navigateToHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
         startActivity(intent);
     }
 
     @Override
+<<<<<<< HEAD
     public void onFinishedAddUser(User user) {
         currentUser.setRole(user.getRole());
         currentUser.setToken(user.getToken());
@@ -154,5 +182,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     public void onFinishedGetOrg() {
         mLoginPresenter.checkRoleUser(currentUser.getRole());
     }
+=======
+    public void onFinishedAddUser() {
+        mLoginPresenter.getCurrentOrganization(currentUser.getId());
+    }
+
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
 
 }

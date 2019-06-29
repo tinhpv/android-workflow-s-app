@@ -24,7 +24,11 @@ public class UpcomingActivitiesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+<<<<<<< HEAD
         view = inflater.inflate(R.layout.fragment_upcoming_activities, container, false);
+=======
+        view = inflater.inflate(R.layout.upcoming_activities_fragment, container, false);
+>>>>>>> 828f753ecd74dc6c7d5c2ded254288314fa046e8
         return view;
     }
 }
