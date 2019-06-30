@@ -3,8 +3,6 @@ package com.example.workflow_s.ui.login;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
 
-import java.util.ArrayList;
-
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-21
@@ -17,6 +15,7 @@ public interface LoginContract {
     interface LoginPresenter {
         void addUserToDB(User user);
         void getCurrentOrganization(String userId);
+        void checkRoleUser(String userRole);
         void onDestroy();
     }
 
@@ -24,8 +23,9 @@ public interface LoginContract {
         void saveCurrentUserToPreference(User user);
         void saveCurrentOrganizationToPreference(Organization organization);
         void navigateToCodeVerifyActivity();
-        void navigateToHomeActivity();
-        void onFinishedAddUser();
+        void navigateToMainActivity();
+        void onFinishedAddUser(User user);
+        void onFinishedGetOrg();
     }
 
     interface GetLoginDataInteractor {

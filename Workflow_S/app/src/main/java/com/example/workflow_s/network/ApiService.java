@@ -3,8 +3,8 @@ package com.example.workflow_s.network;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
-import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.Task;
 
 import java.util.List;
 
@@ -43,6 +43,9 @@ public interface ApiService {
 
     @GET("/api/Users/getverifycode/{id}")
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
+
+    @GET("/api/UserOrganizations/member/{organizationId}")
+    Call<List<User>> getOrganizationMember(@Path("organizationId") String orgId);
 
     @GET("/api/TaskItems/taskitems/{checklistId}")
     Call<List<Task>> getTaskFromChecklist(@Path("checklistId") long checklistId);

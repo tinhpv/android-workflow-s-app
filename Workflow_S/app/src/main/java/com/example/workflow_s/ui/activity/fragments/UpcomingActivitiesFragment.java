@@ -24,7 +24,8 @@ public class UpcomingActivitiesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.upcoming_activities_fragment, container, false);
+
+        view = inflater.inflate(R.layout.fragment_upcoming_activities, container, false);
         return view;
     }
 }

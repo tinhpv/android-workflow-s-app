@@ -24,8 +24,7 @@ public class TodayActivitiesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        view = inflater.inflate(R.layout.today_activities_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_today_activity, container, false);
         return view;
     }
 }
