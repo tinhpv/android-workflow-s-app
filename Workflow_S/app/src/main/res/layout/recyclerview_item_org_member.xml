@@ -11,11 +11,13 @@
     android:layout_marginRight="20dp">
 
     <!--avatar user-->
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/img_user_avatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@mipmap/ic_launcher_round"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:civ_border_width="0dp"
+        android:layout_marginLeft="18dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="Phan Vu Tinh"
             android:fontFamily="@font/avenir_medium"
-            android:textSize="20sp"
+            android:textSize="19sp"
             android:layout_marginLeft="12dp"
             android:textColor="@color/colorPrimaryDark" />
 
@@ -40,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="vutinh1998@gmail.com"
             android:fontFamily="@font/avenir_light_oblique"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:layout_marginLeft="12dp"
             android:textColor="@color/colorPrimaryDark" />
 

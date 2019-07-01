@@ -9,6 +9,13 @@
     <string name="button_checklist">Checklist</string>
     <string name="button_activity">Activity</string>
 
+
+    <!--App Message-->
+    <string name="api_retry_error">Please retry!</string>
+    <string name="api_default_error">Something wrong happened!</string>
+    <string name="some_error">Some Error Occurred!</string>
+    <string name="connection_error">Internet connection lost!</string>
+
     <!--toolbar title-->
     <string name="activity_name">Activity</string>
 

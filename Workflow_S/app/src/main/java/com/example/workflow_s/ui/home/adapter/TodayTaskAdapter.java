@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.home.viewholder.TodayTaskViewHolder;
 
 import org.w3c.dom.Text;
 
@@ -23,25 +24,13 @@ import java.util.List;
  **/
 
 
-public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.TodayTaskViewHolder> {
+public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> {
 
     // Constants
     private final int MAX_ITEM_NUMBER = 5;
 
-    // DataSource for RecyclerView
+    // Datasource for RecyclerView
     private List<Task> mTasks;
-
-
-    // VIEWHOLDER
-    public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextView;
-
-        public TodayTaskViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_task_name);
-        }
-    }
 
     public TodayTaskAdapter(List<Task> tasks) {
         mTasks = tasks;

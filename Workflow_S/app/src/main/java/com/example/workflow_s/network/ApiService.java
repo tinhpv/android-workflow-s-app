@@ -3,6 +3,7 @@ package com.example.workflow_s.network;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
+import com.example.workflow_s.model.Template;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.model.Task;
 
@@ -53,4 +54,6 @@ public interface ApiService {
     @GET("/api/ContentDetails/contentdetail/{taskid}")
     Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
+    @GET("/api/Checklists/listtemplate/{organizationId}/{userId}")
+    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId, @Path("userId") String userId);
 }

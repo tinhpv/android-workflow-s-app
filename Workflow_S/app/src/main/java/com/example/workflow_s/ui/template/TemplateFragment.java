@@ -15,8 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.organization.adapter.OrganizationMemberAdapter;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
+
+import java.util.List;
 
 /**
  * Workflow_S
@@ -25,12 +29,14 @@ import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
  **/
 
 
-public class TemplateFragment extends Fragment {
+public class TemplateFragment extends Fragment implements TemplateContract.TemplateView {
 
     View view;
     private RecyclerView templateRecyclerView;
     private TemplateAdapter mAdapter;
     private RecyclerView.LayoutManager templateLayoutManager;
+
+    private TemplateContract.TemplatePresenter mTemplatePresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +75,17 @@ public class TemplateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setupTemplateRV();
+        initData();
+    }
+
+    private void initData() {
+        mTemplatePresenter = new TemplatePresenterImpl(this, new TemplateInteractor());
+
+//        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+//        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+//        mTemplatePresenter.requestOrganizationData(orgId, userId);
+        // FIXME - HARDCODE HERE
+        mTemplatePresenter.requestTemplateData("1", "2372592022969346");
     }
 
     private void setupTemplateRV() {
@@ -78,5 +95,10 @@ public class TemplateFragment extends Fragment {
         templateRecyclerView.setLayoutManager(templateLayoutManager);
         mAdapter = new TemplateAdapter();
         templateRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void finishGetTemplates(List<Template> userList) {
+        mAdapter.setTemplateList(userList);
     }
 }

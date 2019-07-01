@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.home.adapter;
+package com.example.workflow_s.ui.checklist.adapter;
 
 import android.content.Context;
 import android.os.Build;
@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.ui.checklist.ChecklistFragment;
+import com.example.workflow_s.ui.checklist.viewholder.ChecklistProgressViewHolder;
+import com.example.workflow_s.ui.task.TaskFragment;
+import com.example.workflow_s.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +28,13 @@ import java.util.List;
  **/
 
 
-public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressAdapter.ChecklistProgressViewHolder> {
+public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressViewHolder> {
 
     // Constants
     private final int MAX_ITEM_NUMBER = 4;
 
     // DataSource for RecyclerView
     private List<Checklist> mChecklists;
-
-    // VIEW-HOLDER
-    public class ChecklistProgressViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView mChecklistName;
-        public TextView mChecklistTaskProgress;
-        public TextView mTemplate;
-        public ProgressBar mProgressChecklistBar;
-
-        public ChecklistProgressViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mChecklistName = itemView.findViewById(R.id.tv_checklist_name);
-            mChecklistTaskProgress = itemView.findViewById(R.id.tv_checklist_progress);
-            mTemplate = itemView.findViewById(R.id.tv_template_name);
-            mProgressChecklistBar = itemView.findViewById(R.id.pb_checklist_home);
-        }
-    }
 
     public ChecklistProgressAdapter() {
     }
@@ -59,12 +46,21 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
 
     @NonNull
     @Override
-    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_checklist_progress;
         View view = layoutInflater.inflate(layoutId, viewGroup, false);
         ChecklistProgressViewHolder viewHolder = new ChecklistProgressViewHolder(view);
+
+        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String checklistId = String.valueOf(mChecklists.get(i).getId());
+                CommonUtils.replaceFragments(viewGroup.getContext(), TaskFragment.class, "checklistId", checklistId);
+            }
+        });
+
         return viewHolder;
     }
 

@@ -27,6 +27,7 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.home.HomeFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
+import com.example.workflow_s.ui.task.TaskFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitleTextAppearance(this, R.style.Toolbar);
     }
 
@@ -126,8 +128,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_template_fragment:
                 fragmentClass = TemplateFragment.class;
                 break;
-//            case R.id.nav_checklist_fragment:
-//                break;
+            case R.id.nav_checklist_fragment:
+                fragmentClass = TaskFragment.class;
+                break;
             case R.id.nav_activity_fragment:
                 fragmentClass = ActivityFragment.class;
                 break;

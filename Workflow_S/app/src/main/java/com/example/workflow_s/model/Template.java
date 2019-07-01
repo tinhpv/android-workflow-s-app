@@ -21,13 +21,13 @@ public class Template {
     @SerializedName("timeCreated")
     private String timeCreated;
     @SerializedName("templateStatus")
-    private Integer templateStatus;
+    private String templateStatus;
     @SerializedName("organizationId")
     private Integer organizationId;
     @SerializedName("category")
     private String category;
 
-    public Template(Integer id, String userId, String name, String description, String timeCreated, Integer templateStatus, Integer organizationId, String category) {
+    public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -78,11 +78,11 @@ public class Template {
         this.timeCreated = timeCreated;
     }
 
-    public Integer getTemplateStatus() {
+    public String getTemplateStatus() {
         return templateStatus;
     }
 
-    public void setTemplateStatus(Integer templateStatus) {
+    public void setTemplateStatus(String templateStatus) {
         this.templateStatus = templateStatus;
     }
 
