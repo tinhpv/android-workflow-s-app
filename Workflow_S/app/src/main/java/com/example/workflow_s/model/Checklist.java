@@ -12,24 +12,46 @@ public class Checklist {
 
     @SerializedName("id")
     private Integer id;
+
     @SerializedName("userId")
     private String userId;
+
     @SerializedName("name")
     private String name;
+
     @SerializedName("description")
     private String description;
+
     @SerializedName("timeCreated")
     private String timeCreated;
+
     @SerializedName("templateStatus")
     private Integer templateStatus;
+
     @SerializedName("organizationId")
     private Integer organizationId;
+
     @SerializedName("templateId")
     private Integer templateId;
+
     @SerializedName("countAllTask")
     private Integer totalTask;
+
     @SerializedName("countDoneTask")
     private Integer doneTask;
+
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, Integer templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.templateId = templateId;
+        this.totalTask = totalTask;
+        this.doneTask = doneTask;
+    }
 
     public Integer getId() {
         return id;

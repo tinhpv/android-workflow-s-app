@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.home;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.base.MvpView;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public interface HomeContract {
         void loadDueTasks(String userId);
     }
 
-    interface HomeView {
+    interface HomeView  {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
         void setDataToTasksRecyclerView(ArrayList<Task> datasource);
     }

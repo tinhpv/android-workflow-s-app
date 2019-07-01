@@ -52,7 +52,7 @@ public class OrganizationMemberAdapter extends RecyclerView.Adapter<Organization
         organizationMemberViewHolder.mEmail.setText(mUserList.get(i).getEmail());
 
         String profileUrlString = mUserList.get(i).getAvatar();
-        if (profileUrlString.length() == 0) {
+        if (profileUrlString ==  null) {
             organizationMemberViewHolder.mAvatar.setImageDrawable(ContextCompat.getDrawable(organizationMemberViewHolder.view.getContext(), R.drawable.default_avatar));
         } else {
             Glide.with(organizationMemberViewHolder.view.getContext()).load(profileUrlString).into(organizationMemberViewHolder.mAvatar);

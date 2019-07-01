@@ -16,9 +16,11 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.activity.ActivityFragment;
-import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
+import com.example.workflow_s.ui.checklist.ChecklistFragment;
+import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.template.TemplateFragment;
+import com.example.workflow_s.utils.CommonUtils;
 
 import java.util.ArrayList;
 
@@ -60,29 +62,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_activity:
-                replaceFragments(ActivityFragment.class);
+                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, null);
                 break;
             case R.id.btn_checklist:
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, null);
                 break;
             case R.id.btn_template:
-                replaceFragments(TemplateFragment.class);
+                CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null, null);
+                break;
+            case R.id.bt_view_all_checklist:
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, null);
+                break;
+            case R.id.bt_view_all_task:
                 break;
         } // end switch
-    }
-
-    public void replaceFragments(Class fragmentClass) {
-        Fragment fragment = null;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.flContent, fragment)
-                .commit();
     }
 
     private void initData() {

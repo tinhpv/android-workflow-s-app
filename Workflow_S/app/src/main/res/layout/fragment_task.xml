@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+
+        <TextView
+            android:id="@+id/tv_task_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:padding="17dp"
+            android:text="Student Registration Process"
+            android:fontFamily="@font/avenir_heavy"
+            android:textSize="25sp"
+            android:textColor="@android:color/white"
+            android:textAlignment="center"
+            android:background="@drawable/container_radius_dark"/>
+
+        <TextView
+            android:id="@+id/tv_task_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:text="@string/description_task_demo"
+            android:fontFamily="@font/avenir_light"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryText"
+            android:justificationMode="inter_word"
+            android:lineSpacingMultiplier="1.25"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_task"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+
+
+        <Button
+            android:id="@+id/bt_run_checklist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/run_checklist"
+            android:textSize="20sp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="30dp"
+            android:layout_marginBottom="20dp"
+            android:drawableLeft="@mipmap/running_icon_white"
+            android:drawablePadding="18dp"
+            android:fontFamily="@font/avenir_black"
+            android:background="@drawable/button_radius_dark"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+</ScrollView>
+
+

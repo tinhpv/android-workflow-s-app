@@ -26,7 +26,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.taskdetail.TaskDetailActivity"></activity>
-        <activity android:name=".ui.task.TaskActivity"></activity>
 
     </application>
 

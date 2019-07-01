@@ -1,5 +1,12 @@
 package com.example.workflow_s.ui.template;
 
+import com.example.workflow_s.model.Template;
+import com.example.workflow_s.model.User;
+import com.example.workflow_s.ui.organization.OrganizationContract;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-27
@@ -8,4 +15,21 @@ package com.example.workflow_s.ui.template;
 
 
 public interface TemplateContract {
+
+    interface TemplatePresenter {
+        void requestTemplateData(String orgId, String userId);
+    }
+
+    interface TemplateView {
+        void finishGetTemplates(List<Template> userList);
+    }
+
+    interface GetTemplateDataContract {
+        interface OnFinishedGetTemplateDataListener {
+            void onFinishedGetTemplates(ArrayList<Template> templateList);
+            void onFailure(Throwable t);
+        }
+
+        void getAllTemplates(String orgId, String userId, OnFinishedGetTemplateDataListener onFinishedListener);
+    }
 }

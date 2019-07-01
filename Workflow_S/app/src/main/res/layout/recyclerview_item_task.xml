@@ -3,22 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:id="@+id/task_item"
-    android:background="@color/silver">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/background_item_white_radius"
+    android:gravity="center_vertical">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox"
+        android:layout_marginLeft="18dp"/>
 
     <TextView
-        android:text="taskit em"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:fontFamily="@font/avenir_black"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/textview_taskitem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:text="vutinh"
         android:textColor="@color/colorPrimary"
         android:id="@+id/txt_task_name"
-        android:textSize="20sp"
-        android:layout_width="350dp"
-        android:layout_height="50dp" />
+        android:fontFamily="@font/avenir_light"
+        android:textSize="20sp"/>
 
 </LinearLayout>

@@ -27,10 +27,10 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
     List<Template> mTemplateList;
 
     public TemplateAdapter() {
-        mTemplateList = new ArrayList<>();
-        mTemplateList.add(new Template(1, "", "Student boarding", "abc", "123", 1, 1, "DEV"));
-        mTemplateList.add(new Template(2, "", "Viet boarding", "abc", "123", 1, 1, "DEV"));
-        mTemplateList.add(new Template(3, "", "Employee interview", "abc", "123", 1, 1, "DEV"));
+//        mTemplateList = new ArrayList<>();
+//        mTemplateList.add(new Template(1, "", "Student boarding", "abc", "123", "1", 1, "DEV"));
+//        mTemplateList.add(new Template(2, "", "Viet boarding", "abc", "123", "1", 1, "DEV"));
+//        mTemplateList.add(new Template(3, "", "Employee interview", "abc", "123", "1", 1, "DEV"));
     }
 
     public void setTemplateList(List<Template> templateList) {
