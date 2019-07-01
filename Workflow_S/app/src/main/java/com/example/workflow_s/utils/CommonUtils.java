@@ -35,7 +35,7 @@ public class CommonUtils {
         FragmentManager fragmentManager = ((FragmentActivity)fragmentContext).getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .add(R.id.flContent, fragment)
+                .replace(R.id.flContent, fragment)
                 .commit();
 
     }

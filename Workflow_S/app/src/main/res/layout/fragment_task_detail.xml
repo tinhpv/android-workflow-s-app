@@ -1,18 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:id="@+id/task_detail_layout"
-        android:layout_marginTop="80dp"
-        android:background="@color/silver"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/backgroundColor">
+
+        <LinearLayout
+            android:id="@+id/task_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
+
+
+
+
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:fontFamily="@font/avenir_light"-->
+<!--android:textColor="@color/colorPrimaryText"-->
+<!--android:textSize="15sp"-->
+<!--android:layout_marginHorizontal="25dp"-->
+<!--android:layout_marginVertical="10dp"-->
+<!--android:lineSpacingExtra="1.5dp"-->
+<!--android:text="First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below"/>-->
+
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:text="Hiring Manager Email"-->
+<!--android:layout_marginHorizontal="25dp"-->
+<!--android:layout_marginTop="18dp"-->
+<!--android:textSize="15sp"-->
+<!--android:fontFamily="@font/avenir_heavy"-->
+<!--android:textColor="@color/colorPrimaryText"/>-->
+
+<!--<EditText-->
+<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="80dp"-->
+<!--android:layout_marginTop="6dp"-->
+<!--android:layout_marginHorizontal="25dp"-->
+<!--android:layout_marginBottom="18dp"-->
+<!--android:background="@drawable/edittext_rounded" />-->
+
+
+<!--<ImageView-->
+<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:id="@+id/img_taskdetail"-->
+<!--android:layout_gravity="center_horizontal"-->
+<!--android:layout_width="200dp"-->
+<!--android:layout_height="200dp"-->
+<!--android:src="@mipmap/template_icon"/>-->
+
+<!--<TextView-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:text="Choose your picture"-->
+<!--android:layout_marginHorizontal="25dp"-->
+<!--android:layout_marginTop="18dp"-->
+<!--android:textSize="15sp"-->
+<!--android:fontFamily="@font/avenir_heavy"-->
+<!--android:textColor="@color/colorPrimaryText"/>-->
+
+<!--<Button-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:background="@drawable/button_radius_white"-->
+<!--android:text="Upload image"-->
+<!--android:textAllCaps="false"-->
+<!--android:drawableLeft="@mipmap/upload_icon_dark"-->
+<!--android:drawablePadding="8dp"-->
+<!--android:textSize="14sp"-->
+<!--android:textColor="@color/colorPrimaryText"-->
+<!--android:paddingHorizontal="30dp"-->
+<!--android:layout_marginTop="6dp"-->
+<!--android:layout_marginBottom="18dp"-->
+<!--android:layout_marginHorizontal="25dp"/>-->
