@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.home.HomeFragment;
+import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -175,16 +176,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment fragment = null;
+        Class fragmentClass;
         switch (item.getItemId()) {
             case R.id.action_search:
                 Toast.makeText(this, "SEARCH", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_notif:
-                Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();
+                fragmentClass = NotificationFragment.class;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager
+                        .beginTransaction()
+                        .replace(R.id.flContent, fragment)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+
     }
 
     //    @Override

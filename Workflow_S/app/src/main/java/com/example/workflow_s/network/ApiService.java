@@ -53,4 +53,8 @@ public interface ApiService {
     @GET("/api/ContentDetails/contentdetail/{taskid}")
     Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
+    @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
+    Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
+                                      @Path("userId") String userId);
+
 }
