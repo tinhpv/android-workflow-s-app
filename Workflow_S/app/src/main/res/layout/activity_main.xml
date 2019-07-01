@@ -9,15 +9,11 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- The main content view where fragments are loaded -->
-        <FrameLayout
-            android:id="@+id/flContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <!-- The ActionBar displayed at the top -->
         <android.support.v7.widget.Toolbar
@@ -32,7 +28,13 @@
             android:elevation="4dp">
         </android.support.v7.widget.Toolbar>
 
-    </FrameLayout>
+        <!-- The main content view where fragments are loaded -->
+        <FrameLayout
+            android:id="@+id/flContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 
     <android.support.design.widget.NavigationView

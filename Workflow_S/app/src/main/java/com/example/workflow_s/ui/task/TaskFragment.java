@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
@@ -41,14 +43,16 @@ public class TaskFragment extends Fragment implements TaskContract.TaskView {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_task_test, container, false);
+//        getActivity().getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        view = inflater.inflate(R.layout.fragment_task, container, false);
+        getActivity().setTitle("Checklist's Tasks");
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        setupTaskRV();
-//        initData();
+        setupTaskRV();
+        initData();
     }
 
     private void setupTaskRV() {

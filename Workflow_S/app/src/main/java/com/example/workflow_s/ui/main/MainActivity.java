@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.ui.activity.ActivityFragment;
+import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.home.HomeFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
 import com.example.workflow_s.ui.task.TaskFragment;
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = TemplateFragment.class;
                 break;
             case R.id.nav_checklist_fragment:
-                fragmentClass = TaskFragment.class;
+                fragmentClass = ChecklistFragment.class;
                 break;
             case R.id.nav_activity_fragment:
                 fragmentClass = ActivityFragment.class;
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.flContent, fragment)
+                .add(R.id.flContent, fragment)
                 .commit();
 
         menuItem.setChecked(true); // Highlight the selected item has been done by NavigationView
@@ -189,14 +191,4 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    //    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                mDrawerLayout.openDrawer(GravityCompat.START);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 }

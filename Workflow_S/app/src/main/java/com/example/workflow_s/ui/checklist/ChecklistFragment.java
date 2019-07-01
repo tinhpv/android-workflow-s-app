@@ -42,7 +42,6 @@ public class ChecklistFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33000000")));
         view = inflater.inflate(R.layout.fragment_checklist, container, false);
         return view;
     }
