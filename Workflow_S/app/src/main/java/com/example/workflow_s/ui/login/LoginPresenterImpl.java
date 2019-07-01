@@ -32,6 +32,17 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     }
 
     @Override
+    public void checkRoleUser(String userRole) {
+//        if (userRole.isEmpty()) {
+//            mLoginView.navigateToCodeVerifyActivity();
+//        } else {
+//            mLoginView.navigateToMainActivity();
+//        }
+
+        mLoginView.navigateToMainActivity();
+    }
+
+    @Override
     public void addUserToDB(User user) {
         mGetLoginDataInteractor.saveUserToDB(user, this);
     }
@@ -41,22 +52,16 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
         mLoginView = null;
     }
 
-
     // API Callback
     @Override
     public void onFinished(User user) {
-        mLoginView.onFinishedAddUser();
-        mLoginView.saveCurrentUserToPreference(user);
-
-        if (user.getRole().isEmpty()) {
-            mLoginView.navigateToCodeVerifyActivity();
-        } else {
-            mLoginView.navigateToHomeActivity();
-        }
+//        mLoginView.saveCurrentUserToPreference(user);
+        mLoginView.onFinishedAddUser(user);
     }
 
     @Override
     public void onFinished(Organization currentOrganization) {
+        mLoginView.onFinishedGetOrg();
         mLoginView.saveCurrentOrganizationToPreference(currentOrganization);
     }
 

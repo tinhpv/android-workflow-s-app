@@ -7,7 +7,6 @@ package com.example.workflow_s.ui.login;
  **/
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +16,8 @@ import android.view.View;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
-import com.example.workflow_s.network.ApiClient;
-import com.example.workflow_s.network.ApiService;
 import com.example.workflow_s.ui.authentication.AuthenticationActivity;
-import com.example.workflow_s.ui.home.HomeActivity;
+import com.example.workflow_s.ui.main.MainActivity;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,12 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.LoginView {
 
@@ -73,8 +64,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         String type = getResources().getString(R.string.google);
         String role = "";
         String token = "";
-        String avatar = account.getPhotoUrl().toString();
-        this.currentUser = new User(id, name, email, type, role, avatar, "");
+        String avatar = "";
+        if (null != account.getPhotoUrl()) {
+            avatar = account.getPhotoUrl().toString();
+        }
+
+
+        this.currentUser = new User(id, name, email, type, role, avatar, token);
     }
 
 
@@ -86,11 +82,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    // TODO -  Update UI on Google Sign-In result
+    // TODO -  HANDLE CASE GOOGLE ACCOUNT
     private void updateUI(GoogleSignInAccount account) {
         if (null != account) {
             Log.d(TAG, "Sign-In successfully!");
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
             Log.d(TAG, "Sign-In fail!");
@@ -141,15 +137,22 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     }
 
     @Override
-    public void navigateToHomeActivity() {
-        Intent intent = new Intent(this, HomeActivity.class);
+    public void navigateToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onFinishedAddUser() {
+    public void onFinishedAddUser(User user) {
+        currentUser.setRole(user.getRole());
+        currentUser.setToken(user.getToken());
+        saveCurrentUserToPreference(currentUser);
         mLoginPresenter.getCurrentOrganization(currentUser.getId());
     }
 
+    @Override
+    public void onFinishedGetOrg() {
+        mLoginPresenter.checkRoleUser(currentUser.getRole());
+    }
 
 }

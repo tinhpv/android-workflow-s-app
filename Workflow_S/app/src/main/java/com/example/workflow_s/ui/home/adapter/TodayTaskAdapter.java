@@ -60,7 +60,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
 
     @Override
     public void onBindViewHolder(@NonNull TodayTaskViewHolder todayTaskViewHolder, int i) {
-        todayTaskViewHolder.mTextView.setText("Record candidate details");
+        todayTaskViewHolder.mTextView.setText("Record emp");
     }
 
     @Override
