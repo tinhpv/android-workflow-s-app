@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
@@ -36,10 +37,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     private LoginContract.LoginPresenter mLoginPresenter;
 
+    LottieAnimationView mAnimationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupLoadingAnimation();
         initializeGoogleSignIn();
         initData();
     }
@@ -51,6 +55,26 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         // Check for existing Google Sign In account
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);
+    }
+
+    private void setupLoadingAnimation() {
+        mAnimationView = findViewById(R.id.animation_view);
+        mAnimationView.setVisibility(View.INVISIBLE);
+    }
+
+    private void switchOnLoading() {
+        mAnimationView.setVisibility(View.VISIBLE);
+        if (!mAnimationView.isAnimating()) {
+            mAnimationView.playAnimation();
+        }
+    }
+
+    private void switchOffLoading() {
+        if (mAnimationView.isAnimating()) {
+            mAnimationView.pauseAnimation();
+            mAnimationView.cancelAnimation();
+            mAnimationView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void initData() {
