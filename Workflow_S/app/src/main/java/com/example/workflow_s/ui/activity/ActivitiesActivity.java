@@ -6,9 +6,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.ui.activity.adapters.TodayActivitiesAdapter;
+import com.example.workflow_s.ui.activity.adapters.UpcomingActivitiesAdapter;
 import com.example.workflow_s.ui.activity.adapters.ViewPagerAdapter;
 import com.example.workflow_s.ui.activity.fragments.TodayActivitiesFragment;
 import com.example.workflow_s.ui.activity.fragments.UpcomingActivitiesFragment;
@@ -23,6 +26,8 @@ public class ActivitiesActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabItem mTodayTabItem, mUpcomingTabItem;
     private ViewPagerAdapter adapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,10 @@ public class ActivitiesActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    public void setUpTodayActivitiesRV() {
+
     }
 
 }

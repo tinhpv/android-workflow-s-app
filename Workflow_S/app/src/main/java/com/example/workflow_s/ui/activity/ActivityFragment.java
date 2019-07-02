@@ -22,7 +22,7 @@ import com.example.workflow_s.ui.activity.adapters.ViewPagerAdapter;
  **/
 
 
-public class ActivityFragment extends Fragment {
+public class ActivityFragment extends Fragment  {
 
     private final static int NUMBER_OF_TABS = 2;
     private final static String TAG = "ACTIVITIES";
@@ -32,6 +32,8 @@ public class ActivityFragment extends Fragment {
     private ViewPager mViewPager;
     private TabItem mTodayTabItem, mUpcomingTabItem;
     private ViewPagerAdapter adapter;
+
+    private ActivityContract.ActivityPresenter mPresenter;
 
     @Nullable
     @Override
