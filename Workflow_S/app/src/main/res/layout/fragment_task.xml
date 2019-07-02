@@ -20,7 +20,7 @@
             android:padding="17dp"
             android:text="Student Registration Process"
             android:fontFamily="@font/avenir_heavy"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textColor="@android:color/white"
             android:textAlignment="center"
             android:background="@drawable/container_radius_dark"/>
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/run_checklist"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:paddingVertical="18dp"
             android:paddingHorizontal="30dp"
             android:layout_marginBottom="20dp"
