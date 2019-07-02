@@ -34,14 +34,20 @@ public class HomePresenterImpl implements HomeContract.HomePresenter,
     }
 
     @Override
+    public void onFailureGetChecklists(Throwable t) {
+        mHomeView.onFailGetChecklist();
+    }
+
+    @Override
     public void onFinishedGetTasks(ArrayList<Task> taskArrayList) {
         mHomeView.setDataToTasksRecyclerView(taskArrayList);
     }
 
     @Override
-    public void onFailure(Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
+    public void onFailureGetTasks(Throwable t) {
+        mHomeView.onFailGetTask();
     }
+
 
     @Override
     public void onDestroy() {
@@ -54,8 +60,8 @@ public class HomePresenterImpl implements HomeContract.HomePresenter,
     }
 
     @Override
-    public void loadDueTasks(String userId) {
-        mGetHomeDataInteractor.getAllDueTasks(userId, this);
+    public void loadDueTasks(String userId, String orgId) {
+        mGetHomeDataInteractor.getAllDueTasks(userId, orgId, this);
     }
 
 }

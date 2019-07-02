@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
@@ -21,6 +21,7 @@ import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.CommonUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private HomeContract.HomePresenter mPresenter;
 
+    private ShimmerFrameLayout mChecklistShimmerFrameLayout, mTaskShimmerFrameLayout;
+    private LinearLayout mCheckListDataStatusMessage, mTaskDataStatusMessage;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,10 +56,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        mChecklistShimmerFrameLayout = view.findViewById(R.id.checklist_shimmer_view_container);
+        mTaskShimmerFrameLayout = view.findViewById(R.id.task_shimmer_view_container);
+        mCheckListDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
+        mTaskDataStatusMessage = view.findViewById(R.id.task_data_notfound_message);
+
         makeDashboardButtonLookGood();
         setupChecklistRV();
         setupTaskRV();
         initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mChecklistShimmerFrameLayout.startShimmerAnimation();
+        mTaskShimmerFrameLayout.startShimmerAnimation();
     }
 
     @Override
@@ -80,7 +97,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private void initData() {
         mPresenter = new HomePresenterImpl(this, new HomeInteractor());
+        // FIXME - HARDCORD HERE FOR TESTING ONLY
         mPresenter.loadRunningChecklists("1", "1");
+        mPresenter.loadDueTasks("1", "1");
     }
 
     private void setupTaskRV() {
@@ -90,8 +109,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         todayTaskRecyclerView.setLayoutManager(todayTaskLayoutManager);
 
         // FIXME - TEST DATASOURCE OF TASK_RV
-        ArrayList<Task> mTasks = new ArrayList<>();
-        mTodayTaskAdapter = new TodayTaskAdapter(mTasks);
+        mTodayTaskAdapter = new TodayTaskAdapter();
         todayTaskRecyclerView.setAdapter(mTodayTaskAdapter);
     }
 
@@ -121,12 +139,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-        mChecklistProgressAdapter.setChecklists(datasource);
+        mChecklistShimmerFrameLayout.stopShimmerAnimation();
+        mChecklistShimmerFrameLayout.setVisibility(View.INVISIBLE);
+        if (datasource.size() == 0) {
+            mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
+        } else {
+            mChecklistProgressAdapter.setChecklists(datasource);
+        }
+
     }
 
     @Override
     public void setDataToTasksRecyclerView(ArrayList<Task> datasource) {
-        mTodayTaskAdapter = new TodayTaskAdapter(datasource);
-        todayTaskRecyclerView.setAdapter(mTodayTaskAdapter);
+        mTaskShimmerFrameLayout.stopShimmerAnimation();
+        mTaskShimmerFrameLayout.setVisibility(View.INVISIBLE);
+        if (datasource.size() == 0) {
+            mTaskDataStatusMessage.setVisibility(View.VISIBLE);
+        } else {
+            mTodayTaskAdapter.setTasks(datasource);
+        }
+
+    }
+
+    @Override
+    public void onFailGetChecklist() {
+        mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onFailGetTask() {
+        mTaskDataStatusMessage.setVisibility(View.VISIBLE);
     }
 }

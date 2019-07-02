@@ -14,6 +14,7 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.organization.adapter.OrganizationMemberAdapter;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     private OrganizationContract.OrganizationPresenter mPresenter;
 
+    private ShimmerFrameLayout mOrgShimmerLayout;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,11 +45,13 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mOrgShimmerLayout = view.findViewById(R.id.org_shimmer_view_container);
         setupOrganizationRV();
         initData();
     }
 
     private void initData() {
+        mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         mPresenter.requestOrganizationData(orgId);
@@ -64,6 +69,8 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     @Override
     public void finishedGetMemeber(List<User> userList) {
+        mOrgShimmerLayout.stopShimmerAnimation();
+        mOrgShimmerLayout.setVisibility(View.INVISIBLE);
         mAdapter.setUserList(userList);
     }
 }
