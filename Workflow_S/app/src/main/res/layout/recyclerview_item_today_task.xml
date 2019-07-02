@@ -38,6 +38,7 @@
 
     <!--time label next on the right-->
     <TextView
+        android:id="@+id/tv_due_time"
         android:layout_width="60dp"
         android:layout_height="20dp"
         android:layout_alignParentRight="true"

@@ -93,7 +93,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
             avatar = account.getPhotoUrl().toString();
         }
 
-
         this.currentUser = new User(id, name, email, type, role, avatar, token);
     }
 
@@ -121,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         try {
             mGoogleAccount = completedTask.getResult(ApiException.class);
             if (null != mGoogleAccount) {
+                switchOnLoading();
                 initializeCurrentUser(mGoogleAccount);
                 mLoginPresenter.addUserToDB(currentUser);
             }
@@ -156,12 +156,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     @Override
     public void navigateToCodeVerifyActivity() {
+        switchOffLoading();
         Intent intent = new Intent(this, AuthenticationActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void navigateToMainActivity() {
+        switchOffLoading();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

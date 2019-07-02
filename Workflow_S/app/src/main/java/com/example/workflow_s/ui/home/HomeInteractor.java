@@ -26,8 +26,7 @@ public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
     @Override
     public void getAllRunningChecklists(String userId, String orgId, final OnFinishedGetRunningChecklistsListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-//        Call<List<Checklist>> call = service.getAllRunningChecklists(orgId, userId);
-        Call<List<Checklist>> call = service.getAllRunningChecklists("1", "2372592022969346");
+        Call<List<Checklist>> call = service.getAllRunningChecklists(orgId);
 
         call.enqueue(new Callback<List<Checklist>>() {
             @Override
@@ -37,15 +36,15 @@ public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
 
             @Override
             public void onFailure(Call<List<Checklist>> call, Throwable t) {
-                onFinishedListener.onFailure(t);
+                onFinishedListener.onFailureGetChecklists(t);
             }
         });
     }
 
     @Override
-    public void getAllDueTasks(String userId, final OnFinishedGetDueTasksListener onFinishedListener) {
+    public void getAllDueTasks(String userId, String orgId, final OnFinishedGetDueTasksListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<Task>> call = service.getAllDueTasks(userId);
+        Call<List<Task>> call = service.getAllDueTasks(userId, orgId);
 
         call.enqueue(new Callback<List<Task>>() {
             @Override
@@ -55,7 +54,7 @@ public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
-                onFinishedListener.onFailure(t);
+                onFinishedListener.onFailureGetTasks(t);
             }
         });
     }

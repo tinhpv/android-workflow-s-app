@@ -24,6 +24,11 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
+
+    @GET("api/Checklists/checklistprogress/{organizationId}")
+    Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId);
+
+
     @GET("api/Checklists/checklistprogress/{organizationId}/{userId}")
     Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId, @Path("userId") String userId);
 
@@ -33,8 +38,8 @@ public interface ApiService {
     @GET("api/UserOrganizations/organization/{userId}")
     Call<Organization> getUserOrganizations(@Path("userId") String userId);
 
-    @GET("/api/TaskItems/taskoverdue/{userId}")
-    Call<List<Task>> getAllDueTasks(@Path("userId") String userId);
+    @GET("/api/TaskItems/taskoverdue/{organizationId}/{userId}")
+    Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId, @Path("userId") String userId);
 
     @POST("/api/Users/updatephone/{userid}/{phone}")
     Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId, @Path("phone") String phoneNumber);

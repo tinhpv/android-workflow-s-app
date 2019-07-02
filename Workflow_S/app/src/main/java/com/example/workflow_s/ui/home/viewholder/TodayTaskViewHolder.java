@@ -16,10 +16,12 @@ import com.example.workflow_s.R;
 
 public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView mTextView;
+    public TextView mTaskName, mChecklistTask, mDueTime;
 
     public TodayTaskViewHolder(@NonNull View itemView) {
         super(itemView);
-        mTextView = itemView.findViewById(R.id.tv_task_name);
+        mTaskName = itemView.findViewById(R.id.tv_task_name);
+        mChecklistTask = itemView.findViewById(R.id.tv_checklist_of_task);
+        mDueTime = itemView.findViewById(R.id.tv_due_time);
     }
 }

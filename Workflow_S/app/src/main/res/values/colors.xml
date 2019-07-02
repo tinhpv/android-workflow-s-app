@@ -9,4 +9,6 @@
     <color name="silver">#979595</color>
     <color name="inProgressColor">#0091FF</color>
     <color name="accomplishedColor">#67C801</color>
+
+    <color name="shimmerCellColor">#dddddd</color>
 </resources>

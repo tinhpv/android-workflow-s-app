@@ -9,26 +9,32 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/flContent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+        <!-- The ActionBar displayed at the top -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:elevation="4dp"
+            style="@style/HeaderBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            app:layout_collapseMode="parallax"
+            android:gravity="center_vertical"
+            android:elevation="4dp">
+        </android.support.v7.widget.Toolbar>
 
-    </FrameLayout>
+        <!-- The main content view where fragments are loaded -->
+        <FrameLayout
+            android:id="@+id/flContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 
     <android.support.design.widget.NavigationView
@@ -41,9 +47,6 @@
         app:itemTextColor="@color/colorPrimaryDark"
         app:itemIconTint="@color/colorPrimaryDark"
         android:theme="@style/NavigationViewItem"></android.support.design.widget.NavigationView>
-
-
-
 
 
 

@@ -14,31 +14,34 @@ import java.util.ArrayList;
 
 
 public interface HomeContract {
+
     interface HomePresenter {
         void onDestroy();
         void loadRunningChecklists(String userId, String orgId);
-        void loadDueTasks(String userId);
+        void loadDueTasks(String userId, String orgId);
     }
 
     interface HomeView  {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
         void setDataToTasksRecyclerView(ArrayList<Task> datasource);
+        void onFailGetChecklist();
+        void onFailGetTask();
     }
 
     interface GetHomeDataInteractor {
 
         interface OnFinishedGetRunningChecklistsListener {
             void onFinishedGetChecklists(ArrayList<Checklist> checklistArrayList);
-            void onFailure(Throwable t);
+            void onFailureGetChecklists(Throwable t);
         }
 
         interface OnFinishedGetDueTasksListener {
             void onFinishedGetTasks(ArrayList<Task> taskArrayList);
-            void onFailure(Throwable t);
+            void onFailureGetTasks(Throwable t);
         }
 
         void getAllRunningChecklists(String userId, String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
-        void getAllDueTasks(String userId, OnFinishedGetDueTasksListener onFinishedListener);
+        void getAllDueTasks(String userId, String orgId, OnFinishedGetDueTasksListener onFinishedListener);
 
     }
 }
