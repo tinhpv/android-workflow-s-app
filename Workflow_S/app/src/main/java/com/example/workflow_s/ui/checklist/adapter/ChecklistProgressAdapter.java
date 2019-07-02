@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.checklist.adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -54,7 +55,9 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             @Override
             public void onClick(View v) {
                 String checklistId = String.valueOf(mChecklists.get(i).getId());
-                CommonUtils.replaceFragments(viewGroup.getContext(), TaskFragment.class, "checklistId", checklistId);
+                Bundle args = new Bundle();
+                args.putString("checklistId", checklistId);
+                CommonUtils.replaceFragments(viewGroup.getContext(), TaskFragment.class, args);
             }
         });
 

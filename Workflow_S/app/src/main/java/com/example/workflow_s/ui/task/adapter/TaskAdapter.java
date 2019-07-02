@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.task.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,7 +57,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonUtils.replaceFragments(viewGroup.getContext(), TaskDetailFragment.class, "taskId", String.valueOf(mTaskList.get(i).getId()));
+                Bundle args = new Bundle();
+                args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
+                CommonUtils.replaceFragments(viewGroup.getContext(), TaskDetailFragment.class, args);
             }
         });
         return viewHolder;

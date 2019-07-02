@@ -17,7 +17,7 @@ import com.example.workflow_s.R;
 
 public class CommonUtils {
 
-    public static void replaceFragments(Context fragmentContext, Class fragmentClass, String key, String value) {
+    public static void replaceFragments(Context fragmentContext, Class fragmentClass, Bundle args) {
 
         Fragment fragment = null;
         try {
@@ -26,9 +26,7 @@ public class CommonUtils {
             e.printStackTrace();
         }
         // Insert the fragment by replacing any existing fragment
-        if (null != key) {
-            Bundle args = new Bundle();
-            args.putString(key, value);
+        if (null != args) {
             fragment.setArguments(args);
         }
 
@@ -39,4 +37,5 @@ public class CommonUtils {
                 .commit();
 
     }
+
 }
