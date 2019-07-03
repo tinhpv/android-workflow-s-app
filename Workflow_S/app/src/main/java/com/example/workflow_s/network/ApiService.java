@@ -61,8 +61,18 @@ public interface ApiService {
 
     @GET("/api/Checklists/listtemplate/{organizationId}/{userId}")
     Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId, @Path("userId") String userId);
+
     @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
                                       @Path("userId") String userId);
+
+    @GET("/api/Checklists/template/{organizationId}/{templateId}/{userId}")
+    Call<Template> getTemplateObject(@Path("organizationId") String organizationId,
+                                         @Path("templateId") String templateId,
+                                         @Path("userId") String userId);
+
+
+    @POST("/api/Checklists/run/{userId}")
+    Call<ResponseBody> runChecklist(@Path("userId") String userId, @Body Template template);
 
 }

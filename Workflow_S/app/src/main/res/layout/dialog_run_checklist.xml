@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="30dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checklist name**"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:paddingVertical="16dp"
+        android:fontFamily="@font/avenir_heavy"
+        android:background="@drawable/background_textview_dialog"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_alert_run_checklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginHorizontal="25dp"
+        android:textSize="18sp"
+        android:textColor="@color/color_alert"
+        android:fontFamily="@font/avenir_heavy_oblique"
+        android:text="*Give it a name.."
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/edt_checklist_name"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:background="@drawable/edittext_rounded"
+        android:layout_marginBottom="30dp"
+        android:layout_marginHorizontal="25dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_heavy"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/bt_confirm_run"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="OK"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/avenir_heavy"
+            android:background="@drawable/button_radius_dark"
+            android:layout_marginHorizontal="5dp"/>
+
+        <Button
+            android:id="@+id/bt_cancel_run"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="Cancel"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryText"
+            android:fontFamily="@font/avenir_heavy"
+            android:background="@drawable/button_radius_gray"
+            android:layout_marginHorizontal="5dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
