@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.taskdetail;
 
 
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -31,4 +32,24 @@ public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDat
             }
         });
     }
+
+    //post 3 model thuc thi post something
+//    @Override
+//    public void postSomething(Task task, final OnFinishedPostDataListener onFinishedPostDataListener) {
+//        ApiService service = ApiClient.getClient().create(ApiService.class);
+//        Call<Task> call = null;
+//
+//        call.enqueue(new Callback<Task>() {
+//            @Override
+//            public void onResponse(Call<Task> call, Response<Task> response) {
+//                //se responese khi thuc thi thanh cong
+//                //return message
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Task> call, Throwable t) {
+//                //failure
+//            }
+//        });
+//    }
 }

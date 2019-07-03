@@ -65,4 +65,7 @@ public interface ApiService {
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
                                       @Path("userId") String userId);
 
+    //@POST("/api/Checklists/checklist")
+    //Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId, @Path("userId") String userId);
+
 }

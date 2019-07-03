@@ -1,6 +1,13 @@
 package com.example.workflow_s.ui.taskdetail;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,14 +20,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.utils.Constant;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -35,6 +45,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
     private View view;
     private int taskId;
     private LinearLayout mContainerLayout;
+    Dialog myDialog;
+    Button btnCamera,btnGallery;
+    private final int REQUEST_CAMERA=1,REQUEST_GALLERY =2;
+    //
+    private Task mTask;
 
     private TaskDetailContract.TaskDetailPresenter mPresenter;
 
@@ -52,6 +67,8 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
         mContainerLayout = view.findViewById(R.id.task_detail_layout);
         getTaskIdFromParentFragment();
         initData();
+        //sau khi get data tu text view,... goi presenter
+       // postTask(null);
     }
 
     public void initData() {
@@ -97,6 +114,13 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
                         Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button, mContainerLayout, false);
                         mContainerLayout.addView(label);
                         mContainerLayout.addView(uploadButton);
+                        uploadButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showDialog();
+
+                            }
+                        });
                     } // end if
                     break;
                 case "text":
@@ -140,5 +164,74 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
 //                }
 //            }
 //        } // end for
+    }
+
+
+
+//    @Override
+//    public void baonguoidung(String abc) {
+//        //diaglog.show bao ng dung thanh cong
+//        //Toast.
+//    }
+    //post 1
+//    public void postTask(Task task) {
+//        mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
+//        mPresenter.postSomething(task);
+//    }
+
+    public void showDialog()
+    {
+        myDialog = new Dialog(getContext());
+        myDialog.setContentView(R.layout.dialog_upload_picture);
+        myDialog.setTitle("Choose Image");
+        btnCamera=myDialog.findViewById(R.id.btnCamera);
+        btnGallery=myDialog.findViewById(R.id.btnGallery);
+        btnGallery.setEnabled(true);
+        btnCamera.setEnabled(true);
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentGallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intentGallery.setType("image/*");
+                startActivityForResult(intentGallery,REQUEST_GALLERY);
+            }
+        });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(intentCamera.resolveActivity(getContext().getPackageManager())!=null)
+                {
+                    startActivityForResult(intentCamera,REQUEST_CAMERA);
+
+                }
+
+            }
+        });
+        myDialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode== Activity.RESULT_OK)
+        {
+            if(requestCode==REQUEST_CAMERA)
+            {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                // set image to ui here
+            }else if(requestCode==REQUEST_GALLERY)
+            {
+                Uri uri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
+                    // set image here
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }
