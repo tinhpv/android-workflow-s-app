@@ -31,6 +31,8 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
     private RecyclerView todayActivitiesRecyclerView;
     private RecyclerView.LayoutManager todayLayoutManager;
 
+    private ActivityContract.ActivityPresenter mPresenter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

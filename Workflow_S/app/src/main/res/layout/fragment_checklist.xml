@@ -1,89 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/backgroundColor">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!--IN PROGRESS CHECKLIST-->
-    <LinearLayout
-        android:id="@+id/layout_inprogress_section"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_checklist_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@color/unselectedItem"
+        android:background="@color/colorPrimaryDark"
+        app:tabTextAppearance="@style/TabText">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_current"
+            android:text="Current"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="In progress"
-            android:textSize="15dp"
-            android:fontFamily="@font/avenir_black"
-            android:textColor="@android:color/white"
-            android:background="@drawable/container_radius_blue"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"/>
+            android:layout_width="wrap_content" />
 
-
-        <!--recycler view-->
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_all"
+            android:text="All"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_in_progress_checklist"
-                android:scrollbars="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            android:layout_width="wrap_content"/>
 
-            </android.support.v7.widget.RecyclerView>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-
-    <!--ACCOMPLISHED CHECKLIST-->
-    <LinearLayout
-        android:id="@+id/layout_accomplished_section"
+    </android.support.design.widget.TabLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_checklist_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="In progress"
-            android:textSize="15dp"
-            android:fontFamily="@font/avenir_black"
-            android:textColor="@android:color/white"
-            android:background="@drawable/container_radius_green"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"/>
-
-
-        <!--recycler view-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_accomplished_checklist"
-                android:scrollbars="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-        </RelativeLayout>
-
-    </LinearLayout>
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

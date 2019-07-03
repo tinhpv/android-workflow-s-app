@@ -4,7 +4,7 @@ import com.example.workflow_s.model.ContentDetail;
 
 import java.util.ArrayList;
 
-public interface TaskDetailContract {
+public interface  TaskDetailContract {
 
     //view
     interface  TaskDetailView {
