@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.task;
+package com.example.workflow_s.ui.task.task_checklist;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -6,19 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.ui.task.adapter.TaskAdapter;
+import com.example.workflow_s.ui.task.TaskContract;
+import com.example.workflow_s.ui.task.TaskInteractor;
+import com.example.workflow_s.ui.task.TaskPresenterImpl;
+import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Workflow_S
@@ -27,24 +27,22 @@ import java.util.List;
  **/
 
 
-public class TaskFragment extends Fragment implements TaskContract.TaskView {
+public class ChecklistTaskFragment extends Fragment implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener {
 
     private static final String TAG = "TASK_FRAGMENT";
 
     View view;
-    private RecyclerView taskRecyclerView;
-    private TaskAdapter mTaskAdapter;
+    private RecyclerView checklistTaskRecyclerView;
+    private ChecklistTaskAdapter mChecklistChecklistTaskAdapter;
     private RecyclerView.LayoutManager taskLayoutManager;
 
     private TaskContract.TaskPresenter mPresenter;
-
     private int checklistId;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        getActivity().getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-        view = inflater.inflate(R.layout.fragment_task, container, false);
+        view = inflater.inflate(R.layout.fragment_task_cheklist, container, false);
         getActivity().setTitle("Checklist's Tasks");
         return view;
     }
@@ -56,19 +54,20 @@ public class TaskFragment extends Fragment implements TaskContract.TaskView {
     }
 
     private void setupTaskRV() {
-        taskRecyclerView = view.findViewById(R.id.rv_task);
-        taskRecyclerView.setHasFixedSize(true);
+        checklistTaskRecyclerView = view.findViewById(R.id.rv_checklist_task);
+        checklistTaskRecyclerView.setHasFixedSize(true);
         taskLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        taskRecyclerView.setLayoutManager(taskLayoutManager);
+        checklistTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
-        mTaskAdapter = new TaskAdapter();
-        taskRecyclerView.setAdapter(mTaskAdapter);
+        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this, this);
+        checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
     }
 
     public void initData() {
+
+        // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
-        Log.i(TAG, "initData: " + checklistId);
 
         // FIXME - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
@@ -79,6 +78,17 @@ public class TaskFragment extends Fragment implements TaskContract.TaskView {
 
     @Override
     public void setDataToTaskRecyclerView(ArrayList<Task> datasource) {
-        mTaskAdapter.setTaskList(datasource);
+        mChecklistChecklistTaskAdapter.setTaskList(datasource);
     }
+
+    @Override
+    public void onEventCheckBox(Boolean isSelected) {
+//        if (isTemplate) {
+//            Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
+//            //btnRunChecklist.startAnimation(shakeAnimation);
+//        } else { // is checklist
+//
+//        } //end if
+    }
+
 }

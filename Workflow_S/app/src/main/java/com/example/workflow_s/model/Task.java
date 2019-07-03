@@ -2,6 +2,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-22
@@ -28,6 +30,7 @@ public class Task {
 
     @SerializedName("taskStatus")
     private String taskStatus;
+
 
     public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus) {
         this.id = id;

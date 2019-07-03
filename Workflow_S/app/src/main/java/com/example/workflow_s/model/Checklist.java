@@ -40,6 +40,7 @@ public class Checklist {
     @SerializedName("countDoneTask")
     private Integer doneTask;
 
+
     public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
         this.id = id;
         this.userId = userId;

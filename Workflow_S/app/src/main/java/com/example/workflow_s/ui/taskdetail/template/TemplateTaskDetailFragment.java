@@ -1,10 +1,9 @@
-package com.example.workflow_s.ui.taskdetail;
+package com.example.workflow_s.ui.taskdetail.template;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,33 +16,31 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
-import com.example.workflow_s.utils.Constant;
+import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
+import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
+import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 
-import org.w3c.dom.Text;
-
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
  * Workflow_S
- * Created by TinhPV on 2019-06-30
+ * Created by TinhPV on 2019-07-03
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
 
-public class TaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView {
-    private View view;
+public class TemplateTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView {
+
+    View view;
     private int taskId;
     private LinearLayout mContainerLayout;
-
     private TaskDetailContract.TaskDetailPresenter mPresenter;
-
     ArrayList<ContentDetail> taskContentList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_task_detail_template, container, false);
         return view;
     }
 
@@ -54,7 +51,29 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
         initData();
     }
 
-    public void initData() {
+    private void initData() {
+
+        mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
+        mPresenter.loadDetails(taskId);
+
+        // FIXME - STATIC DATA HERE FOR TESTING ONLY
+
+        String textForTesting1 = "First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below.";
+        String textForTesting2 = "Employment background checks are vital for not only you as an employer but also for your company. As a hiring manager, it is your responsibility to exercise caution or due diligence by uncovering any potential complications a person may have in their past that they potentially could bring to the workplace.";
+        String imageSrcForTesting1 = "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
+        String imageSrcForTesting2 = "https://images.unsplash.com/photo-1519336367661-eba9c1dfa5e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
+
+        taskContentList = new ArrayList<>();
+        taskContentList.add(new ContentDetail(1, "img", "", imageSrcForTesting1, 1, 1, ""));
+        taskContentList.add(new ContentDetail(2, "text", textForTesting1, "", 1, 2, ""));
+        taskContentList.add(new ContentDetail(3, "text", "", "", 1, 3, "Input your name"));
+        taskContentList.add(new ContentDetail(4, "img", "", "", 1, 4, "Choose a picture"));
+        taskContentList.add(new ContentDetail(5, "text", textForTesting2, "", 1, 5, ""));
+        taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
+
+    }
+
+    private void getTaskIdFromParentFragment() {
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.loadDetails(taskId);
 
@@ -76,10 +95,6 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
         taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
     }
 
-    private void getTaskIdFromParentFragment() {
-        Bundle arguments = getArguments();
-        taskId = Integer.parseInt(arguments.getString("taskId"));
-    }
 
     @Override
     public void setDataToView(ArrayList<ContentDetail> datasource) {
@@ -114,31 +129,5 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
                     break;
             } // end switch
         } // end for
-
-//        for (int i = 0; i < datasource.size(); i++) {
-//            if (datasource.get(i).getType().equals("img")) {
-//                if (datasource.get(i).getLabel().isEmpty()) {
-//                    //LinearLayout imageLayout = findViewById(R.id.img_taskdetail_layout);
-//                    //View childImg = inflater.inflate(R.layout.taskdetail_image, (ViewGroup) )
-//                    ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
-//                    //ImageView imageView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, true);
-//                    Log.i("IMG", "setDataToView: " + Constant.IMG_BASE_URL + datasource.get(i).getImageSrc()) ;
-//
-//                    Glide.with(this).load(Constant.IMG_BASE_URL + datasource.get(i).getImageSrc()).into(imgView);
-//                    mContainerLayout.addView(imgView);
-//                }
-//            } else if (datasource.get(i).getType().equals("text")) {
-//                if (datasource.get(i).getLabel().isEmpty()) {
-//                    //LinearLayout textLayout = findViewById(R.id.textview_taskdetail_layout);
-////                    TextView textView = findViewById(R.id.txt_task_detail);
-////                    textView.setText(datasource.get(i).getText());
-//
-//                    TextView txtView = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
-//                    txtView.setText(datasource.get(i).getText());
-//                    mContainerLayout.addView(txtView);
-//
-//                }
-//            }
-//        } // end for
     }
 }

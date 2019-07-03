@@ -2,6 +2,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-28
@@ -26,6 +28,8 @@ public class Template {
     private Integer organizationId;
     @SerializedName("category")
     private String category;
+
+
 
     public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category) {
         this.id = id;

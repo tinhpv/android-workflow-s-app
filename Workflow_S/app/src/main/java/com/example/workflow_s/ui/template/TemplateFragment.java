@@ -20,6 +20,7 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
 import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 
     private void initData() {
         mTemplatePresenter = new TemplatePresenterImpl(this, new TemplateInteractor());
+
 
 //        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
 //        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
