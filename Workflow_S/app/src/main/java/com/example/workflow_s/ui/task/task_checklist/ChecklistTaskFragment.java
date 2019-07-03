@@ -59,7 +59,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         taskLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         checklistTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
-        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this, this);
+        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this);
         checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
     }
 
