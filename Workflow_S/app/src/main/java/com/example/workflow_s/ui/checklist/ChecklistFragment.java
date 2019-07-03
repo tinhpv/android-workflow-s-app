@@ -75,11 +75,11 @@ public class ChecklistFragment extends Fragment {
 
     private void initData() {
         mChecklists = new ArrayList<>();
-        mChecklists.add(new Checklist(1, "123", "Vu Tinh 24h", "abc", "12h30'", 1, 1, 1, 5, 2));
-        mChecklists.add(new Checklist(2, "124", "Tien Nguyen 14/2", "abc", "12h30'", 1, 1, 1, 5, 2));
-        mChecklists.add(new Checklist(3, "125", "Phat Lam 12/3", "abc", "12h30'", 1, 1, 1, 5, 2));
-        mChecklists.add(new Checklist(4, "126", "Cao Trang 5/12", "abc", "12h30'", 1, 1, 1, 5, 5));
-        mChecklists.add(new Checklist(5, "128", "Vietnam 6788", "abc", "12h30'", 1, 1, 1, 5, 5));
+//        mChecklists.add(new Checklist(1, "123", "Vu Tinh 24h", "abc", "12h30'", 1, 1, 1, 5, 2));
+//        mChecklists.add(new Checklist(2, "124", "Tien Nguyen 14/2", "abc", "12h30'", 1, 1, 1, 5, 2));
+//        mChecklists.add(new Checklist(3, "125", "Phat Lam 12/3", "abc", "12h30'", 1, 1, 1, 5, 2));
+//        mChecklists.add(new Checklist(4, "126", "Cao Trang 5/12", "abc", "12h30'", 1, 1, 1, 5, 5));
+//        mChecklists.add(new Checklist(5, "128", "Vietnam 6788", "abc", "12h30'", 1, 1, 1, 5, 5));
     }
 
     private void setupActiveRV() {
