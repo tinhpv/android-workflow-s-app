@@ -14,9 +14,9 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textSize="22sp"
-        android:text="Error"
+        android:text="Permission Alert!"
         android:textColor="#fafafa"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/textview_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -24,19 +24,19 @@
         android:padding="10dp"
         android:gravity="center"
         android:fontFamily="@font/avenir_light"
-        android:text="You didn't assigned this task ! You can't see content detail of this."
-        android:lines="2"
+        android:text="You're not assigned to this task. So you dont have permission to check it out."
+        android:lines="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"/>
 
     <Button
         android:id="@+id/btn_ok"
-        android:layout_width="200dp"
+        android:layout_width="100dp"
         android:layout_gravity="center"
         android:text="OK"
         android:textColor="#fafafa"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_radius_dark"/>
+        android:layout_height="40dp"
+        android:background="@drawable/button_radius_red"/>
 
 </LinearLayout>
