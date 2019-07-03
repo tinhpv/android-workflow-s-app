@@ -11,4 +11,6 @@
     <color name="accomplishedColor">#67C801</color>
 
     <color name="shimmerCellColor">#dddddd</color>
+
+    <color name="color_alert">#800000</color>
 </resources>
