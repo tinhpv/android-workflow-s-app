@@ -31,6 +31,8 @@ public class Template {
     @SerializedName("taskItem")
     private List<Task> taskItems;
 
+
+
     public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category) {
         this.id = id;
         this.userId = userId;

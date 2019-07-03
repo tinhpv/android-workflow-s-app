@@ -1,10 +1,9 @@
-package com.example.workflow_s.ui.taskdetail;
+package com.example.workflow_s.ui.taskdetail.template;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,33 +16,31 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
-import com.example.workflow_s.utils.Constant;
+import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
+import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
+import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 
-import org.w3c.dom.Text;
-
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
  * Workflow_S
- * Created by TinhPV on 2019-06-30
+ * Created by TinhPV on 2019-07-03
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
 
-public class TaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView {
-    private View view;
+public class TemplateTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView {
+
+    View view;
     private int taskId;
     private LinearLayout mContainerLayout;
-
     private TaskDetailContract.TaskDetailPresenter mPresenter;
-
     ArrayList<ContentDetail> taskContentList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_task_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_task_detail_template, container, false);
         return view;
     }
 
@@ -54,11 +51,10 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
         initData();
     }
 
-    public void initData() {
+    private void initData() {
+
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.loadDetails(taskId);
-
-
 
         // FIXME - STATIC DATA HERE FOR TESTING ONLY
 
@@ -74,12 +70,14 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
         taskContentList.add(new ContentDetail(4, "img", "", "", 1, 4, "Choose a picture"));
         taskContentList.add(new ContentDetail(5, "text", textForTesting2, "", 1, 5, ""));
         taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
+
     }
 
     private void getTaskIdFromParentFragment() {
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
     }
+
 
     @Override
     public void setDataToView(ArrayList<ContentDetail> datasource) {
@@ -114,31 +112,5 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.T
                     break;
             } // end switch
         } // end for
-
-//        for (int i = 0; i < datasource.size(); i++) {
-//            if (datasource.get(i).getType().equals("img")) {
-//                if (datasource.get(i).getLabel().isEmpty()) {
-//                    //LinearLayout imageLayout = findViewById(R.id.img_taskdetail_layout);
-//                    //View childImg = inflater.inflate(R.layout.taskdetail_image, (ViewGroup) )
-//                    ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
-//                    //ImageView imageView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, true);
-//                    Log.i("IMG", "setDataToView: " + Constant.IMG_BASE_URL + datasource.get(i).getImageSrc()) ;
-//
-//                    Glide.with(this).load(Constant.IMG_BASE_URL + datasource.get(i).getImageSrc()).into(imgView);
-//                    mContainerLayout.addView(imgView);
-//                }
-//            } else if (datasource.get(i).getType().equals("text")) {
-//                if (datasource.get(i).getLabel().isEmpty()) {
-//                    //LinearLayout textLayout = findViewById(R.id.textview_taskdetail_layout);
-////                    TextView textView = findViewById(R.id.txt_task_detail);
-////                    textView.setText(datasource.get(i).getText());
-//
-//                    TextView txtView = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
-//                    txtView.setText(datasource.get(i).getText());
-//                    mContainerLayout.addView(txtView);
-//
-//                }
-//            }
-//        } // end for
     }
 }
