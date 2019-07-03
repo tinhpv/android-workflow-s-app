@@ -21,7 +21,7 @@ public interface TemplateContract {
     }
 
     interface TemplateView {
-        void finishGetTemplates(List<Template> userList);
+        void finishGetTemplates(List<Template> templateList);
     }
 
     interface GetTemplateDataContract {

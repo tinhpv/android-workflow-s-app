@@ -12,14 +12,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.ui.organization.adapter.OrganizationMemberAdapter;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
-import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,14 +32,24 @@ import java.util.List;
  **/
 
 
-public class TemplateFragment extends Fragment implements TemplateContract.TemplateView {
+public class TemplateFragment extends Fragment implements TemplateContract.TemplateView, TemplateDialogFragment.DataBackContract {
+
+    private final static String TAG = "TEMPLATE_FRAGMENT";
 
     View view;
+    private TextView categoryTextView;
     private RecyclerView templateRecyclerView;
     private TemplateAdapter mAdapter;
     private RecyclerView.LayoutManager templateLayoutManager;
 
     private TemplateContract.TemplatePresenter mTemplatePresenter;
+
+    private ShimmerFrameLayout mShimmerFrameLayout;
+    private LinearLayout mTemplateDataStatusMessage;
+
+    private ArrayList<String> categoryList;
+    private ArrayList<Template> templateList, categorizedTemplateList;
+    private String selectedCategory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,11 +71,21 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
                 Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_filter:
-                Toast.makeText(getActivity(), "FILTER", Toast.LENGTH_SHORT).show();
+                prepareShowingCategoryDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void prepareShowingCategoryDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("category_list", categoryList);
+        bundle.putString("selected_category", selectedCategory);
+        TemplateDialogFragment templateDialogFragment = TemplateDialogFragment.newInstance();
+        templateDialogFragment.setTargetFragment(this, 0);
+        templateDialogFragment.setArguments(bundle);
+        templateDialogFragment.show(getActivity().getSupportFragmentManager(), TAG);
     }
 
     @Nullable
@@ -74,8 +97,19 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mShimmerFrameLayout = view.findViewById(R.id.template_shimmer_view);
+        mTemplateDataStatusMessage = view.findViewById(R.id.template_data_notfound_message);
+        categoryTextView = view.findViewById(R.id.tv_template_category);
+        categoryTextView.setText("All");
+        selectedCategory = "All";
         setupTemplateRV();
         initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mShimmerFrameLayout.startShimmerAnimation();
     }
 
     private void initData() {
@@ -98,7 +132,51 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     }
 
     @Override
-    public void finishGetTemplates(List<Template> userList) {
-        mAdapter.setTemplateList(userList);
+    public void finishGetTemplates(List<Template> templateList) {
+        mShimmerFrameLayout.setVisibility(View.INVISIBLE);
+        mShimmerFrameLayout.stopShimmerAnimation();
+        if (templateList.size() == 0) {
+            mTemplateDataStatusMessage.setVisibility(View.VISIBLE);
+        } else {
+            collectCategoryName(templateList);
+            mAdapter.setTemplateList(templateList);
+        } // end if
+    }
+
+    private void collectCategoryName(List<Template> templateList) {
+
+        this.templateList = (ArrayList<Template>) templateList;
+        categoryList = new ArrayList<>();
+        categoryList.add("All");
+        for (Template template : templateList) {
+            if (!categoryList.contains(template.getCategory())) {
+                categoryList.add(template.getCategory());
+            }
+        } // end for
+    }
+
+
+
+    @Override
+    public void onFinishSelectCategory(String category) {
+        categoryTextView.setText(category);
+        categorizeTemplate(category);
+    }
+
+    private void categorizeTemplate(String category) {
+        selectedCategory = category;
+        if (category.equals("All")) {
+            mAdapter.setTemplateList(templateList);
+        } else {
+            categorizedTemplateList = new ArrayList<>();
+            for (Template template : this.templateList) {
+                if (template.getCategory().equals(category)) {
+                    categorizedTemplateList.add(template);
+                } // end if
+            } // end for
+
+            mAdapter.setTemplateList(categorizedTemplateList);
+        }
+
     }
 }
