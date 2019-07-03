@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.template.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,9 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.ui.organization.adapter.OrganizationMemberViewHolder;
+import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
+import com.example.workflow_s.ui.task.task_template.TemplateTaskFragment;
+import com.example.workflow_s.utils.CommonUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,12 +27,9 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
 
     // datasource for this RV
     List<Template> mTemplateList;
+    RecyclerView mRecyclerView;
 
     public TemplateAdapter() {
-//        mTemplateList = new ArrayList<>();
-//        mTemplateList.add(new Template(1, "", "Student boarding", "abc", "123", "1", 1, "DEV"));
-//        mTemplateList.add(new Template(2, "", "Viet boarding", "abc", "123", "1", 1, "DEV"));
-//        mTemplateList.add(new Template(3, "", "Employee interview", "abc", "123", "1", 1, "DEV"));
     }
 
     public void setTemplateList(List<Template> templateList) {
@@ -38,14 +37,40 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
     @NonNull
     @Override
-    public TemplateViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public TemplateViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_template;
         View view = layoutInflater.inflate(layoutId, viewGroup, false);
         TemplateViewHolder viewHolder = new TemplateViewHolder(view);
+
+        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int index = mRecyclerView.getChildLayoutPosition(v);
+
+                String templateId = String.valueOf(mTemplateList.get(index).getId());
+                String templateName = mTemplateList.get(index).getName();
+                String templateDescription = mTemplateList.get(index).getDescription();
+
+                Bundle args = new Bundle();
+                args.putString("templateId", templateId);
+                args.putString("templateName", templateName);
+                args.putString("templateDescription", templateDescription);
+
+                CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskFragment.class, args);
+            }
+        });
+
         return viewHolder;
     }
 

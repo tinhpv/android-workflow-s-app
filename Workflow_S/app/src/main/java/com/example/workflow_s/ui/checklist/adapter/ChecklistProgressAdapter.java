@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.ui.checklist.viewholder.ChecklistProgressViewHolder;
-import com.example.workflow_s.ui.task.TaskFragment;
+import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +56,8 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 String checklistId = String.valueOf(mChecklists.get(i).getId());
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
-                CommonUtils.replaceFragments(viewGroup.getContext(), TaskFragment.class, args);
+                args.putBoolean("isTemplate", false);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });
 
