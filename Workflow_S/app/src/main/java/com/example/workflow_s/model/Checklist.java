@@ -26,7 +26,7 @@ public class Checklist {
     private String timeCreated;
 
     @SerializedName("templateStatus")
-    private Integer templateStatus;
+    private String templateStatus;
 
     @SerializedName("organizationId")
     private Integer organizationId;
@@ -40,7 +40,7 @@ public class Checklist {
     @SerializedName("countDoneTask")
     private Integer doneTask;
 
-    public Checklist(Integer id, String userId, String name, String description, String timeCreated, Integer templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -93,11 +93,11 @@ public class Checklist {
         this.timeCreated = timeCreated;
     }
 
-    public Integer getTemplateStatus() {
+    public String getTemplateStatus() {
         return templateStatus;
     }
 
-    public void setTemplateStatus(Integer templateStatus) {
+    public void setTemplateStatus(String templateStatus) {
         this.templateStatus = templateStatus;
     }
 
