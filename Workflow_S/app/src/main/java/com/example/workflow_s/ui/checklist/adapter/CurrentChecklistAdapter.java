@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
-import com.example.workflow_s.ui.task.TaskFragment;
+import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
             public void onClick(View v) {
                 Bundle args = new Bundle();
                 args.putString("checklistId", String.valueOf(mChecklists.get(i).getId()));
-                CommonUtils.replaceFragments(viewGroup.getContext(), TaskFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });
         return viewHolder;
