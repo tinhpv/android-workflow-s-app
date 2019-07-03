@@ -2,6 +2,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-28
@@ -26,6 +28,8 @@ public class Template {
     private Integer organizationId;
     @SerializedName("category")
     private String category;
+    @SerializedName("taskItem")
+    private List<Task> taskItems;
 
     public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category) {
         this.id = id;
@@ -36,6 +40,18 @@ public class Template {
         this.templateStatus = templateStatus;
         this.organizationId = organizationId;
         this.category = category;
+    }
+
+    public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category, List<Task> taskItems) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.category = category;
+        this.taskItems = taskItems;
     }
 
     public Integer getId() {
@@ -100,5 +116,13 @@ public class Template {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<Task> getTaskItems() {
+        return taskItems;
+    }
+
+    public void setTaskItems(List<Task> taskItems) {
+        this.taskItems = taskItems;
     }
 }

@@ -2,6 +2,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-22
@@ -29,6 +31,12 @@ public class Task {
     @SerializedName("taskStatus")
     private String taskStatus;
 
+    @SerializedName("contentDetail")
+    private List<ContentDetail> contentDetails;
+
+    @SerializedName("taskMember")
+    private List<TaskMember> taskMembers;
+
     public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus) {
         this.id = id;
         this.checklistId = checklistId;
@@ -36,6 +44,17 @@ public class Task {
         this.dueTime = dueTime;
         this.priority = priority;
         this.taskStatus = taskStatus;
+    }
+
+    public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus, List<ContentDetail> contentDetails, List<TaskMember> taskMembers) {
+        this.id = id;
+        this.checklistId = checklistId;
+        this.name = name;
+        this.dueTime = dueTime;
+        this.priority = priority;
+        this.taskStatus = taskStatus;
+        this.contentDetails = contentDetails;
+        this.taskMembers = taskMembers;
     }
 
     public Integer getId() {
@@ -84,5 +103,21 @@ public class Task {
 
     public void setTaskStatus(String taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public List<ContentDetail> getContentDetails() {
+        return contentDetails;
+    }
+
+    public void setContentDetails(List<ContentDetail> contentDetails) {
+        this.contentDetails = contentDetails;
+    }
+
+    public List<TaskMember> getTaskMembers() {
+        return taskMembers;
+    }
+
+    public void setTaskMembers(List<TaskMember> taskMembers) {
+        this.taskMembers = taskMembers;
     }
 }

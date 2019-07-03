@@ -1,19 +1,26 @@
 package com.example.workflow_s.ui.task.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.taskdetail.TaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.List;
 
@@ -21,6 +28,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     // list task
     private List<Task> mTaskList;
+    //dialog
+    private Dialog errorDialog;
 
     // viewholder
     public class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -50,16 +59,42 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_task;
-        View view = layoutInflater.inflate(layoutId, viewGroup, false);
+        final View view = layoutInflater.inflate(layoutId, viewGroup, false);
         final TaskViewHolder viewHolder = new TaskViewHolder(view);
+
+        //create dialog
+        errorDialog = new Dialog(context);
+        errorDialog.setContentView(R.layout.dialog_error_task);
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //task item click
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
-                CommonUtils.replaceFragments(viewGroup.getContext(), TaskDetailFragment.class, args);
+                List<TaskMember> listMember = mTaskList.get(i).getTaskMembers();
+                String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
+                if (!listMember.isEmpty()) {
+                    for (int j = 0; j < listMember.size(); j++) {
+                        if (listMember.get(j).getUserId().equals(userId)) {
+                            Bundle args = new Bundle();
+                            args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
+                            CommonUtils.replaceFragments(viewGroup.getContext(), TaskDetailFragment.class, args);
+                        } else {
+                            Log.i("No Assign", "no assign");
+                            errorDialog.show();
+                            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+                            btnOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    errorDialog.cancel();
+                                }
+                            });
+                        }
+
+                    }
+
+
+                }
             }
         });
         return viewHolder;

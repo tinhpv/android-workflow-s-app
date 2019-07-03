@@ -8,6 +8,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Checklist {
 
     @SerializedName("id")
@@ -40,6 +42,9 @@ public class Checklist {
     @SerializedName("countDoneTask")
     private Integer doneTask;
 
+    @SerializedName("taskItem")
+    private List<Task> taskItems;
+
     public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
         this.id = id;
         this.userId = userId;
@@ -51,6 +56,20 @@ public class Checklist {
         this.templateId = templateId;
         this.totalTask = totalTask;
         this.doneTask = doneTask;
+    }
+
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<Task> taskItems) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.templateId = templateId;
+        this.totalTask = totalTask;
+        this.doneTask = doneTask;
+        this.taskItems = taskItems;
     }
 
     public Integer getId() {
@@ -131,5 +150,13 @@ public class Checklist {
 
     public void setDoneTask(Integer doneTask) {
         this.doneTask = doneTask;
+    }
+
+    public List<Task> getTaskItems() {
+        return taskItems;
+    }
+
+    public void setTaskItems(List<Task> taskItems) {
+        this.taskItems = taskItems;
     }
 }

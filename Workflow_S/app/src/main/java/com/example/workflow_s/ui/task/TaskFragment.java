@@ -10,15 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.task.adapter.TaskAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Workflow_S
