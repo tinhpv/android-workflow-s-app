@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -85,11 +85,11 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<TaskMember> listMember = mTaskList.get(i).getTaskMembers();
+                List<User> listMember = mTaskList.get(i).getMemberList();
                 String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
                 if (!listMember.isEmpty()) {
                     for (int j = 0; j < listMember.size(); j++) {
-                        if (listMember.get(j).getUserId().equals(userId)) {
+                        if (listMember.get(j).getId().equals(userId)) {
                             Bundle args = new Bundle();
                             args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
                             CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);

@@ -31,11 +31,11 @@ public class Task {
     @SerializedName("taskStatus")
     private String taskStatus;
 
-    @SerializedName("contentDetail")
+    @SerializedName("contentDetails")
     private List<ContentDetail> contentDetails;
 
-    @SerializedName("taskMember")
-    private List<TaskMember> taskMembers;
+    @SerializedName("userId")
+    private List<User> memberList;
 
     public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus) {
         this.id = id;
@@ -46,7 +46,7 @@ public class Task {
         this.taskStatus = taskStatus;
     }
 
-    public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus, List<ContentDetail> contentDetails, List<TaskMember> taskMembers) {
+    public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus, List<ContentDetail> contentDetails, List<User> userId) {
         this.id = id;
         this.checklistId = checklistId;
         this.name = name;
@@ -54,7 +54,7 @@ public class Task {
         this.priority = priority;
         this.taskStatus = taskStatus;
         this.contentDetails = contentDetails;
-        this.taskMembers = taskMembers;
+        this.memberList = userId;
     }
 
     public Integer getId() {
@@ -113,11 +113,11 @@ public class Task {
         this.contentDetails = contentDetails;
     }
 
-    public List<TaskMember> getTaskMembers() {
-        return taskMembers;
+    public List<User> getMemberList() {
+        return memberList;
     }
 
-    public void setTaskMembers(List<TaskMember> taskMembers) {
-        this.taskMembers = taskMembers;
+    public void setMemberList(List<User> memberList) {
+        this.memberList = memberList;
     }
 }

@@ -131,13 +131,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     public void onClick(View v) {
         if (v.getId() == R.id.bt_run_checklist) {
             showRunChecklistDialog(getActivity());
-
-            userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-            orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-
-            //mPresenter.getTemplateObject(String.valueOf(templateId), userId, orgId);
-            // FIXME - HARDCODE HERE FOR TESTING
-            //mPresenter.getTemplateObject("7", "2372592022969346", orgId);
         } // end if
     }
 
@@ -161,6 +154,14 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
                     Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
                     checklistName.startAnimation(shakeAnimation);
                 } else {
+                    //userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+                    //orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+
+                    //mPresenter.getTemplateObject(String.valueOf(templateId), userId, orgId);
+                    // FIXME - HARDCODE HERE FOR TESTING
+                    userId = "107757857762956968267";
+                    orgId = "1";
+                    mPresenter.getTemplateObject("27", "2372592022969346", orgId);
                     dialog.dismiss();
                 }
             }
@@ -178,10 +179,8 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     }
 
     private void handleRunChecklist(Template template) {
-
-
         if (null != template) {
-            template.setName("PhanVuTinh");
+            template.setName(runningChecklistName);
             mPresenter.runChecklist(userId, template);
         } // end if
     }

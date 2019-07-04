@@ -155,6 +155,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
                 categoryList.add(template.getCategory());
             }
         } // end for
+
     }
 
 
