@@ -48,15 +48,14 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
         todayActivitiesRecyclerView.setLayoutManager(todayLayoutManager);
 
         //FIXME - TEST DATASOURCE OF ACTIVITIES_RV
-        ArrayList<Task> mTasks = new ArrayList<>();
-        mTodayActivitiesAdapter = new TodayActivitiesAdapter(mTasks);
+        mTodayActivitiesAdapter = new TodayActivitiesAdapter();
         todayActivitiesRecyclerView.setAdapter(mTodayActivitiesAdapter);
     }
 
     @Override
     public void setDataToTodayTasksRecyclerView(ArrayList<Task> datasource) {
-        mTodayActivitiesAdapter =new TodayActivitiesAdapter(datasource);
-        todayActivitiesRecyclerView.setAdapter(mTodayActivitiesAdapter);
+        mTodayActivitiesAdapter.setTasks(datasource);
+
     }
 
     @Override

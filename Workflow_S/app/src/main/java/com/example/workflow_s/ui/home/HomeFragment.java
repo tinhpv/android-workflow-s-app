@@ -160,16 +160,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         } else {
             mTodayTaskAdapter.setTasks(datasource);
         }
-
     }
 
     @Override
     public void onFailGetChecklist() {
+        mChecklistShimmerFrameLayout.stopShimmerAnimation();
+        mChecklistShimmerFrameLayout.setVisibility(View.INVISIBLE);
         mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onFailGetTask() {
+        mTaskShimmerFrameLayout.stopShimmerAnimation();
+        mTaskShimmerFrameLayout.setVisibility(View.INVISIBLE);
         mTaskDataStatusMessage.setVisibility(View.VISIBLE);
     }
 }

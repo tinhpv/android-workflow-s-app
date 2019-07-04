@@ -28,7 +28,6 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
 
     View view;
     private RecyclerView upcomingActivitiesRecyclerView;
-
     private UpcomingActivitiesAdapter mUpcomingActivitiesAdapter;
     private RecyclerView.LayoutManager upcomingLayoutManager;
 
@@ -48,8 +47,7 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
         upcomingActivitiesRecyclerView.setLayoutManager(upcomingLayoutManager);
 
         //FIXME - TEST DATASOURCE OF ACTIVITIES_RV
-        ArrayList<Task> mTasks = new ArrayList<>();
-        mUpcomingActivitiesAdapter = new UpcomingActivitiesAdapter(mTasks);
+        mUpcomingActivitiesAdapter = new UpcomingActivitiesAdapter();
         upcomingActivitiesRecyclerView.setAdapter(mUpcomingActivitiesAdapter);
     }
 
@@ -60,7 +58,6 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
 
     @Override
     public void setDataToUpcomingTasksRecyclerView(ArrayList<Task> datasource) {
-        mUpcomingActivitiesAdapter = new UpcomingActivitiesAdapter(datasource);
-        upcomingActivitiesRecyclerView.setAdapter(mUpcomingActivitiesAdapter);
+        mUpcomingActivitiesAdapter.setTasks(datasource);
     }
 }

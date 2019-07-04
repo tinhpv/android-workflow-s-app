@@ -18,6 +18,12 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
     //datasource for recyclerview
     private List<Task> mTasks;
 
+
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public TodayActivitiesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -36,7 +42,11 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
 
     @Override
     public int getItemCount() {
-        return 6;
+        if (mTasks == null) {
+            return 0;
+        } else {
+            return 6;
+        }
     }
 
     //viewholder
@@ -50,7 +60,5 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
         }
     }
 
-    public TodayActivitiesAdapter(List<Task> tasks) {
-        mTasks = tasks;
-    }
+
 }
