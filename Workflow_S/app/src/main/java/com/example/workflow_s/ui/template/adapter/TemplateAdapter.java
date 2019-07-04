@@ -45,7 +45,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
 
     @NonNull
     @Override
-    public TemplateViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
+    public TemplateViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_template;

@@ -28,9 +28,8 @@ public class Template {
     private Integer organizationId;
     @SerializedName("category")
     private String category;
-    @SerializedName("taskItem")
-    private List<Task> taskItems;
-
+    @SerializedName("taskItemViewModels")
+    private List<Task> taskItemList;
 
 
     public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category) {
@@ -44,7 +43,7 @@ public class Template {
         this.category = category;
     }
 
-    public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category, List<Task> taskItems) {
+    public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category, List<Task> taskItemViewModels) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -53,7 +52,7 @@ public class Template {
         this.templateStatus = templateStatus;
         this.organizationId = organizationId;
         this.category = category;
-        this.taskItems = taskItems;
+        this.taskItemList = taskItemViewModels;
     }
 
     public Integer getId() {
@@ -120,11 +119,11 @@ public class Template {
         this.category = category;
     }
 
-    public List<Task> getTaskItems() {
-        return taskItems;
+    public List<Task> getTaskItemList() {
+        return taskItemList;
     }
 
-    public void setTaskItems(List<Task> taskItems) {
-        this.taskItems = taskItems;
+    public void setTaskItemList(List<Task> taskItemList) {
+        this.taskItemList = taskItemList;
     }
 }
