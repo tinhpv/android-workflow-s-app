@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
@@ -27,11 +28,12 @@ import java.util.ArrayList;
  **/
 
 
-public class ChecklistTaskFragment extends Fragment implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener {
+public class ChecklistTaskFragment extends Fragment implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener, View.OnClickListener {
 
     private static final String TAG = "TASK_FRAGMENT";
 
     View view;
+    private Button completeChecklistButton;
     private RecyclerView checklistTaskRecyclerView;
     private ChecklistTaskAdapter mChecklistChecklistTaskAdapter;
     private RecyclerView.LayoutManager taskLayoutManager;
@@ -49,6 +51,8 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
+        completeChecklistButton.setOnClickListener(this);
         setupTaskRV();
         initData();
     }
@@ -91,4 +95,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 //        } //end if
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bt_complete_checklist) {
+            // DO SOMETHING HERE
+        }
+    }
 }
