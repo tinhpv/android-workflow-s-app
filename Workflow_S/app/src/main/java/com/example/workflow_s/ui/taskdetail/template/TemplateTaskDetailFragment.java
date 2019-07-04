@@ -92,7 +92,7 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
                     } else { // image from user
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
                         label.setText(detail.getLabel());
-                        Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button, mContainerLayout, false);
+                        Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button_disable, mContainerLayout, false);
                         mContainerLayout.addView(label);
                         mContainerLayout.addView(uploadButton);
                     } // end if
@@ -106,7 +106,7 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
                         label.setText(detail.getLabel());
                         mContainerLayout.addView(label);
-                        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
+                        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edittext_disable, mContainerLayout, false);
                         mContainerLayout.addView(userEditText);
                     }
                     break;

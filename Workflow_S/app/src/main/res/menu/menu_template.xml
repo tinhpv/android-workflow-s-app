@@ -11,12 +11,4 @@
         app:showAsAction="ifRoom">
     </item>
 
-    <item
-        android:id="@+id/action_filter"
-        android:title="Filter"
-        android:orderInCategory="1"
-        android:icon="@mipmap/filter_icon"
-        app:showAsAction="ifRoom">
-    </item>
-
 </menu>

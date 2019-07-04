@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/button_radius_dark_gray"
+    android:text="Upload image"
+    android:textAllCaps="false"
+    android:drawableLeft="@mipmap/upload_icon_gray"
+    android:drawablePadding="8dp"
+    android:textSize="14sp"
+    android:textColor="#4E4F50"
+    android:paddingHorizontal="30dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="18dp"
+    android:layout_marginHorizontal="25dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -8,4 +8,5 @@
     android:fontFamily="@font/avenir_light"
     android:textSize="15sp"
     android:padding="7dp"
-    android:background="@drawable/edittext_rounded" />
+    android:enabled="false"
+    android:background="@drawable/edittext_rounded_gray" />

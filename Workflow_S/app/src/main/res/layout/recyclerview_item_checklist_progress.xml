@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/colorPrimaryText"
             android:text="Working Shift_1"
             android:fontFamily="@font/avenir_medium"
             android:layout_weight="1"
@@ -76,7 +77,7 @@
         android:layout_marginTop="5dp"
         android:max="100"
         android:progress="50"
-        android:minHeight="5dp"
+        android:minHeight="8dp"
         android:minWidth="400dp"/>
 
 

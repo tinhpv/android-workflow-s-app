@@ -7,18 +7,21 @@
     android:background="@color/backgroundColor">
 
     <!--Template Category Text-->
-    <TextView
-        android:id="@+id/tv_template_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/bt_template_category"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
+        android:paddingHorizontal="20dp"
         android:text="Education"
         android:textSize="20dp"
+        android:textAllCaps="false"
         android:fontFamily="@font/avenir_black"
-        android:textColor="@color/colorPrimaryDark"
-        android:drawableLeft="@mipmap/template_icon_nobackground"
-        android:drawablePadding="12dp"/>
+        android:textColor="@android:color/white"
+        android:drawableRight="@mipmap/down_button_white_ic"
+        android:drawablePadding="12dp"
+        android:background="@drawable/button_radius_dark" />
 
     <!--recycler view-->
     <RelativeLayout
@@ -80,7 +83,8 @@
             android:id="@+id/rv_template"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp">
 
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>

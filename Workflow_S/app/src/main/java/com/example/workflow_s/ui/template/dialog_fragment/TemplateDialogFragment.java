@@ -37,7 +37,6 @@ public class TemplateDialogFragment extends BottomSheetDialogFragment implements
     private String selectedCategory;
     DataBackContract listener;
 
-
     public static TemplateDialogFragment newInstance() {
         return new TemplateDialogFragment();
     }
