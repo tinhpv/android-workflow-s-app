@@ -51,7 +51,7 @@ public interface ApiService {
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
 
     @GET("/api/UserOrganizations/member/{organizationId}")
-    Call<List<User>> getOrganizationMember(@Path("organizationId") String orgId);
+    Call<List<User>> getOrganizationMember(@Path("organizationId") int orgId);
 
     @GET("/api/TaskItems/taskitems/{checklistId}")
     Call<List<Task>> getTaskFromChecklist(@Path("checklistId") long checklistId);
@@ -73,5 +73,8 @@ public interface ApiService {
 
     @POST("/api/Checklists/run/{userId}")
     Call<ResponseBody> runChecklist(@Path("userId") String userId, @Body Template template);
+
+    @GET("/api/UserOrganizations/organization/{userId}")
+    Call<Organization> getOrganization(@Path("userId") String userId);
 
 }

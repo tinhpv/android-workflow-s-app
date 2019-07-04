@@ -66,7 +66,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-        Log.i("userId", userId);
+        //Log.i("userId", userId);
         if (datasource.isEmpty()) {
 
         }
