@@ -107,6 +107,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
         initData();
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
