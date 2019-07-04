@@ -37,6 +37,9 @@ public class Task {
     @SerializedName("userId")
     private List<User> memberList;
 
+    @SerializedName("taskMember")
+    private List<TaskMember> taskMemberList;
+
     public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus) {
         this.id = id;
         this.checklistId = checklistId;
@@ -55,6 +58,14 @@ public class Task {
         this.taskStatus = taskStatus;
         this.contentDetails = contentDetails;
         this.memberList = userId;
+    }
+
+    public List<TaskMember> getTaskMemberList() {
+        return taskMemberList;
+    }
+
+    public void setTaskMemberList(List<TaskMember> taskMemberList) {
+        this.taskMemberList = taskMemberList;
     }
 
     public Integer getId() {
