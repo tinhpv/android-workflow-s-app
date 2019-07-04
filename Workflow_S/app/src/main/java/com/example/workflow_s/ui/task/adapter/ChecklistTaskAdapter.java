@@ -56,6 +56,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
             mTextView = itemView.findViewById(R.id.txt_task_name);
             mCheckBox = itemView.findViewById(R.id.cb_complete_task);
         }
+
     }
 
     public ChecklistTaskAdapter(CheckboxListener listener) {

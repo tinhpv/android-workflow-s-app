@@ -18,6 +18,11 @@ public class UpcomingActivitiesAdapter extends RecyclerView.Adapter<UpcomingActi
     //datasource for recyclerview
     private List<Task> mTasks;
 
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public UpcomingActivitiesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -36,7 +41,11 @@ public class UpcomingActivitiesAdapter extends RecyclerView.Adapter<UpcomingActi
 
     @Override
     public int getItemCount() {
-        return 7;
+        if (null == mTasks) {
+            return 0;
+        } else {
+            return 7;
+        }
     }
 
     //viewholder
@@ -50,7 +59,5 @@ public class UpcomingActivitiesAdapter extends RecyclerView.Adapter<UpcomingActi
         }
     }
 
-    public UpcomingActivitiesAdapter(List<Task> tasks) {
-        mTasks = tasks;
-    }
+
 }

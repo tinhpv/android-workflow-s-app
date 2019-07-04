@@ -71,7 +71,6 @@ public interface ApiService {
                                          @Path("templateId") String templateId,
                                          @Path("userId") String userId);
 
-
     @POST("/api/Checklists/run/{userId}")
     Call<ResponseBody> runChecklist(@Path("userId") String userId, @Body Template template);
 
