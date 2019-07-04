@@ -13,7 +13,7 @@
         android:fontFamily="@font/avenir_medium"
         android:textStyle="bold"
         android:gravity="center"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:text="Permission Alert!"
         android:textColor="#fafafa"
         android:background="@drawable/textview_dialog"
@@ -28,9 +28,11 @@
         android:lines="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:textSize="16sp"/>
 
     <Button
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/avenir_medium"
         android:id="@+id/btn_ok"
         android:layout_width="100dp"
         android:layout_gravity="center"

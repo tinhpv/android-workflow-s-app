@@ -28,8 +28,14 @@ import java.util.List;
 
 public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdapter.TaskViewHolder> {
 
-
     CheckboxListener listener;
+    private RecyclerView mRecyclerView;
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
 
     public interface CheckboxListener {
         void onEventCheckBox(Boolean isSelected);
@@ -69,7 +75,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
     @NonNull
     @Override
-    public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
+    public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup,  int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_task;
@@ -85,28 +91,33 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<TaskMember> listMember = mTaskList.get(i).getTaskMembers();
+                int index = mRecyclerView.getChildLayoutPosition(v);
+
+                List<TaskMember> listMember = mTaskList.get(index).getTaskMembers();
                 String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
+                boolean flag = false;
                 if (!listMember.isEmpty()) {
                     for (int j = 0; j < listMember.size(); j++) {
                         if (listMember.get(j).getUserId().equals(userId)) {
-                            Bundle args = new Bundle();
-                            args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
-                            CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
-                        } else {
-                            Log.i("No Assign", "no assign");
-                            errorDialog.show();
-                            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
-                            btnOk.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    errorDialog.cancel();
-                                }
-                            });
+                            flag = true;
+
                         }
 
                     }
-
+                    if (flag) {
+                        Bundle args = new Bundle();
+                        args.putString("taskId", String.valueOf(mTaskList.get(index).getId()));
+                        CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+                    } else {
+                        errorDialog.show();
+                        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+                        btnOk.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                errorDialog.cancel();
+                            }
+                        });
+                    }
 
                 }
             }
