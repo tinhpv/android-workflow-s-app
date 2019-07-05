@@ -36,40 +36,4 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
         });
     }
 
-    @Override
-    public void getTemplateObject(String templateId, String orgId, String userId, final OnFinishedGetTemplateObjectListener onFinishedListener) {
-        ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<Template> call = service.getTemplateObject(orgId, templateId, userId);
-
-        call.enqueue(new Callback<Template>() {
-            @Override
-            public void onResponse(Call<Template> call, Response<Template> response) {
-                onFinishedListener.onFinishedGetTemplate(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Template> call, Throwable t) {
-                onFinishedListener.onFailure(t);
-            }
-        });
-    }
-
-    @Override
-    public void runChecklist(String userId, Template template, final OnFinishedRunChecklistListener listener) {
-        ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.runChecklist(userId, template);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedRunChecklist();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                listener.onFailure(t);
-            }
-        });
-    }
-
-
 }

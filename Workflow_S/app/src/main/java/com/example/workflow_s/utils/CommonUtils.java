@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.example.workflow_s.R;
 
@@ -31,11 +32,20 @@ public class CommonUtils {
         }
 
         FragmentManager fragmentManager = ((FragmentActivity)fragmentContext).getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+
+        transaction
                 .add(R.id.flContent, fragment)
                 .addToBackStack(null)
                 .commit();
+
+//        fragmentManager
+//                .beginTransaction()
+//                .add(R.id.flContent, fragment)
+//                .addToBackStack(null)
+//                .commit();
 
     }
 
