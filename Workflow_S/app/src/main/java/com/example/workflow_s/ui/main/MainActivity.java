@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.flContent, homeFragment)
+                .add(R.id.flContent, homeFragment)
                 .commit();
     }
 

@@ -53,8 +53,10 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private void initData() {
         mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
+        // FIXME - HARD CODE ORGID HERE
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-        mPresenter.requestOrganizationData(orgId);
+
+        mPresenter.requestOrganizationData("1");
     }
 
     private void setupOrganizationRV() {

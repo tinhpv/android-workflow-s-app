@@ -33,6 +33,7 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
 
     View view;
     private int taskId;
+    private String taskName;
     private LinearLayout mContainerLayout;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
     ArrayList<ContentDetail> taskContentList;
@@ -56,36 +57,39 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.loadDetails(taskId);
 
-        // FIXME - STATIC DATA HERE FOR TESTING ONLY
+        // FIXED - STATIC DATA HERE FOR TESTING ONLY
 
-        String textForTesting1 = "First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below.";
-        String textForTesting2 = "Employment background checks are vital for not only you as an employer but also for your company. As a hiring manager, it is your responsibility to exercise caution or due diligence by uncovering any potential complications a person may have in their past that they potentially could bring to the workplace.";
-        String imageSrcForTesting1 = "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
-        String imageSrcForTesting2 = "https://images.unsplash.com/photo-1519336367661-eba9c1dfa5e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
-
-        taskContentList = new ArrayList<>();
-        taskContentList.add(new ContentDetail(1, "img", "", imageSrcForTesting1, 1, 1, ""));
-        taskContentList.add(new ContentDetail(2, "text", textForTesting1, "", 1, 2, ""));
-        taskContentList.add(new ContentDetail(3, "text", "", "", 1, 3, "Input your name"));
-        taskContentList.add(new ContentDetail(4, "img", "", "", 1, 4, "Choose a picture"));
-        taskContentList.add(new ContentDetail(5, "text", textForTesting2, "", 1, 5, ""));
-        taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
+//        String textForTesting1 = "First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below.";
+//        String textForTesting2 = "Employment background checks are vital for not only you as an employer but also for your company. As a hiring manager, it is your responsibility to exercise caution or due diligence by uncovering any potential complications a person may have in their past that they potentially could bring to the workplace.";
+//        String imageSrcForTesting1 = "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
+//        String imageSrcForTesting2 = "https://images.unsplash.com/photo-1519336367661-eba9c1dfa5e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
+//
+//        taskContentList = new ArrayList<>();
+//        taskContentList.add(new ContentDetail(1, "img", "", imageSrcForTesting1, 1, 1, ""));
+//        taskContentList.add(new ContentDetail(2, "text", textForTesting1, "", 1, 2, ""));
+//        taskContentList.add(new ContentDetail(3, "text", "", "", 1, 3, "Input your name"));
+//        taskContentList.add(new ContentDetail(4, "img", "", "", 1, 4, "Choose a picture"));
+//        taskContentList.add(new ContentDetail(5, "text", textForTesting2, "", 1, 5, ""));
+//        taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
 
     }
 
     private void getTaskIdFromParentFragment() {
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
+        taskName = arguments.getString("taskName");
+        getActivity().setTitle(taskName);
     }
 
 
     @Override
     public void setDataToView(ArrayList<ContentDetail> datasource) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        for (ContentDetail detail : taskContentList) {
+        for (ContentDetail detail : datasource) {
             switch (detail.getType()) {
                 case "img":
-                    if (detail.getLabel().isEmpty()) { // image from admin
+//                    if (detail.getLabel().isEmpty()) { // image from admin
+                    if (detail.getLabel() == null) {
                         ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                         Glide.with(this).load(detail.getImageSrc()).into(imgView);
                         mContainerLayout.addView(imgView);
@@ -98,7 +102,8 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
                     } // end if
                     break;
                 case "text":
-                    if (detail.getLabel().isEmpty()) { // this is will be the textView
+//                    if (detail.getLabel().isEmpty()) { // this is will be the textView
+                    if (detail.getLabel() == null) {
                         TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
                         description.setText(detail.getText());
                         mContainerLayout.addView(description);
