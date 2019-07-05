@@ -175,5 +175,12 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     @Override
     public void onFinishSelectOrgName(String orgName) {
         txtOrgName.setText(orgName);
+            for (int i = 0; i < organizationArrayList.size(); i++) {
+                if (organizationArrayList.get(i).getName().equals(orgName)) {
+                    mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());
+                }
+            }
+
+
     }
 }
