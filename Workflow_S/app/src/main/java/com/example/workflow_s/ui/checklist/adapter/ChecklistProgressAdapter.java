@@ -32,13 +32,21 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
 
     // DataSource for RecyclerView
     private List<Checklist> mChecklists;
+    private RecyclerView mRecyclerView;
 
     public ChecklistProgressAdapter() {
     }
 
+
     public void setChecklists(List<Checklist> checklists) {
         mChecklists = checklists;
         this.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
     }
 
     @NonNull
@@ -53,10 +61,10 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String checklistId = String.valueOf(mChecklists.get(i).getId());
+                int index = mRecyclerView.getChildLayoutPosition(v);
+                String checklistId = String.valueOf(mChecklists.get(index).getId());
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
-                args.putBoolean("isTemplate", false);
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });

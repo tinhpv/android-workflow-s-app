@@ -6,31 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <TextView
-        android:id="@+id/tv_org_name"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:text="Org Name"
-        android:textSize="18sp"
-        android:fontFamily="@font/avenir_medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_org_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#fafafa"
-        android:fontFamily="@font/avenir_light"
-        android:text="Filter"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/button_radius_dark"/>
-
     <!--recycler view-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/backgroundColor">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/org_shimmer_view_container"
@@ -61,7 +43,9 @@
             android:id="@+id/rv_organization"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:background="@color/backgroundColor">
 
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>

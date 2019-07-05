@@ -27,7 +27,10 @@ public class OrganizationDialogFragment extends BottomSheetDialogFragment implem
     }
     @Override
     public void onEvent(String orgName) {
-        listener.onFinishSelectOrgName(orgName);
+        if (orgName != null) {
+            listener.onFinishSelectOrgName(orgName);
+        }
+
         dismiss();
     }
 

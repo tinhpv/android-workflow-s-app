@@ -9,7 +9,7 @@
     android:id="@+id/dialog_error">
 
     <TextView
-        android:padding="5dp"
+        android:paddingVertical="15dp"
         android:fontFamily="@font/avenir_medium"
         android:textStyle="bold"
         android:gravity="center"
@@ -24,7 +24,7 @@
         android:padding="10dp"
         android:gravity="center"
         android:fontFamily="@font/avenir_light"
-        android:text="Are you sure want to switch your organization?"
+        android:text="Are you sure switching to another organization?"
         android:lines="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,7 +56,8 @@
             android:text="Cancel"
             android:textColor="#fafafa"
             android:layout_height="40dp"
-            android:background="@drawable/button_radius_red"/>
+            android:textAllCaps="false"
+            android:background="@drawable/button_radius_dark_gray"/>
 
     </LinearLayout>
 
