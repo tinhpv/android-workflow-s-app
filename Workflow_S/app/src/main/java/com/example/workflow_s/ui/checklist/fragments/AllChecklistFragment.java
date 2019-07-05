@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 public class AllChecklistFragment extends Fragment implements ChecklistContract.ChecklistView {
 
+    private static final String NAME_ARG = "AllChecklist";
+
     View view;
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
@@ -28,18 +30,26 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
 
     private ChecklistContract.ChecklistPresenter mPresenter;
 
+    public AllChecklistFragment() {}
+
+    //static constructor
+    public static AllChecklistFragment newInstance() {
+        final AllChecklistFragment allChecklistFragment = new AllChecklistFragment();
+        return allChecklistFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_current_checklists, container, false);
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setupChecklistRV();
-        initData();    }
+        initData();
+    }
 
     //FIXME - HARDCODE FOR TESTING
     private void initData() {

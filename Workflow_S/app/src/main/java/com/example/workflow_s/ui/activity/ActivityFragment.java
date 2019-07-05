@@ -49,7 +49,7 @@ public class ActivityFragment extends Fragment  {
         mTodayTabItem = view.findViewById(R.id.tab_today);
         mUpcomingTabItem = view.findViewById(R.id.tab_upcoming);
         mViewPager = view.findViewById(R.id.view_pager);
-        adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(), NUMBER_OF_TABS);
+        adapter = new ViewPagerAdapter(getChildFragmentManager(), NUMBER_OF_TABS);
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }

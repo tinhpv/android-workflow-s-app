@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView {
 
+    private static final String NAME_ARG = "CurrentChecklist";
+
     View view;
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
@@ -31,6 +33,23 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     private ChecklistContract.ChecklistPresenter mPresenter;
     //private LinearLayout mChecklistDataStatusMessage;
+
+    public CurrentChecklistFragment() {}
+
+    //static constructor
+    public static CurrentChecklistFragment newInstance() {
+        final CurrentChecklistFragment currentChecklistFragment = new CurrentChecklistFragment();
+        // The 1 below is an optimization, being the number of arguments that will
+        // be added to this bundle.  If you know the number of arguments you will add
+        // to the bundle it stops additional allocations of the backing map.  If
+        // unsure, you can construct Bundle without any arguments
+        //final Bundle args = new Bundle(1);
+        // This stores the argument as an argument in the bundle.  Note that even if
+        // the 'name' parameter is NULL then this will work, so you should consider
+        // at this point if the parameter is mandatory and if so check for NULL and
+        // throw an appropriate error if so
+        return currentChecklistFragment;
+    }
 
     @Nullable
     @Override
@@ -43,8 +62,11 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //mChecklistDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
-        setupChecklistRV();
-        initData();
+
+            setupChecklistRV();
+            initData();
+
+
     }
 
     //FIXME - HARDCODE FOR TESTING

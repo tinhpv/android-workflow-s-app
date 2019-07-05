@@ -46,6 +46,13 @@ public class ChecklistFragment extends Fragment {
 
     private ChecklistContract.ChecklistPresenter mPresenter;
 
+    public ChecklistFragment(){}
+
+    public static ChecklistFragment newInstance() {
+        final ChecklistFragment checklistFragment = new ChecklistFragment();
+        return checklistFragment;
+    }
+
 
     @Nullable
     @Override
@@ -68,7 +75,7 @@ public class ChecklistFragment extends Fragment {
         mAllTabItem = view.findViewById(R.id.tab_all);
 
         mViewPager = view.findViewById(R.id.view_checklist_pager);
-        adapter = new ChecklistPagerAdapter(getActivity().getSupportFragmentManager(), NUMBER_OF_TABS);
+        adapter = new ChecklistPagerAdapter(getChildFragmentManager(), NUMBER_OF_TABS);
 
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);

@@ -21,9 +21,9 @@ public class ChecklistPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                return new CurrentChecklistFragment();
+                return CurrentChecklistFragment.newInstance();
             case 1:
-                return new AllChecklistFragment();
+                return AllChecklistFragment.newInstance();
             default:
                     return null;
         } //end switch

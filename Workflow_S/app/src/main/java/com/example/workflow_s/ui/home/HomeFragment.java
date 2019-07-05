@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null);
                 break;
             case R.id.bt_view_all_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.newInstance().getClass(), null);
                 break;
             case R.id.bt_view_all_task:
                 break;

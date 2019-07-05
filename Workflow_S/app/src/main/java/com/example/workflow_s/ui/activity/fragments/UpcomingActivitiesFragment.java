@@ -36,8 +36,12 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_upcoming_activities, container, false);
-        setupUpcomingActivitiesRV();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setupUpcomingActivitiesRV();
     }
 
     public void setupUpcomingActivitiesRV() {
@@ -58,6 +62,6 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
 
     @Override
     public void setDataToUpcomingTasksRecyclerView(ArrayList<Task> datasource) {
-        mUpcomingActivitiesAdapter.setTasks(datasource);
+        //mUpcomingActivitiesAdapter.setTasks(datasource);
     }
 }
