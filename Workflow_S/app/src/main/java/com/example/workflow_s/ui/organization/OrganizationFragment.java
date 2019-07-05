@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.ui.organization.adapter.OrganizationMemberAdapter;
 import com.example.workflow_s.ui.organization.dialog_fragment.OrganizationDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -49,7 +51,9 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     private ArrayList<String> orgNameList;
     private ArrayList<User> users;
+    private List<UserOrganization> userOrganizationArrayList;
     private String selectedOrgName;
+    private ArrayList<Organization> organizationArrayList;
 
     @Nullable
     @Override
@@ -69,18 +73,18 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
                 prepareShowOrgDialog();
             }
         });
-        initData();
+        //initData();
+        setupData();
         setupOrganizationRV();
 
     }
 
     private void prepareShowOrgDialog() {
         //FIXME HARDCODE FOR TESTING
-        orgNameList = new ArrayList<>();
-        orgNameList.add("Vietnam");
-        orgNameList.add("Education");
-        orgNameList.add("PRM391");
-
+//        orgNameList.add("Vietnam");
+//        orgNameList.add("Education");
+//        orgNameList.add("PRM391");
+        selectedOrgName = "Vietnam";
         Bundle bundle = new Bundle();
         bundle.putSerializable("org_list", orgNameList);
         bundle.putString("selected_org_name", selectedOrgName);
@@ -113,6 +117,21 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         organizationRecyclerView.setAdapter(mAdapter);
     }
 
+    private void setupData() {
+        //FIXME HARDCODE
+        mOrgShimmerLayout.startShimmerAnimation();
+        mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
+        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+        Log.i("userId", userId);
+
+        mPresenter.requestListOrganization(userId);
+        mPresenter.requestOrganizationData(1);
+
+        //saveData
+        Organization organization = new Organization(1, "Vietnam");
+        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
+    }
+
     @Override
     public void finishedGetMemeber(List<User> userList) {
         mOrgShimmerLayout.stopShimmerAnimation();
@@ -122,18 +141,39 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     @Override
     public void finishedGetOrganization(Organization organization) {
-        txtOrgName.setText(organization.getName());
-        mOrgShimmerLayout.startShimmerAnimation();
-        mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
-        mPresenter.requestOrganizationData(organization.getId());
+//        txtOrgName.setText(organization.getName());
+//        mOrgShimmerLayout.startShimmerAnimation();
+//        mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
+//        mPresenter.requestOrganizationData(organization.getId());
 
         //Organization organization = new Organization(orgId, orgName);
-        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
+        //SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
     }
+
+    @Override
+    public void finishedGetListUserOrganization(List<UserOrganization> userOrganizationList) {
+        userOrganizationArrayList = new ArrayList<>();
+        userOrganizationArrayList = userOrganizationList;
+        organizationArrayList = new ArrayList<>();
+        orgNameList = new ArrayList<>();
+        if (!userOrganizationArrayList.isEmpty()) {
+            for (int i = 0; i < userOrganizationArrayList.size(); i++) {
+                organizationArrayList.add(userOrganizationArrayList.get(i).getOrganization());
+            }
+        }
+        if (!organizationArrayList.isEmpty()) {
+            for (int i = 0; i < organizationArrayList.size(); i++) {
+                orgNameList.add(organizationArrayList.get(i).getName());
+            }
+
+        }
+    }
+
+
+
 
     @Override
     public void onFinishSelectOrgName(String orgName) {
         txtOrgName.setText(orgName);
-
     }
 }

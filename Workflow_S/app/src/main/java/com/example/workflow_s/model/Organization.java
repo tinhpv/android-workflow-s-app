@@ -11,10 +11,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Organization {
 
-    @SerializedName("organizationId")
+    @SerializedName("id")
     private int id;
 
-    @SerializedName("organizationName")
+    @SerializedName("name")
     private String name;
 
     public Organization(int id, String name) {
