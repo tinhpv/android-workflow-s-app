@@ -25,11 +25,13 @@ import android.widget.Toast;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.Template;
+import com.example.workflow_s.ui.checklistrunning.ChecklistRunningFragment;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
 import com.example.workflow_s.ui.task.adapter.TemplateTaskAdapter;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import org.w3c.dom.Text;
@@ -56,7 +58,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
 
     private TaskContract.TaskPresenter mPresenter;
     private int templateId;
-    private String userId, orgId, templateName, templateDescription, runningChecklistName;
+    private String templateName, templateDescription, templateUserId;
 
     @Nullable
     @Override
@@ -73,14 +75,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
         initUI();
     }
 
-    private void initUI() {
-        btnRunChecklist = view.findViewById(R.id.bt_run_checklist);
-        btnRunChecklist.setOnClickListener(this);
-        mTemplateDescription = view.findViewById(R.id.tv_template_description);
-        mTemplateDescription.setText(templateDescription);
-        mTemplateName = view.findViewById(R.id.tv_template_name);
-        mTemplateName.setText(templateName);
-    }
 
     private void initData() {
         // GET NECESSARY DATA FROM PARENT
@@ -88,10 +82,20 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
         templateId = Integer.parseInt(arguments.getString("templateId"));
         templateName = arguments.getString("templateName");
         templateDescription = arguments.getString("templateDescription");
+        templateUserId = arguments.getString("templateUserId");
 
-        // FIXED - HARDCODE HERE
+        // request data from server
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
         mPresenter.loadTasks(templateId);
+    }
+
+    private void initUI() {
+        btnRunChecklist = view.findViewById(R.id.bt_run_checklist);
+        btnRunChecklist.setOnClickListener(this);
+        mTemplateDescription = view.findViewById(R.id.tv_template_description);
+        mTemplateDescription.setText(templateDescription);
+        mTemplateName = view.findViewById(R.id.tv_template_name);
+        mTemplateName.setText(templateName);
     }
 
     private void initRV() {
@@ -110,17 +114,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     }
 
     @Override
-    public void finishGetTemplateObject(Template template) {
-        handleRunChecklist(template);
-    }
-
-    @Override
-    public void finishedRunChecklist() {
-        Toast.makeText(getActivity(), "RUN SUCCESFULLY", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
     public void onEventCheckBox(Boolean isSelected) {
         Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
         btnRunChecklist.startAnimation(shakeAnimation);
@@ -129,58 +122,12 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_run_checklist) {
-            showRunChecklistDialog(getActivity());
+            Bundle args = new Bundle();
+            args.putInt("templateId", templateId);
+            args.putString("templateName", templateName);
+            args.putString("templateUserId", templateUserId);
+            CommonUtils.replaceFragments(getActivity(), ChecklistRunningFragment.class, args);
         } // end if
     }
 
-    private void showRunChecklistDialog(Context context) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_run_checklist);
-
-        final EditText checklistName = dialog.findViewById(R.id.edt_checklist_name);
-        final TextView alertTextView = dialog.findViewById(R.id.tv_alert_run_checklist);
-        Button confirmRunButton = dialog.findViewById(R.id.bt_confirm_run);
-        Button cancelRunButton = dialog.findViewById(R.id.bt_cancel_run);
-
-        confirmRunButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runningChecklistName = checklistName.getText().toString();
-                if (runningChecklistName.trim().length() == 0) {
-                    alertTextView.setVisibility(View.VISIBLE);
-                    Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
-                    checklistName.startAnimation(shakeAnimation);
-                } else {
-                    //userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-                    //orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-
-                    //mPresenter.getTemplateObject(String.valueOf(templateId), userId, orgId);
-                    // FIXME - HARDCODE HERE FOR TESTING
-                    userId = "107757857762956968267";
-                    orgId = "1";
-                    mPresenter.getTemplateObject("27", "2372592022969346", orgId);
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        cancelRunButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-    }
-
-    private void handleRunChecklist(Template template) {
-        if (null != template) {
-            template.setName(runningChecklistName);
-            mPresenter.runChecklist(userId, template);
-        } // end if
-    }
 }

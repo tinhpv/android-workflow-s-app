@@ -61,11 +61,13 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
                 String templateId = String.valueOf(mTemplateList.get(index).getId());
                 String templateName = mTemplateList.get(index).getName();
                 String templateDescription = mTemplateList.get(index).getDescription();
+                String templateUserId = mTemplateList.get(index).getUserId();
 
                 Bundle args = new Bundle();
                 args.putString("templateId", templateId);
                 args.putString("templateName", templateName);
                 args.putString("templateDescription", templateDescription);
+                args.putString("templateUserId", templateUserId);
 
                 CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskFragment.class, args);
             }

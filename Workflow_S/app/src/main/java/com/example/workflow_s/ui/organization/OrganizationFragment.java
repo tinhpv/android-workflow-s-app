@@ -122,14 +122,17 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
         String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-        Log.i("userId", userId);
 
         mPresenter.requestListOrganization(userId);
         mPresenter.requestOrganizationData(1);
 
+
         //saveData
-        Organization organization = new Organization(1, "Vietnam");
-        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
+        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        String orgName = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgName));
+        Organization organization = new Organization(Integer.parseInt(orgId), orgName);
+        txtOrgName.setText(organization.getName());
+//        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
     }
 
     @Override
@@ -174,13 +177,15 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     @Override
     public void onFinishSelectOrgName(String orgName) {
+        Organization tmpOrg = null;
         txtOrgName.setText(orgName);
             for (int i = 0; i < organizationArrayList.size(); i++) {
                 if (organizationArrayList.get(i).getName().equals(orgName)) {
                     mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());
+                    tmpOrg = organizationArrayList.get(i);
                 }
             }
 
-
+        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, tmpOrg);
     }
 }
