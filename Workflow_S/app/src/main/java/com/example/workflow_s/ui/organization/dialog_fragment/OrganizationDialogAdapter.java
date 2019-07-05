@@ -88,6 +88,7 @@ public class OrganizationDialogAdapter extends RecyclerView.Adapter<Organization
                 cancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        listener.onEvent(null);
                         dialog.dismiss();
                     }
                 });

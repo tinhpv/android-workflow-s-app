@@ -8,11 +8,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
@@ -41,8 +45,6 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private RecyclerView organizationRecyclerView;
     private OrganizationMemberAdapter mAdapter;
     private RecyclerView.LayoutManager organizationLayoutManager;
-    private TextView txtOrgName;
-    private Button btnFilter;
 
     private OrganizationContract.OrganizationPresenter mPresenter;
 
@@ -55,6 +57,30 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private String selectedOrgName;
     private ArrayList<Organization> organizationArrayList;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_org, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_switch:
+                prepareShowOrgDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,22 +91,11 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         mOrgShimmerLayout = view.findViewById(R.id.org_shimmer_view_container);
-        txtOrgName = view.findViewById(R.id.tv_org_name);
-        btnFilter = view.findViewById(R.id.btn_org_filter);
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prepareShowOrgDialog();
-            }
-        });
-        //initData();
         setupData();
         setupOrganizationRV();
-
     }
 
     private void prepareShowOrgDialog() {
-
         String orgName = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgName));
         Bundle bundle = new Bundle();
         bundle.putSerializable("org_list", orgNameList);
@@ -97,12 +112,6 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         mOrgShimmerLayout.startShimmerAnimation();
     }
 
-    private void initData() {
-        mOrgShimmerLayout.startShimmerAnimation();
-        mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
-        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-        mPresenter.requestOrganization(userId);
-    }
 
     private void setupOrganizationRV() {
         organizationRecyclerView = view.findViewById(R.id.rv_organization);
@@ -127,10 +136,8 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         mPresenter.requestListOrganization(userId);
         mPresenter.requestOrganizationData(Integer.parseInt(orgId));
 
-
         //saveData
-
-        txtOrgName.setText(organization.getName());
+        getActivity().setTitle(organization.getName());
         //SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
 
     }
@@ -178,7 +185,7 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     @Override
     public void onFinishSelectOrgName(String orgName) {
         Organization tmpOrg = null;
-        txtOrgName.setText(orgName);
+        getActivity().setTitle(orgName);
         for (int i = 0; i < organizationArrayList.size(); i++) {
             if (organizationArrayList.get(i).getName().equals(orgName)) {
                 mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());

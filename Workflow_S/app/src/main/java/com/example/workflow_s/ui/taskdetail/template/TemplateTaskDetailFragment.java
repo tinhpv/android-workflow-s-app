@@ -37,7 +37,7 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     private String taskName;
     private LinearLayout mContainerLayout;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
-    ArrayList<ContentDetail> taskContentList;
+
 
     @Nullable
     @Override
@@ -57,22 +57,6 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
 
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.loadDetails(taskId);
-
-        // FIXED - STATIC DATA HERE FOR TESTING ONLY
-
-//        String textForTesting1 = "First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below.";
-//        String textForTesting2 = "Employment background checks are vital for not only you as an employer but also for your company. As a hiring manager, it is your responsibility to exercise caution or due diligence by uncovering any potential complications a person may have in their past that they potentially could bring to the workplace.";
-//        String imageSrcForTesting1 = "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
-//        String imageSrcForTesting2 = "https://images.unsplash.com/photo-1519336367661-eba9c1dfa5e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80";
-//
-//        taskContentList = new ArrayList<>();
-//        taskContentList.add(new ContentDetail(1, "img", "", imageSrcForTesting1, 1, 1, ""));
-//        taskContentList.add(new ContentDetail(2, "text", textForTesting1, "", 1, 2, ""));
-//        taskContentList.add(new ContentDetail(3, "text", "", "", 1, 3, "Input your name"));
-//        taskContentList.add(new ContentDetail(4, "img", "", "", 1, 4, "Choose a picture"));
-//        taskContentList.add(new ContentDetail(5, "text", textForTesting2, "", 1, 5, ""));
-//        taskContentList.add(new ContentDetail(6, "img", "", imageSrcForTesting2, 1, 6, ""));
-
     }
 
     private void getTaskIdFromParentFragment() {

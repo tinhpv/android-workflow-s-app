@@ -108,6 +108,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                     if (flag) {
                         Bundle args = new Bundle();
                         args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
+                        args.putString("taskName", mTaskList.get(i).getName());
                         CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
 
                     } else {

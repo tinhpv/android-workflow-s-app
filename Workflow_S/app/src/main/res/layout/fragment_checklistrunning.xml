@@ -52,7 +52,6 @@
         android:id="@+id/edt_checklist_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checklist Vu Tinh"
         android:textSize="25sp"
         android:fontFamily="@font/avenir_heavy"
         android:textColor="@color/colorPrimaryText"

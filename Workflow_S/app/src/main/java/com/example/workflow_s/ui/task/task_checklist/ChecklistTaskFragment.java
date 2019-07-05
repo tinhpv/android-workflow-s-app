@@ -68,15 +68,13 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     }
 
     public void initData() {
-
         // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
 
-        // FIXME - HARDCODE HERE
+        // OK - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
-//        mPresenter.loadTasks(checklistId);
-        mPresenter.loadTasks(2);
+        mPresenter.loadTasks(checklistId);
     }
 
 
@@ -87,12 +85,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @Override
     public void onEventCheckBox(Boolean isSelected) {
-//        if (isTemplate) {
-//            Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
-//            //btnRunChecklist.startAnimation(shakeAnimation);
-//        } else { // is checklist
-//
-//        } //end if
+
     }
 
     @Override
