@@ -30,6 +30,8 @@ import com.example.workflow_s.ui.organization.OrganizationFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.flContent, homeFragment)
+                .add(R.id.flContent, homeFragment)
                 .commit();
     }
 

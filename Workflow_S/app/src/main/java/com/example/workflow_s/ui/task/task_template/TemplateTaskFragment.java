@@ -91,8 +91,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
 
         // FIXME - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
-//        mPresenter.loadTasks(checklistId);
-        mPresenter.loadTasks(2);
+        mPresenter.loadTasks(templateId);
     }
 
     private void initRV() {
@@ -119,6 +118,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     @Override
     public void finishedRunChecklist() {
         Toast.makeText(getActivity(), "RUN SUCCESFULLY", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

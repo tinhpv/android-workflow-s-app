@@ -33,7 +33,8 @@ public class CommonUtils {
         FragmentManager fragmentManager = ((FragmentActivity)fragmentContext).getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.flContent, fragment)
+                .add(R.id.flContent, fragment)
+                .addToBackStack(null)
                 .commit();
 
     }

@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +34,12 @@ import java.util.List;
  **/
 
 
-public class TemplateFragment extends Fragment implements TemplateContract.TemplateView, TemplateDialogFragment.DataBackContract {
+public class TemplateFragment extends Fragment implements TemplateContract.TemplateView, TemplateDialogFragment.DataBackContract, View.OnClickListener {
 
     private final static String TAG = "TEMPLATE_FRAGMENT";
 
     View view;
-    private TextView categoryTextView;
+    private Button categoryButton;
     private RecyclerView templateRecyclerView;
     private TemplateAdapter mAdapter;
     private RecyclerView.LayoutManager templateLayoutManager;
@@ -71,9 +72,6 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             case R.id.action_search:
                 Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_filter:
-                prepareShowingCategoryDialog();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -100,8 +98,9 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mShimmerFrameLayout = view.findViewById(R.id.template_shimmer_view);
         mTemplateDataStatusMessage = view.findViewById(R.id.template_data_notfound_message);
-        categoryTextView = view.findViewById(R.id.tv_template_category);
-        categoryTextView.setText("All");
+        categoryButton = view.findViewById(R.id.bt_template_category);
+        categoryButton.setOnClickListener(this);
+        categoryButton.setText("All");
         selectedCategory = "All";
         setupTemplateRV();
         initData();
@@ -163,7 +162,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 
     @Override
     public void onFinishSelectCategory(String category) {
-        categoryTextView.setText(category);
+        categoryButton.setText(category);
         categorizeTemplate(category);
     }
 
@@ -182,5 +181,12 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             mAdapter.setTemplateList(categorizedTemplateList);
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bt_template_category) {
+            prepareShowingCategoryDialog();
+        }
     }
 }

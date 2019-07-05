@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "https://workflow3i.azurewebsites.net/";
+    public static final String BASE_URL = "https://workflowmanagement20190705102617.azurewebsites.net/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

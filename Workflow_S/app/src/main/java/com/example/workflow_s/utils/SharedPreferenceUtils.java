@@ -15,6 +15,7 @@ import com.example.workflow_s.model.User;
 
 
 public class SharedPreferenceUtils {
+
     public static void saveCurrentUserData(Context context, User currentUser, Organization organization) {
         SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
