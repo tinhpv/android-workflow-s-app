@@ -80,14 +80,11 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     }
 
     private void prepareShowOrgDialog() {
-        //FIXME HARDCODE FOR TESTING
-//        orgNameList.add("Vietnam");
-//        orgNameList.add("Education");
-//        orgNameList.add("PRM391");
-        selectedOrgName = "Vietnam";
+
+        String orgName = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgName));
         Bundle bundle = new Bundle();
         bundle.putSerializable("org_list", orgNameList);
-        bundle.putString("selected_org_name", selectedOrgName);
+        bundle.putString("selected_org_name", orgName);
         OrganizationDialogFragment organizationDialogFragment = OrganizationDialogFragment.newInstance();
         organizationDialogFragment.setTargetFragment(this, 0);
         organizationDialogFragment.setArguments(bundle);
@@ -122,14 +119,20 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
         String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-        Log.i("userId", userId);
 
+        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        String orgName = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgName));
+        Organization organization = new Organization(Integer.parseInt(orgId), orgName);
+        //Log.i("orgId", orgId);
         mPresenter.requestListOrganization(userId);
-        mPresenter.requestOrganizationData(1);
+        mPresenter.requestOrganizationData(Integer.parseInt(orgId));
+
 
         //saveData
-        Organization organization = new Organization(1, "Vietnam");
-        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
+
+        txtOrgName.setText(organization.getName());
+        //SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
+
     }
 
     @Override
@@ -174,13 +177,14 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
 
     @Override
     public void onFinishSelectOrgName(String orgName) {
+        Organization tmpOrg = null;
         txtOrgName.setText(orgName);
-            for (int i = 0; i < organizationArrayList.size(); i++) {
-                if (organizationArrayList.get(i).getName().equals(orgName)) {
-                    mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());
-                }
+        for (int i = 0; i < organizationArrayList.size(); i++) {
+            if (organizationArrayList.get(i).getName().equals(orgName)) {
+                mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());
+                tmpOrg = organizationArrayList.get(i);
             }
+        }
 
-
-    }
+        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, tmpOrg);  }
 }
