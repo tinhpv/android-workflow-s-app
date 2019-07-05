@@ -56,7 +56,7 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
 
         public TodayActivitiesViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_task_name);
+            mTextView = itemView.findViewById(R.id.tv_today_task_name);
         }
     }
 

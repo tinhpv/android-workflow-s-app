@@ -55,7 +55,7 @@ public class UpcomingActivitiesAdapter extends RecyclerView.Adapter<UpcomingActi
 
         public UpcomingActivitiesViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_task_name);
+            mTextView = itemView.findViewById(R.id.tv_upcoming_task_name);
         }
     }
 

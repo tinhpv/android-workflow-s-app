@@ -37,8 +37,12 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_today_activity, container, false);
-        setupTodayActivitiesRV();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setupTodayActivitiesRV();
     }
 
     public void setupTodayActivitiesRV() {
@@ -54,7 +58,7 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
 
     @Override
     public void setDataToTodayTasksRecyclerView(ArrayList<Task> datasource) {
-        mTodayActivitiesAdapter.setTasks(datasource);
+        //mTodayActivitiesAdapter.setTasks(datasource);
 
     }
 
