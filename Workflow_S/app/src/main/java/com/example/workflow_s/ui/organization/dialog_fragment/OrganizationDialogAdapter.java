@@ -1,11 +1,15 @@
 package com.example.workflow_s.ui.organization.dialog_fragment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,25 +60,51 @@ public class OrganizationDialogAdapter extends RecyclerView.Adapter<Organization
         //item click
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                int index = mOrganizationNameList.indexOf(selectedOrgName);
-                OrganizationDialogViewHolder oldViewHolder = (OrganizationDialogViewHolder) mRecyclerView.findViewHolderForAdapterPosition(index);
-                oldViewHolder.imgChecked.setVisibility(View.INVISIBLE);
+            public void onClick(final View v) {
+                final Dialog dialog = new Dialog(v.getContext());
+                dialog.setContentView(R.layout.dialog_confirm_organization);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
 
-                OrganizationDialogViewHolder currentViewHolder = (OrganizationDialogViewHolder) mRecyclerView.findContainingViewHolder(v);
-                currentViewHolder.imgChecked.setVisibility(View.VISIBLE);
-                selectedOrgName = mOrganizationNameList.get(mRecyclerView.getChildLayoutPosition(v));
+                Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+                Button cancelButton = dialog.findViewById(R.id.btn_cancel);
 
-                listener.onEvent(selectedOrgName);
+                confirmButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v2) {
+                        int index = mOrganizationNameList.indexOf(selectedOrgName);
+                        OrganizationDialogViewHolder oldViewHolder = (OrganizationDialogViewHolder) mRecyclerView.findViewHolderForAdapterPosition(index);
+                        oldViewHolder.imgChecked.setVisibility(View.INVISIBLE);
+
+                        OrganizationDialogViewHolder currentViewHolder = (OrganizationDialogViewHolder) mRecyclerView.findContainingViewHolder(v);
+                        currentViewHolder.imgChecked.setVisibility(View.VISIBLE);
+                        selectedOrgName = mOrganizationNameList.get(mRecyclerView.getChildLayoutPosition(v));
+
+                        listener.onEvent(selectedOrgName);
+                        dialog.dismiss();
+                    }
+                });
+
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
         });
         return viewHolder;
     }
 
+    private void showConfirmDialog(Context context) {
+
+    }
+
     @Override
     public void onBindViewHolder(@NonNull OrganizationDialogViewHolder organizationDialogViewHolder, int i) {
         organizationDialogViewHolder.mOrganiztonName.setText(mOrganizationNameList.get(i));
-        if (mOrganizationNameList.get(i) == selectedOrgName) {
+        if (mOrganizationNameList.get(i).equals(selectedOrgName)) {
             organizationDialogViewHolder.imgChecked.setVisibility(View.VISIBLE);
         }
     }

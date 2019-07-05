@@ -72,4 +72,7 @@ public class OrganizationDialogFragment extends BottomSheetDialogFragment implem
         mAdapter = new OrganizationDialogAdapter(this);
         organizationNameRecyclerView.setAdapter(mAdapter);
     }
+
+
+
 }
