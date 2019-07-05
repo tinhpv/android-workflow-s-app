@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.organization;
 
+import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
 
@@ -14,20 +15,31 @@ import java.util.List;
 
 public interface OrganizationContract {
 
+    //presenter
     interface OrganizationPresenter {
-        void requestOrganizationData(String orgId);
+        void requestOrganizationData(int orgId);
+        void requestOrganization(String userId);
     }
 
+    //view
     interface OrganizationView {
         void finishedGetMemeber(List<User> userList);
+        void finishedGetOrganization(Organization organization);
     }
 
+    //model
     interface GetOrganizationDataContract {
         interface OnFinishedGetMembersListener {
             void onFinishedGetMembers(ArrayList<User> users);
             void onFailure(Throwable t);
         }
 
-        void getAllMember(String orgId, OnFinishedGetMembersListener onFinishedListener);
+        interface OnFinishedGetOrganizatonListener {
+            void onFinishedGetOrg(Organization organization);
+            void onFailure(Throwable t);
+        }
+
+        void getAllMember(int orgId, OnFinishedGetMembersListener onFinishedListener);
+        void getOrganization(String userId, OnFinishedGetOrganizatonListener onFinishedListener);
     }
 }

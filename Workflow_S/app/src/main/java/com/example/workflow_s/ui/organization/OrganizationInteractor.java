@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.organization;
 
+import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
@@ -22,7 +23,7 @@ import retrofit2.Response;
 public class OrganizationInteractor implements OrganizationContract.GetOrganizationDataContract {
 
     @Override
-    public void getAllMember(String orgId, final OnFinishedGetMembersListener onFinishedListener) {
+    public void getAllMember(int orgId, final OnFinishedGetMembersListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<List<User>> call = service.getOrganizationMember(orgId);
 
@@ -37,6 +38,26 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
                 onFinishedListener.onFailure(t);
             }
         });
+
+    }
+
+    @Override
+    public void getOrganization(String userId, final OnFinishedGetOrganizatonListener onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<Organization> call = service.getOrganization(userId);
+
+        call.enqueue(new Callback<Organization>() {
+            @Override
+            public void onResponse(Call<Organization> call, Response<Organization> response) {
+                onFinishedListener.onFinishedGetOrg((Organization) response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Organization> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+
 
     }
 }
