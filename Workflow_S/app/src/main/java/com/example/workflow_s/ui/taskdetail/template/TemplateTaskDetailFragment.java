@@ -19,6 +19,7 @@ import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
+import com.example.workflow_s.utils.Constant;
 
 import java.util.ArrayList;
 
@@ -91,7 +92,7 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
 //                    if (detail.getLabel().isEmpty()) { // image from admin
                     if (detail.getLabel() == null) {
                         ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
-                        Glide.with(this).load(detail.getImageSrc()).into(imgView);
+                        Glide.with(this).load(Constant.IMG_BASE_URL + detail.getImageSrc()).into(imgView);
                         mContainerLayout.addView(imgView);
                     } else { // image from user
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);

@@ -89,7 +89,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
         templateName = arguments.getString("templateName");
         templateDescription = arguments.getString("templateDescription");
 
-        // FIXME - HARDCODE HERE
+        // FIXED - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
         mPresenter.loadTasks(templateId);
     }
@@ -111,7 +111,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
 
     @Override
     public void finishGetTemplateObject(Template template) {
-        Log.d(TAG, "finishGetTemplateObject: " + templateName);
         handleRunChecklist(template);
     }
 
