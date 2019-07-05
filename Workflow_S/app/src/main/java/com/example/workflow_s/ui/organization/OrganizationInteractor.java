@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.organization;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -44,7 +45,7 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
     @Override
     public void getOrganization(String userId, final OnFinishedGetOrganizatonListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<Organization> call = service.getOrganization(userId);
+        Call<Organization> call = service.getCurrentOrganization(userId);
 
         call.enqueue(new Callback<Organization>() {
             @Override
@@ -59,5 +60,23 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
         });
 
 
+    }
+
+    @Override
+    public void getListUserOrganization(String userId, final OnFinishedGetListUserOrganizationListener onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<UserOrganization>> call = service.getListUserOrganization(userId);
+
+        call.enqueue(new Callback<List<UserOrganization>>() {
+            @Override
+            public void onResponse(Call<List<UserOrganization>> call, Response<List<UserOrganization>> response) {
+                onFinishedListener.onFinishedGetListUserOrg((ArrayList<UserOrganization>) response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<UserOrganization>> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
     }
 }

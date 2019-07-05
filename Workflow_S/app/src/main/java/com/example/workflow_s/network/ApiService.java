@@ -6,6 +6,7 @@ import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.UserOrganization;
 
 import java.util.List;
 
@@ -76,5 +77,11 @@ public interface ApiService {
 
     @GET("/api/UserOrganizations/organization/{userId}")
     Call<Organization> getOrganization(@Path("userId") String userId);
+
+    @GET("/api/Organizations/current/{userId}")
+    Call<Organization> getCurrentOrganization(@Path("userId") String userId);
+
+    @GET("/api/UserOrganizations/user/{userId}")
+    Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
 
 }

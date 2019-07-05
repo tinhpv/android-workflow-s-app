@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.ui.home.HomeContract;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -17,7 +19,8 @@ import java.util.ArrayList;
 
 public class OrganizationPresenterImpl implements OrganizationContract.OrganizationPresenter,
         OrganizationContract.GetOrganizationDataContract.OnFinishedGetMembersListener,
-        OrganizationContract.GetOrganizationDataContract.OnFinishedGetOrganizatonListener{
+        OrganizationContract.GetOrganizationDataContract.OnFinishedGetOrganizatonListener,
+        OrganizationContract.GetOrganizationDataContract.OnFinishedGetListUserOrganizationListener{
 
     private static final String TAG = "ORGANIZATION_PRESENTER";
     private OrganizationContract.OrganizationView mOrganizationView;
@@ -39,6 +42,11 @@ public class OrganizationPresenterImpl implements OrganizationContract.Organizat
     }
 
     @Override
+    public void requestListOrganization(String userId) {
+        mOrganizationDataContract.getListUserOrganization(userId, this);
+    }
+
+    @Override
     public void onFinishedGetMembers(ArrayList<User> users) {
         mOrganizationView.finishedGetMemeber(users);
     }
@@ -46,6 +54,11 @@ public class OrganizationPresenterImpl implements OrganizationContract.Organizat
     @Override
     public void onFinishedGetOrg(Organization organization) {
         mOrganizationView.finishedGetOrganization(organization);
+    }
+
+    @Override
+    public void onFinishedGetListUserOrg(List<UserOrganization> userOrganizationList) {
+        mOrganizationView.finishedGetListUserOrganization(userOrganizationList);
     }
 
     @Override
