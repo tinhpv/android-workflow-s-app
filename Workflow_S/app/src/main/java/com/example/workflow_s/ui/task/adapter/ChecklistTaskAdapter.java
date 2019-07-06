@@ -22,6 +22,7 @@ import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragment;
+import com.example.workflow_s.ui.taskdetail.template.TemplateTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
@@ -93,36 +94,43 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int index = mRecyclerView.getChildLayoutPosition(v);
-                List<TaskMember> listMember = mTaskList.get(index).getTaskMemberList();
-                String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
-                boolean flag = false;
-                if (!listMember.isEmpty()) {
-                    for (int j = 0; j < listMember.size(); j++) {
-                        if (listMember.get(j).getUserId().equals(userId)) {
-                            flag = true;
-                            break;
-                        }
-                    }
+                Bundle args = new Bundle();
+                args.putString("taskId", String.valueOf(mTaskList.get(index).getId()));
+                args.putString("taskName", mTaskList.get(index).getName());
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
 
-                    if (flag) {
-                        Bundle args = new Bundle();
-                        args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
-                        args.putString("taskName", mTaskList.get(i).getName());
-                        CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
-
-                    } else {
-                        Log.i("No Assign", "no assign");
-                        errorDialog.show();
-                        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
-                        btnOk.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                errorDialog.cancel();
-                            }
-                        });
-                    } // end if
-                } // end if
+//                int index = mRecyclerView.getChildLayoutPosition(v);
+//                List<TaskMember> listMember = mTaskList.get(index).getTaskMemberList();
+//                String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
+//                boolean flag = false;
+//                if (!listMember.isEmpty()) {
+//                    for (int j = 0; j < listMember.size(); j++) {
+//                        if (listMember.get(j).getUserId().equals(userId)) {
+//                            flag = true;
+//                            break;
+//                        }
+//                    }
+//
+//                    if (flag) {
+//                        Bundle args = new Bundle();
+//                        args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
+//                        args.putString("taskName", mTaskList.get(i).getName());
+//                        CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+//
+//                    } else {
+//                        Log.i("No Assign", "no assign");
+//                        errorDialog.show();
+//                        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+//                        btnOk.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                errorDialog.cancel();
+//                            }
+//                        });
+//                    } // end if
+//                } // end if
             }
         });
         return viewHolder;

@@ -51,7 +51,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
 
     @NonNull
     @Override
-    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
+    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_checklist_progress;
@@ -63,8 +63,14 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             public void onClick(View v) {
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 String checklistId = String.valueOf(mChecklists.get(index).getId());
+                String checklistName = mChecklists.get(index).getName();
+                String desc = mChecklists.get(index).getDescription();
+
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
+                args.putString("checklistName", checklistName);
+                args.putString("checklistDescription", desc);
+
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });
