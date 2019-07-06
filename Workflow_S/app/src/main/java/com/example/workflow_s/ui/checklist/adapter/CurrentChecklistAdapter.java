@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,12 +16,14 @@ import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentChecklistAdapter.CurrentChecklistViewHolder> {
 
     //datasource for recyclerview
     private List<Checklist> mChecklists;
+    private List<Checklist> mChecklistsFull;
 
     @NonNull
     @Override
@@ -55,6 +58,38 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         return mChecklists.size();
     }
 
+    public Filter getFilter() {
+        return searchFilter;
+    }
+
+    private Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Checklist> filterList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filterList.addAll(mChecklistsFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Checklist item : mChecklistsFull) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filterList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filterList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mChecklists.clear();
+            mChecklists.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {
 
@@ -74,6 +109,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
 
     public void setChecklists(List<Checklist> checklists) {
         mChecklists = checklists;
+        mChecklistsFull = new ArrayList<>(checklists);
         this.notifyDataSetChanged();
     }
 }

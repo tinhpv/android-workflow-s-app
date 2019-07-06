@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.home.HomeFragment;
 import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
+import com.example.workflow_s.ui.search.SearchActivity;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
@@ -183,7 +185,8 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass;
         switch (item.getItemId()) {
             case R.id.action_search:
-                Toast.makeText(this, "SEARCH", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_notif:
                 //Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();

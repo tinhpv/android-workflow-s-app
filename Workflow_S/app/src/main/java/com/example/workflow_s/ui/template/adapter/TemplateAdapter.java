@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
@@ -14,6 +15,7 @@ import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.ui.task.task_template.TemplateTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +29,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
 
     // datasource for this RV
     List<Template> mTemplateList;
+    List<Template> mTemplateListFull;
     RecyclerView mRecyclerView;
 
     public TemplateAdapter() {
@@ -34,8 +37,10 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
 
     public void setTemplateList(List<Template> templateList) {
         mTemplateList = templateList;
+        mTemplateListFull = new ArrayList<>(templateList);
         notifyDataSetChanged();
     }
+
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -90,4 +95,37 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
             return mTemplateList.size();
         }
     }
+
+    public Filter getFilter() {
+        return searchFilter;
+    }
+
+    private Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Template> filterList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filterList.addAll(mTemplateListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Template item : mTemplateListFull) {
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filterList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filterList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mTemplateList.clear();
+            mTemplateList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
 }
