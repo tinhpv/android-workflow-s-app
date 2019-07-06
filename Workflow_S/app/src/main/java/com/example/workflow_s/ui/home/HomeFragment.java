@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,10 @@ import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.CommonUtils;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -68,6 +71,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         setupChecklistRV();
         setupTaskRV();
         initData();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i("Token", "Token is null");
+        } else {
+            Log.i("Token", token);
+            Log.i("UserToken", SharedPreferenceUtils.retrieveData(view.getContext(), view.getContext().getString(R.string.pref_token)));
+        }
+
     }
 
     @Override

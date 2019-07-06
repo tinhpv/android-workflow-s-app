@@ -24,6 +24,8 @@ android {
     }
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
@@ -50,4 +52,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.airbnb.android:lottie:2.7.0'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    //firebase
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 }
+

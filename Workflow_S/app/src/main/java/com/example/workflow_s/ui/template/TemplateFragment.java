@@ -1,17 +1,20 @@
 package com.example.workflow_s.ui.template;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,11 +22,14 @@ import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
+import com.example.workflow_s.ui.main.MainActivity;
+import com.example.workflow_s.ui.search.SearchActivity;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
 import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +59,8 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     private ArrayList<Template> templateList, categorizedTemplateList;
     private String selectedCategory;
 
+    private List<String> listSearch;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,21 +69,37 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_template, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search_item);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_search:
+//                Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     private void prepareShowingCategoryDialog() {
         Bundle bundle = new Bundle();
@@ -143,6 +167,12 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             collectCategoryName(templateList);
             mAdapter.setTemplateList(templateList);
         } // end if
+
+        //
+        listSearch = new ArrayList<>();
+        for (Template item : templateList) {
+            listSearch.add(item.getName());
+        }
     }
 
     private void collectCategoryName(List<Template> templateList) {
