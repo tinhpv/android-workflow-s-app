@@ -12,9 +12,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="WHO'S WORKING ON"
+        android:text="WHO'S WORKING ON..."
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:paddingVertical="16dp"
         android:fontFamily="@font/avenir_heavy"
         android:background="@drawable/background_textview_dialog"
@@ -23,7 +23,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_assign_user"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_marginTop="20dp"
         android:scrollbars="vertical"
         android:layout_marginBottom="20dp"
@@ -37,7 +37,7 @@
         android:layout_height="40dp"
         android:fontFamily="@font/avenir_heavy"
         android:background="@drawable/edittext_rounded"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:padding="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
@@ -53,10 +53,10 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/bt_confirm_run"
+            android:id="@+id/bt_add_user"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:text="OK"
+            android:text="Add"
             android:textSize="18sp"
             android:textColor="@android:color/white"
             android:fontFamily="@font/avenir_heavy"
@@ -64,7 +64,7 @@
             android:layout_marginHorizontal="5dp" />
 
         <Button
-            android:id="@+id/bt_cancel_run"
+            android:id="@+id/bt_cancel_add"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:text="Cancel"

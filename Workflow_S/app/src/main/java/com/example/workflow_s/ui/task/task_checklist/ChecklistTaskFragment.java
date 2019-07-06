@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskPresenterImpl;
@@ -29,6 +30,7 @@ import com.example.workflow_s.ui.task.dialog.AssigningDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -50,7 +52,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
-    private String checklistName, checklistDescription;
+    private String checklistName, checklistDescription, checklistUserId;
+    private List<TaskMember> checklistMemberList;
+    private String checklistDueTime, checklistFirstTaskId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,8 +77,11 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
                 return true;
             case R.id.action_assign:
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                AssigningDialogFragment editNameDialogFragment = AssigningDialogFragment.newInstance("Some Title");
-                editNameDialogFragment.show(fm, "fragment_edit_name");
+                // convert List to ArrayList so that we can store it in Bundle
+                ArrayList<TaskMember> taskMembers = new ArrayList<>();
+                taskMembers.addAll(checklistMemberList);
+                AssigningDialogFragment editNameDialogFragment = AssigningDialogFragment.newInstance(checklistUserId,checklistFirstTaskId, taskMembers);
+                editNameDialogFragment.show(fm, "fragment_assign_user");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -113,6 +120,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
         checklistName = arguments.getString("checklistName");
         checklistDescription = arguments.getString("checklistDescription");
+        checklistUserId = arguments.getString("checklistUserId");
 
         // OK - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
@@ -131,6 +139,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @Override
     public void setDataToTaskRecyclerView(ArrayList<Task> datasource) {
+        checklistMemberList = new ArrayList<>();
+        checklistMemberList = datasource.get(0).getTaskMemberList();
+        checklistDueTime = datasource.get(0).getDueTime();
+        checklistFirstTaskId = String.valueOf(datasource.get(0).getId());
         mChecklistChecklistTaskAdapter.setTaskList(datasource);
     }
 

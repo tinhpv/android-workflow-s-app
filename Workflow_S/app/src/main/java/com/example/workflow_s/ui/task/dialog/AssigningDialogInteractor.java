@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.task.dialog;
 
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
@@ -7,6 +8,7 @@ import com.example.workflow_s.network.ApiService;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,5 +38,39 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
             }
         });
 
+    }
+
+    @Override
+    public void assignTaskMember(TaskMember member, final OnFinishedAssignMemberListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.assignMember(member);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedAssigning();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void unassignTaskMember(int memberId, final OnFinishedUnassignMemberListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.unassignMember(memberId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedUnassigning();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
     }
 }

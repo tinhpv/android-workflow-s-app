@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.task.dialog;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 
 import java.util.ArrayList;
@@ -13,7 +14,10 @@ import java.util.ArrayList;
  **/
 
 
-public class AssigningDialogPresenterImpl implements AssigningDialogContract.AssigningDialogPresenter, AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener {
+public class AssigningDialogPresenterImpl implements AssigningDialogContract.AssigningDialogPresenter,
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener,
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedAssignMemberListener,
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedUnassignMemberListener {
 
     private AssigningDialogContract.AssigningDialogView mDialogView;
     private AssigningDialogInteractor mDialogInteractor;
@@ -29,8 +33,29 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
+    public void assignUser(TaskMember taskMember) {
+        mDialogInteractor.assignTaskMember(taskMember, this);
+    }
+
+    @Override
+    public void unassignUser(int memberId) {
+        mDialogInteractor.unassignTaskMember(memberId, this);
+    }
+
+    @Override
     public void onFinishedGetMembers(ArrayList<User> users) {
         mDialogView.finishedGetMember(users);
+    }
+
+    @Override
+    public void onFinishedAssigning() {
+        mDialogView.finishedAssignMember();
+    }
+
+
+    @Override
+    public void onFinishedUnassigning() {
+        mDialogView.finishedUnassignMember();
     }
 
     @Override

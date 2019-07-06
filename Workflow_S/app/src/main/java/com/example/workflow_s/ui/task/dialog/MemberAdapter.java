@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.organization.adapter.OrganizationMemberViewHolder;
+import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogAdapter;
 
 import java.util.List;
 
@@ -28,12 +29,23 @@ import java.util.List;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberViewHolder> {
 
+
+    EventListener listener;
+
+    public interface EventListener {
+        void onEvent(String userId);
+    }
+
     private List<User> mUserList;
     private RecyclerView mRecyclerView;
 
     public void setUserList(List<User> userList) {
         mUserList = userList;
         notifyDataSetChanged();
+    }
+
+    public MemberAdapter(EventListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -55,7 +67,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MemberViewHolder memberViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MemberViewHolder memberViewHolder, final int i) {
         memberViewHolder.mMemberName.setText(mUserList.get(i).getName());
         memberViewHolder.mEmail.setText(mUserList.get(i).getEmail());
 
@@ -69,8 +81,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO - HANDLE UNASSIGN USER HERE
-
+                // DONE - HANDLE UNASSIGN USER HERE
+                //int index = mRecyclerView.getChildLayoutPosition(v);
+                listener.onEvent(mUserList.get(i).getId());
             }
         });
     }

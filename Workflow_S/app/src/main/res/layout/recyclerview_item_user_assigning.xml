@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="15dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp">
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
 
     <!--avatar user-->
     <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="Phan Vu Tinh"
                 android:fontFamily="@font/avenir_medium"
-                android:textSize="19sp"
+                android:textSize="15sp"
                 android:layout_marginLeft="12dp"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="vutinh1998@gmail.com"
                 android:fontFamily="@font/avenir_light_oblique"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:layout_marginLeft="12dp"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/unassigned_ic_dark"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"/>
 

@@ -21,7 +21,7 @@
             android:id="@+id/tv_checklist_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryText"
             android:text="Working Shift_1"
@@ -37,6 +37,7 @@
             android:drawableLeft="@mipmap/task_icon_small"
             android:drawablePadding="5dp"
             android:text="7/10 tasks"
+            android:textSize="12dp"
             android:fontFamily="@font/avenir_light_oblique"
             android:layout_marginRight="10dp" />
 

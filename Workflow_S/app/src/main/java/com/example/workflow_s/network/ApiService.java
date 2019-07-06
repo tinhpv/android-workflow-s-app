@@ -3,6 +3,7 @@ package com.example.workflow_s.network;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.model.Task;
@@ -13,6 +14,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -31,7 +33,8 @@ public interface ApiService {
 
 
     @GET("api/Checklists/checklistprogress/{organizationId}/{userId}")
-    Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId, @Path("userId") String userId);
+    Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId,
+                                                  @Path("userId") String userId);
 
     @POST("api/Users/login/user")
     Call<User> addUser(@Body User user);
@@ -40,13 +43,16 @@ public interface ApiService {
     Call<Organization> getUserOrganizations(@Path("userId") String userId);
 
     @GET("/api/TaskItems/taskoverdue/{organizationId}/{userId}")
-    Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId, @Path("userId") String userId);
+    Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId,
+                                    @Path("userId") String userId);
 
     @POST("/api/Users/updatephone/{userid}/{phone}")
-    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId, @Path("phone") String phoneNumber);
+    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId,
+                                         @Path("phone") String phoneNumber);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
-    Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
+    Call<String> submitVerifyCode(@Path("userid") String userId,
+                                  @Path("code") String verifyCode);
 
     @GET("/api/Users/getverifycode/{id}")
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
@@ -61,7 +67,8 @@ public interface ApiService {
     Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
     @GET("/api/Checklists/listtemplate/{organizationId}/{userId}")
-    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId, @Path("userId") String userId);
+    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId,
+                                                @Path("userId") String userId);
 
     @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
@@ -73,7 +80,8 @@ public interface ApiService {
                                          @Path("userId") String userId);
 
     @POST("/api/Checklists/run/{userId}")
-    Call<ResponseBody> runChecklist(@Path("userId") String userId, @Body Template template);
+    Call<ResponseBody> runChecklist(@Path("userId") String userId,
+                                    @Body Template template);
 
     @GET("/api/UserOrganizations/organization/{userId}")
     Call<Organization> getOrganization(@Path("userId") String userId);
@@ -83,5 +91,13 @@ public interface ApiService {
 
     @GET("/api/UserOrganizations/user/{userId}")
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
+
+    @POST("/api/TaskMembers/assign")
+    Call<ResponseBody> assignMember(@Body TaskMember taskMember);
+
+    @DELETE("/api/TaskMembers/delete/{memberId}")
+    Call<ResponseBody> unassignMember(@Path("memberId") int memberId);
+
+
 
 }
