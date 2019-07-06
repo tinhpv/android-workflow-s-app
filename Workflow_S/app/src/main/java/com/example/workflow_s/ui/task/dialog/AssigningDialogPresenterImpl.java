@@ -17,7 +17,8 @@ import java.util.ArrayList;
 public class AssigningDialogPresenterImpl implements AssigningDialogContract.AssigningDialogPresenter,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedAssignMemberListener,
-        AssigningDialogContract.GetDataAssignInteractor.OnFinishedUnassignMemberListener {
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedUnassignMemberListener,
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetTaskMembersListener {
 
     private AssigningDialogContract.AssigningDialogView mDialogView;
     private AssigningDialogInteractor mDialogInteractor;
@@ -43,6 +44,11 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
+    public void getTaskMember(int taskId) {
+        mDialogInteractor.getAllTaskMembers(taskId, this);
+    }
+
+    @Override
     public void onFinishedGetMembers(ArrayList<User> users) {
         mDialogView.finishedGetMember(users);
     }
@@ -56,6 +62,11 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     @Override
     public void onFinishedUnassigning() {
         mDialogView.finishedUnassignMember();
+    }
+
+    @Override
+    public void onFinishedGetTaskMembers(ArrayList<TaskMember> taskMembers) {
+        mDialogView.finishedGetTaskMember(taskMembers);
     }
 
     @Override

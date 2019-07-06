@@ -55,7 +55,7 @@ public class AssigningDialogFragment extends DialogFragment
     private List<User> mUserList, mUnassignedUserList;
     private ArrayList<TaskMember> mTaskMemberList;
     private ArrayList<String> emailList;
-    private String checklistUserId, taskId, userEmailToAssign;
+    private String checklistUserId, taskId, userEmailToAssign, unassignedUserId;
     AssigningDialogContract.AssigningDialogPresenter mDialogPresenter;
 
     public static AssigningDialogFragment newInstance(String checklistUserId, String taskId, ArrayList<TaskMember> memberList) {
@@ -127,24 +127,55 @@ public class AssigningDialogFragment extends DialogFragment
 
     @Override
     public void finishedAssignMember() {
-        updateUsersToDisplay();
+        updateUsersToDisplay(true);
     }
 
     @Override
     public void finishedUnassignMember() {
-
+        updateUsersToDisplay(false);
     }
 
-    private void updateUsersToDisplay() {
-        for (User user : mUnassignedUserList) {
-            if (user.getEmail().equals(userEmailToAssign)) {
-                mUnassignedUserList.remove(user);
-                mTaskMemberList.add(new TaskMember(1, Integer.parseInt(taskId), user.getId()));
-                manipulateDataToDisplayOnRV();
-                userEmailForAssigning.setText("");
-                break;
-            }
+    @Override
+    public void finishedGetTaskMember(List<TaskMember> taskMemberList) {
+        if (taskMemberList != null) {
+            for (TaskMember member : taskMemberList) {
+                if (member.getUserId().equals(unassignedUserId)) {
+                    mDialogPresenter.unassignUser(member.getId());
+                }
+            } // end for
         }
+    }
+
+    private void updateUsersToDisplay(boolean isAssigned) {
+        if (isAssigned) {
+            for (User user : mUnassignedUserList) {
+                if (user.getEmail().equals(userEmailToAssign)) {
+                    mUnassignedUserList.remove(user);
+                    mTaskMemberList.add(new TaskMember(1, Integer.parseInt(taskId), user.getId()));
+                    manipulateDataToDisplayOnRV();
+                    userEmailForAssigning.setText("");
+                    break;
+                }
+            } // end for
+        } else {
+//            unassignedUserId => có id rồi làm gì?
+            // them vao unassigned list
+            for (User user : mUserList) {
+                if (user.getId().equals(unassignedUserId)) {
+                    mUnassignedUserList.add(user);
+                    for (TaskMember tempUser : mTaskMemberList) {
+                        if (tempUser.getUserId().equals(unassignedUserId) && (tempUser.getTaskId() == Integer.parseInt(taskId))) {
+                            mTaskMemberList.remove(tempUser);
+                            break;
+                        } // end if
+                    } // end for
+                    manipulateDataToDisplayOnRV();
+                    break;
+                }
+            }
+
+        }
+
     }
 
     private void manipulateDataToDisplayOnRV() {
@@ -157,7 +188,7 @@ public class AssigningDialogFragment extends DialogFragment
         mAdapter.setUserList(usersToDisplay);
     }
 
-    private Boolean isContain(String userId) {
+    private boolean isContain(String userId) {
         if (mTaskMemberList != null) {
             for (TaskMember member : mTaskMemberList) {
                 if (member.getUserId().equals(userId)) {
@@ -218,6 +249,7 @@ public class AssigningDialogFragment extends DialogFragment
 
     @Override
     public void onEvent(String userId) {
-        
+        unassignedUserId = userId;
+        mDialogPresenter.getTaskMember(Integer.parseInt(taskId));
     }
 }

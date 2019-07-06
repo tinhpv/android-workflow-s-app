@@ -19,15 +19,18 @@ public interface AssigningDialogContract {
         void getOrgMember(int orgId);
         void assignUser(TaskMember taskMember);
         void unassignUser(int memberId);
+        void getTaskMember(int taskId);
     }
 
     interface AssigningDialogView {
         void finishedGetMember(List<User> userList);
         void finishedAssignMember();
         void finishedUnassignMember();
+        void finishedGetTaskMember(List<TaskMember> taskMemberList);
     }
 
     interface GetDataAssignInteractor {
+
         interface OnFinishedGetMembersListener {
             void onFinishedGetMembers(ArrayList<User> users);
             void onFailure(Throwable t);
@@ -43,10 +46,15 @@ public interface AssigningDialogContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetTaskMembersListener {
+            void onFinishedGetTaskMembers(ArrayList<TaskMember> taskMembers);
+            void onFailure(Throwable t);
+        }
+
 
         void getAllMember(int orgId, OnFinishedGetMembersListener onFinishedListener);
         void assignTaskMember(TaskMember member, OnFinishedAssignMemberListener listener);
         void unassignTaskMember(int memberId, OnFinishedUnassignMemberListener listener);
-
+        void getAllTaskMembers(int taskId, OnFinishedGetTaskMembersListener listener);
     }
 }

@@ -73,4 +73,22 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
             }
         });
     }
+
+    @Override
+    public void getAllTaskMembers(int taskId, final OnFinishedGetTaskMembersListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<TaskMember>> call = service.getAllTaskMember(taskId);
+        call.enqueue(new Callback<List<TaskMember>>() {
+            @Override
+            public void onResponse(Call<List<TaskMember>> call, Response<List<TaskMember>> response) {
+                listener.onFinishedGetTaskMembers((ArrayList<TaskMember>) response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<TaskMember>> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+
+    }
 }

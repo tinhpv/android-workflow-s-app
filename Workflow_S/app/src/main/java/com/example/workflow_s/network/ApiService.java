@@ -99,5 +99,6 @@ public interface ApiService {
     Call<ResponseBody> unassignMember(@Path("memberId") int memberId);
 
 
-
+    @GET("/api/TaskMembers/taskmember/{taskId}")
+    Call<List<TaskMember>> getAllTaskMember(@Path("taskId") int taskId);
 }
