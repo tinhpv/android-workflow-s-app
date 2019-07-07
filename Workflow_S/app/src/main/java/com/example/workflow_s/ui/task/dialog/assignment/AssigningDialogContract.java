@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.task.dialog;
+package com.example.workflow_s.ui.task.dialog.assignment;
 
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;

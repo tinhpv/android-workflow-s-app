@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.task.dialog;
+package com.example.workflow_s.ui.task.dialog.assignment;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,8 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.User;
-import com.example.workflow_s.ui.organization.adapter.OrganizationMemberViewHolder;
-import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogAdapter;
 
 import java.util.List;
 

@@ -1,7 +1,5 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,8 +24,8 @@ import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
-import com.example.workflow_s.ui.task.dialog.AssigningDialogFragment;
-import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.example.workflow_s.ui.task.dialog.assignment.AssigningDialogFragment;
+import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
-    private String checklistName, checklistDescription, checklistUserId;
+    private String checklistName, checklistDescription, checklistUserId, currentDueTime;
     private List<TaskMember> checklistMemberList;
     private String checklistDueTime, checklistFirstTaskId;
 
@@ -71,17 +69,18 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_set_time:
-                Toast.makeText(getActivity(), "SET TIME", Toast.LENGTH_SHORT).show();
+                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), currentDueTime);
+                settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             case R.id.action_assign:
-                FragmentManager fm = getActivity().getSupportFragmentManager();
                 // convert List to ArrayList so that we can store it in Bundle
                 ArrayList<TaskMember> taskMembers = new ArrayList<>();
                 taskMembers.addAll(checklistMemberList);
-                AssigningDialogFragment editNameDialogFragment = AssigningDialogFragment.newInstance(checklistUserId,checklistFirstTaskId, taskMembers);
-                editNameDialogFragment.show(fm, "fragment_assign_user");
+                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId,checklistFirstTaskId, taskMembers);
+                assigningDialogFragment.show(fm, "fragment_assign_user");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -143,6 +142,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         checklistMemberList = datasource.get(0).getTaskMemberList();
         checklistDueTime = datasource.get(0).getDueTime();
         checklistFirstTaskId = String.valueOf(datasource.get(0).getId());
+        currentDueTime = datasource.get(0).getDueTime();
         mChecklistChecklistTaskAdapter.setTaskList(datasource);
     }
 
