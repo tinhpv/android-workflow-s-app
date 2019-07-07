@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
@@ -37,7 +41,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private String taskName;
     private LinearLayout mContainerLayout;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
-    ArrayList<ContentDetail> taskContentList;
 
     @Nullable
     @Override
@@ -71,7 +74,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         for (ContentDetail detail : datasource) {
             switch (detail.getType()) {
                 case "img":
-                    if (detail.getLabel().isEmpty()) { // image from admin
+//                    if (detail.getLabel().isEmpty()) { // image from admin
+                    if (detail.getLabel() == null) {
                         ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                         Glide.with(this).load(Constant.IMG_BASE_URL + detail.getImageSrc()).into(imgView);
                         mContainerLayout.addView(imgView);
@@ -84,7 +88,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                     } // end if
                     break;
                 case "text":
-                    if (detail.getLabel().isEmpty()) { // this is will be the textView
+//                    if (detail.getLabel().isEmpty()) { // this is will be the textView
+                    if (detail.getLabel() == null) {
                         TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
                         description.setText(detail.getText());
                         mContainerLayout.addView(description);

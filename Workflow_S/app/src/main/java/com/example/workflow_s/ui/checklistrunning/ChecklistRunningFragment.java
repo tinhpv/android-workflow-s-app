@@ -96,7 +96,7 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     @Override
     public void finishGetTemplateObject(Template template) {
         if (null != template) {
-            template.setName(templateName);
+            template.setName(checklistName);
             mRunningPresenter.runChecklist(userId, template);
         }
     }
