@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
@@ -53,6 +55,8 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private String checklistName, checklistDescription, checklistUserId, currentDueTime;
     private List<TaskMember> checklistMemberList;
     private String checklistDueTime, checklistFirstTaskId;
+
+    LottieAnimationView mAnimationView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,6 +137,29 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         mChecklistDescription.setText(checklistDescription);
         mChecklistName = view.findViewById(R.id.tv_task_name);
         mChecklistName.setText(checklistName);
+        mAnimationView = view.findViewById(R.id.animation_view);
+        mAnimationView.setSpeed(2.0f);
+        mAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAnimationView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
 
@@ -146,6 +173,13 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         mChecklistChecklistTaskAdapter.setTaskList(datasource);
     }
 
+    private void switchOnLoading() {
+        mAnimationView.setVisibility(View.VISIBLE);
+        if (!mAnimationView.isAnimating()) {
+            mAnimationView.playAnimation();
+        }
+    }
+
     @Override
     public void onEventCheckBox(Boolean isSelected) {
 
@@ -154,7 +188,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_complete_checklist) {
-            // DO SOMETHING HERE
+            switchOnLoading();
         }
     }
 }

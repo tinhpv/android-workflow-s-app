@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundColor">
 
     <ProgressBar
@@ -28,9 +28,8 @@
         app:layout_constraintBottom_toTopOf="@id/button_block"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
+        <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -52,6 +51,7 @@
                 android:id="@+id/tv_task_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_task_name"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
@@ -62,15 +62,27 @@
                 android:justificationMode="inter_word"
                 android:lineSpacingMultiplier="1.25"/>
 
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_checklist_task"
+                android:layout_below="@+id/tv_task_description"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
 
-        </LinearLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_below="@+id/tv_task_description"
+                app:lottie_rawRes="@raw/done"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"
+                tools:ignore="MissingConstraints" />
+
+        </RelativeLayout>
     </ScrollView>
 
 
