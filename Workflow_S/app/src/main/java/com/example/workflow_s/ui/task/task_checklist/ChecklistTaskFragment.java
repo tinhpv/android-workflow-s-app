@@ -1,9 +1,11 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
 import android.animation.Animator;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +58,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private String checklistName, checklistDescription, checklistUserId, currentDueTime;
     private List<TaskMember> checklistMemberList;
     private String checklistDueTime, checklistFirstTaskId;
+
+    private ProgressBar mTaskProgressBar;
+    private int totalTask, doneTask;
 
     LottieAnimationView mAnimationView;
 
@@ -124,13 +130,18 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         checklistName = arguments.getString("checklistName");
         checklistDescription = arguments.getString("checklistDescription");
         checklistUserId = arguments.getString("checklistUserId");
+        totalTask = arguments.getInt("totalTask");
+        doneTask = arguments.getInt("doneTask");
 
         // OK - HARDCODE HERE
         mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
         mPresenter.loadTasks(checklistId);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initUI() {
+        mTaskProgressBar = view.findViewById(R.id.pb_checklist_task);
+        updateProgressBar();
         completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
         completeChecklistButton.setOnClickListener(this);
         mChecklistDescription = view.findViewById(R.id.tv_task_description);
@@ -180,9 +191,21 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void updateProgressBar() {
+        if (totalTask == 0) {
+            mTaskProgressBar.setProgress(0, true);
+        } else {
+            int progress = (int) ((doneTask / (totalTask * 1.0)) * 100);
+            mTaskProgressBar.setProgress(progress, true);
+        } // end
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onEventCheckBox(Boolean isSelected) {
-
+        doneTask++;
+        updateProgressBar();
     }
 
     @Override
