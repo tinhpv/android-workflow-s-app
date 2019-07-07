@@ -31,7 +31,7 @@ public class Task {
     @SerializedName("taskStatus")
     private String taskStatus;
 
-    @SerializedName("contentDetails")
+    @SerializedName("contentDetail")
     private List<ContentDetail> contentDetails;
 
     @SerializedName("userId")

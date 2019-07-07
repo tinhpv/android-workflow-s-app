@@ -42,8 +42,8 @@ public interface ApiService {
     @GET("/api/TaskItems/taskoverdue/{organizationId}/{userId}")
     Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId, @Path("userId") String userId);
 
-    @POST("/api/Users/updatephone/{userid}/{phone}")
-    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId, @Path("phone") String phoneNumber);
+    @POST("/api/Users/updatephone/{userid}/{phone}/{devicetoken}")
+    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId, @Path("phone") String phoneNumber, @Path("devicetoken") String devicetoken);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
     Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
@@ -83,5 +83,8 @@ public interface ApiService {
 
     @GET("/api/UserOrganizations/user/{userId}")
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
+
+    @GET("/api/TaskItems/getfirsttask/{checklistId}")
+    Call<Task> getFirstTaskFromChecklist(@Path("checklistId") int checklistId);
 
 }

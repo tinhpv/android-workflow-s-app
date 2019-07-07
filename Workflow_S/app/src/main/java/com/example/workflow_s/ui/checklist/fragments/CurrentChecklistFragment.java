@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
@@ -21,6 +23,7 @@ import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView {
 
@@ -30,6 +33,9 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
     private RecyclerView.LayoutManager checklistLayoutManager;
+
+    private ArrayList<Checklist> checklists, currentChecklist;
+    private Checklist tmpChecklist;
 
     private ChecklistContract.ChecklistPresenter mPresenter;
     //private LinearLayout mChecklistDataStatusMessage;
@@ -62,17 +68,16 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //mChecklistDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
-
             setupChecklistRV();
             initData();
-
 
     }
 
     //FIXME - HARDCODE FOR TESTING
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        mPresenter.loadAllChecklist("1");
+        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        mPresenter.loadAllChecklist(orgId);
     }
 
     private void setupChecklistRV() {
@@ -87,20 +92,51 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-        String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-        //Log.i("userId", userId);
-        if (datasource.isEmpty()) {
+//        String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
+//        //Log.i("userId", userId);
+//        if (datasource.isEmpty()) {
+//
+//        }
+//        ArrayList<Checklist> arrayList = new ArrayList<>();
+//        for (int i = 0; i < datasource.size(); i ++) {
+//            //FIXME HARDCODE FOR TESTING
+//            if (datasource.get(i).getUserId().equals(userId)) {
+//                arrayList.add(datasource.get(i));
+//            }
+//        }
+//        Log.i("My Checklist", arrayList.size() + "");
+//        mCurrentChecklistAdapter.setChecklists(arrayList);
+        checklists = new ArrayList<>();
+        checklists = datasource;
+        checkData();
+    }
 
-        }
-        ArrayList<Checklist> arrayList = new ArrayList<>();
-        for (int i = 0; i < datasource.size(); i ++) {
-            //FIXME HARDCODE FOR TESTING
-            if (datasource.get(i).getUserId().equals(userId)) {
-                arrayList.add(datasource.get(i));
+    @Override
+    public void finishFirstTaskFromChecklist(Task task) {
+        if (task != null) {
+            String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
+            List<TaskMember> taskMemberList = task.getTaskMemberList();
+            //taskMemberList = task.getTaskMemberList();
+            if (!taskMemberList.isEmpty()) {
+                for (int i = 0; i < taskMemberList.size(); i++) {
+                    if (taskMemberList.get(i).getUserId().equals(userId)) {
+                        if (currentChecklist.isEmpty()) {
+                            currentChecklist = new ArrayList<>();
+                        }
+                        currentChecklist.add(tmpChecklist);
+                    }
+                }
             }
         }
-        Log.i("My Checklist", arrayList.size() + "");
-        mCurrentChecklistAdapter.setChecklists(arrayList);
+        //mCurrentChecklistAdapter.setChecklists(currentChecklist);
+    }
+
+    private void checkData() {
+        for (int i = 0; i < checklists.size(); i++) {
+            tmpChecklist = checklists.get(i);
+            mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
+            mPresenter.loadFirstTaskFromChecklist(tmpChecklist.getId());
+        }
     }
 
 
