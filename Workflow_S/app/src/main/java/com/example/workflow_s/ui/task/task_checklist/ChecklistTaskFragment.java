@@ -34,7 +34,6 @@ import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragm
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-30
@@ -106,12 +105,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
         completeChecklistButton.setOnClickListener(this);
         setupTaskRV();
         initData();
+        initUI();
     }
 
     private void setupTaskRV() {
