@@ -106,12 +106,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
         completeChecklistButton.setOnClickListener(this);
         setupTaskRV();
         initData();
+        initUI();
     }
 
     private void setupTaskRV() {

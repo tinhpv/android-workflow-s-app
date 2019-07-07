@@ -36,7 +36,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pb_checklist_task"
         app:lottie_rawRes="@raw/done"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:elevation="2dp" />
 
     <ScrollView
         android:id="@+id/scrollView2"
