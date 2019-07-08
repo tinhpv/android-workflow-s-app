@@ -8,13 +8,15 @@ public interface MvpView {
 
     void hideLoading();
 
-    void onError(@StringRes int resId);
+    void openActivityOnTokenExpire();
 
-    void onError(String message);
+//    void onError(@StringRes int resId);
+//
+//    void onError(String message);
 
     void showMessage(String message);
 
-    void showMessage(@StringRes int resId);
+    //void showMessage(@StringRes int resId);
 
     boolean isNetworkConnected();
 

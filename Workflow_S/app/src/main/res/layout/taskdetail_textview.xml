@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="@font/avenir_light"
+    android:textColor="@color/colorPrimaryText"
+    android:textSize="15sp"
+    android:layout_marginHorizontal="25dp"
+    android:layout_marginVertical="10dp"
+    android:lineSpacingExtra="1.5dp"
+    android:text="First thing's first you're going to need to record the candidate's details you're performing the check on, on behalf of the hiring manager. Do so using the form fields below"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+
+

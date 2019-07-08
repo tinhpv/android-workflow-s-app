@@ -6,12 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.workflow_s.R;
-import com.example.workflow_s.model.Checklist;
-
-import org.w3c.dom.Text;
+import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.home.viewholder.TodayTaskViewHolder;
 
 import java.util.List;
 
@@ -22,28 +20,19 @@ import java.util.List;
  **/
 
 
-public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.TodayTaskViewHolder> {
+public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskViewHolder> {
 
     // Constants
-    private final int MAX_ITEM_NUMBER = 5;
+    private final int MAX_ITEM_NUMBER = 4;
 
-    // DataSource for RecyclerView
-    private List<Checklist> mChecklists;
+    // Datasource for RecyclerView
+    private List<Task> mTasks;
 
+    public TodayTaskAdapter() {}
 
-    // VIEWHOLDER
-    public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextView;
-
-        public TodayTaskViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.tv_task_name);
-        }
-    }
-
-    public TodayTaskAdapter(List<Checklist> checklists) {
-        mChecklists = checklists;
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -59,12 +48,19 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
 
     @Override
     public void onBindViewHolder(@NonNull TodayTaskViewHolder todayTaskViewHolder, int i) {
-        todayTaskViewHolder.mTextView.setText("TEST DEMO");
+        todayTaskViewHolder.mTaskName.setText(mTasks.get(i).getName());
+        todayTaskViewHolder.mChecklistTask.setText(mTasks.get(i).getChecklistId());
+        todayTaskViewHolder.mDueTime.setText(mTasks.get(i).getDueTime());
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        if (null == mTasks) {
+            return 0;
+        } else {
+            int numberOfItems = mTasks.size();
+            return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
+        }
     }
 
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_item_white_radius"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_user_avatar_notification"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/ic_launcher_round"
+        app:civ_border_width="3dp"
+        app:civ_border_color="@android:color/white"
+        android:layout_marginLeft="15dp"/>
+
+
+    <!--task name-->
+    <TextView
+        android:id="@+id/tv_notification"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:layout_toRightOf="@id/img_user_avatar_notification"
+        android:fontFamily="@font/avenir_light"
+        android:lines="2"
+        android:maxLines="2"
+        android:textColor="@color/colorPrimaryText"
+        android:text="Tinh had just run 3 checlists in Coding in..."
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+
+    <!--time label next on the right-->
+    <TextView
+        android:id="@+id/tv_time_notification"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tv_notification"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/avenir_heavy"
+        android:gravity="center"
+        android:text="May 28 at 3:46pm"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="8sp" />
+
+
+</RelativeLayout>
