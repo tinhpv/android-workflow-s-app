@@ -20,9 +20,9 @@ public class AuthenticationInteractor implements AuthenticationContract.ManipAut
 
     // FIXME - HARDCODE HERE FOR TESTING ONLY
     @Override
-    public void updatePhone(String userId, String phoneNum, String devicetoken, final OnFinishedUpdatePhoneListener listener) {
+    public void updatePhone(String userId, String phoneNum, String deviceToken, final OnFinishedUpdatePhoneListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.updatePhoneNumber("107757857762956968267", phoneNum, devicetoken);
+        Call<ResponseBody> call = service.updatePhoneNumber(userId, phoneNum, deviceToken);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

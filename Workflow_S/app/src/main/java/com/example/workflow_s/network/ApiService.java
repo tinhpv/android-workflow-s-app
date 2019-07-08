@@ -43,7 +43,9 @@ public interface ApiService {
     Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId, @Path("userId") String userId);
 
     @POST("/api/Users/updatephone/{userid}/{phone}/{devicetoken}")
-    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId, @Path("phone") String phoneNumber, @Path("devicetoken") String devicetoken);
+    Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId,
+                                         @Path("phone") String phoneNumber,
+                                         @Path("devicetoken") String deviceToken);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
     Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
