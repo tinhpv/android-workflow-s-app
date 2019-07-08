@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1004946762604",
+    "firebase_url": "https://workflows-1559988095103.firebaseio.com",
+    "project_id": "workflows-1559988095103",
+    "storage_bucket": "workflows-1559988095103.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004946762604:android:995b4a63251d9a7c",
+        "android_client_info": {
+          "package_name": "com.example.workflow_s"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004946762604-hgk0034cde4fjtesf721f5ac979d6u35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.workflow_s",
+            "certificate_hash": "eebfa606e2028e89602dd3eb835454c2abbf0117"
+          }
+        },
+        {
+          "client_id": "1004946762604-3pgmephr393ps28tcualvff61q6vv4sa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuOcwFJh6P4HUNpPB6VANjpfeZSYS_Gio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004946762604-3pgmephr393ps28tcualvff61q6vv4sa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
