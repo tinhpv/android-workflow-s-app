@@ -180,8 +180,6 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     }
 
 
-
-
     @Override
     public void onFinishSelectOrgName(String orgName) {
         Organization tmpOrg = null;

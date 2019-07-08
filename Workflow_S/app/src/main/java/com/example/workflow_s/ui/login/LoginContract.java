@@ -20,12 +20,10 @@ public interface LoginContract {
     }
 
     interface LoginView {
-        void saveCurrentUserToPreference(User user);
-        void saveCurrentOrganizationToPreference(Organization organization);
         void navigateToCodeVerifyActivity();
         void navigateToMainActivity();
         void onFinishedAddUser(User user);
-        void onFinishedGetOrg();
+        void onFinishedGetOrg(Organization org);
     }
 
     interface GetLoginDataInteractor {

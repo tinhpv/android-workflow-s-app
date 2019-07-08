@@ -57,11 +57,10 @@ public class AssigningDialogFragment extends DialogFragment
     private String checklistUserId, taskId, userEmailToAssign, unassignedUserId;
     AssigningDialogContract.AssigningDialogPresenter mDialogPresenter;
 
-    public static AssigningDialogFragment newInstance(String checklistUserId, String taskId, ArrayList<TaskMember> memberList) {
+    public static AssigningDialogFragment newInstance(String checklistUserId, String taskId) {
         AssigningDialogFragment frag = new AssigningDialogFragment();
         Bundle args = new Bundle();
         args.putString("checklistUserId", checklistUserId);
-        args.putSerializable("memberList", memberList);
         args.putString("taskId", taskId);
         frag.setArguments(args);
         return frag;
@@ -84,15 +83,22 @@ public class AssigningDialogFragment extends DialogFragment
 
 
         setupRV();
+        requestData();
+
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mDialogPresenter = new AssigningDialogPresenterImpl(this, new AssigningDialogInteractor());
-        String orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
-        mDialogPresenter.getOrgMember(Integer.parseInt(orgId));
 
         addUserButton = view.findViewById(R.id.bt_add_user);
         addUserButton.setOnClickListener(this);
         cancelButton = view.findViewById(R.id.bt_cancel_add);
         cancelButton.setOnClickListener(this);
+    }
+
+    private void requestData() {
+        mDialogPresenter = new AssigningDialogPresenterImpl(this, new AssigningDialogInteractor());
+
+        String orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
+        mDialogPresenter.getTaskMember(Integer.parseInt(taskId));
+        mDialogPresenter.getOrgMember(Integer.parseInt(orgId));
     }
 
     private void initUI() {
@@ -125,16 +131,6 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     @Override
-    public void finishedAssignMember() {
-        updateUsersToDisplay(true);
-    }
-
-    @Override
-    public void finishedUnassignMember() {
-        updateUsersToDisplay(false);
-    }
-
-    @Override
     public void finishedGetTaskMember(List<TaskMember> taskMemberList) {
         if (taskMemberList != null) {
             for (TaskMember member : taskMemberList) {
@@ -144,6 +140,17 @@ public class AssigningDialogFragment extends DialogFragment
             } // end for
         }
     }
+
+    @Override
+    public void finishedAssignMember() {
+        updateUsersToDisplay(true);
+    }
+
+    @Override
+    public void finishedUnassignMember() {
+        updateUsersToDisplay(false);
+    }
+
 
     private void updateUsersToDisplay(boolean isAssigned) {
         if (isAssigned) {

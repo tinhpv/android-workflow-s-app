@@ -7,17 +7,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/backgroundColor">
 
-    <ProgressBar
-        android:id="@+id/pb_checklist_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:background="#dadada"
-        android:max="100"
-        android:progress="50"
-        android:minHeight="8dp"
-        android:minWidth="400dp"/>
-
 
     <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,6 +24,23 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
             </LinearLayout>
+
+            <Button
+                android:id="@+id/bt_complete_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete this task"
+                android:textSize="13sp"
+                android:paddingVertical="15dp"
+                android:paddingHorizontal="30dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginTop="14dp"
+                android:drawableLeft="@mipmap/checkmark_ic_white"
+                android:drawablePadding="15dp"
+                android:fontFamily="@font/avenir_black"
+                android:background="@drawable/button_radius_dark"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 

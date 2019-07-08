@@ -46,8 +46,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         setupLoadingAnimation();
         initializeGoogleSignIn();
         initData();
-//        String token = FirebaseInstanceId.getInstance().getToken();
-//        Log.i("Token", token);
     }
 
 
@@ -146,12 +144,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         }
     }
 
-    @Override
     public void saveCurrentUserToPreference(User user) {
         SharedPreferenceUtils.saveCurrentUserData(this, user, null);
     }
 
-    @Override
     public void saveCurrentOrganizationToPreference(Organization organization) {
         SharedPreferenceUtils.saveCurrentUserData(this, null, organization);
     }
@@ -179,7 +175,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     }
 
     @Override
-    public void onFinishedGetOrg() {
+    public void onFinishedGetOrg(Organization org) {
+        saveCurrentOrganizationToPreference(org);
         mLoginPresenter.checkRoleUser(currentUser.getRole());
     }
 

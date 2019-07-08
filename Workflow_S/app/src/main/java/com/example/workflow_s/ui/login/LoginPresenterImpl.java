@@ -33,13 +33,11 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
 
     @Override
     public void checkRoleUser(String userRole) {
-//        if (userRole.isEmpty()) {
-//            mLoginView.navigateToCodeVerifyActivity();
-//        } else {
-//            mLoginView.navigateToMainActivity();
-//        }
-
-        mLoginView.navigateToMainActivity();
+        if (userRole.isEmpty() || userRole == null) {
+            mLoginView.navigateToCodeVerifyActivity();
+        } else {
+            mLoginView.navigateToMainActivity();
+        }
     }
 
     @Override
@@ -55,14 +53,12 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     // API Callback
     @Override
     public void onFinished(User user) {
-//        mLoginView.saveCurrentUserToPreference(user);
         mLoginView.onFinishedAddUser(user);
     }
 
     @Override
     public void onFinished(Organization currentOrganization) {
-        mLoginView.onFinishedGetOrg();
-        mLoginView.saveCurrentOrganizationToPreference(currentOrganization);
+        mLoginView.onFinishedGetOrg(currentOrganization);
     }
 
     @Override

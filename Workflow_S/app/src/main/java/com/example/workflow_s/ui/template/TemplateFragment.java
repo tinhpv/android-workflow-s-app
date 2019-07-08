@@ -147,7 +147,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 //        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
 //        mTemplatePresenter.requestOrganizationData(orgId, userId);
         // FIXME - HARDCODE HERE
-        mTemplatePresenter.requestTemplateData(orgId, userId);
+        mTemplatePresenter.requestTemplateData("1", "2372592022969346");
     }
 
     private void setupTemplateRV() {

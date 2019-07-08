@@ -41,7 +41,7 @@ public class CommonUtils {
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
 
         transaction
-                .add(R.id.flContent, fragment)
+                .add(R.id.flContent, fragment,fragment.getClass().getName().toString())
                 .addToBackStack(null)
                 .commit();
 

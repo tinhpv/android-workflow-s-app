@@ -106,4 +106,10 @@ public interface ApiService {
     @GET("/api/TaskItems/getfirsttask/{checklistId}")
     Call<Task> getFirstTaskFromChecklist(@Path("checklistId") int checklistId);
 
+    @PUT("/api/Checklists/done/{checklistid}")
+    Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId);
+
+    @PUT("/api/TaskItems/done/{taskid}")
+    Call<ResponseBody> completeTask(@Path("taskid") int taskId);
+
 }

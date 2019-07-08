@@ -86,9 +86,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
                 return true;
             case R.id.action_assign:
                 // convert List to ArrayList so that we can store it in Bundle
-                ArrayList<TaskMember> taskMembers = new ArrayList<>();
-                taskMembers.addAll(checklistMemberList);
-                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId,checklistFirstTaskId, taskMembers);
+                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId, checklistFirstTaskId);
                 assigningDialogFragment.show(fm, "fragment_assign_user");
                 return true;
             default:
