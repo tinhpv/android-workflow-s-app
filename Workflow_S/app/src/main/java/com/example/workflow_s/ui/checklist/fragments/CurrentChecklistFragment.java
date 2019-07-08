@@ -1,6 +1,8 @@
 package com.example.workflow_s.ui.checklist.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,6 +39,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     private ArrayList<Checklist> checklists, currentChecklist;
     private Checklist tmpChecklist;
+    private boolean flag;
 
     private ChecklistContract.ChecklistPresenter mPresenter;
     //private LinearLayout mChecklistDataStatusMessage;
@@ -71,10 +74,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         //mChecklistDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
             setupChecklistRV();
             initData();
-
     }
 
-    //FIXME - HARDCODE FOR TESTING
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
@@ -93,81 +94,32 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-//        String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-//        //Log.i("userId", userId);
-//        if (datasource.isEmpty()) {
-//
-//        }
-//        ArrayList<Checklist> arrayList = new ArrayList<>();
-//        for (int i = 0; i < datasource.size(); i ++) {
-//            //FIXME HARDCODE FOR TESTING
-//            if (datasource.get(i).getUserId().equals(userId)) {
-//                arrayList.add(datasource.get(i));
-//            }
-//        }
-//        Log.i("My Checklist", arrayList.size() + "");
-//        mCurrentChecklistAdapter.setChecklists(arrayList);
-//        checklists = new ArrayList<>();
-//        checklists = datasource;
-//        checkData();
-//        if (currentChecklist != null) {
-//            for (Checklist item : currentChecklist) {
-//                Log.i("My current checklist: ", item.getName());
-//            }
-//        } else {
-//            Log.i("My current checklist: ", "don't have data");
-//        }
         currentChecklist = new ArrayList<>();
-        String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-        if (datasource != null) {
-            for (Checklist checklist : datasource) {
-                if (checklist.getUserId().equals(userId)) {
-                    currentChecklist.add(checklist);
-                } else {
-                    List<User> taskMembers = checklist.getTaskItems().get(0).getMemberList();
-                    for (User user : taskMembers) {
-                        if (user.getId().equals(userId) ) {
-                            currentChecklist.add(checklist);
-                        }
-                    }
-                }
-
-            }
-        }
+        checklists = new ArrayList<>();
+        checklists = datasource;
+        for (Checklist checklist : checklists) {
+           tmpChecklist = checklist;
+           mPresenter.loadFirstTaskFromChecklist(tmpChecklist.getId());
+       }
 
     }
 
     @Override
     public void finishFirstTaskFromChecklist(Task task) {
-
             String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-            try {
                 if (task != null) {
-                    //Task tmpTask = task;
                     List<TaskMember> taskMemberList = new ArrayList<>(task.getTaskMemberList());
-                  //  taskMemberList = task.getTaskMemberList();
-                    //taskMemberList = task.setTaskMemberList();
                     if (!taskMemberList.isEmpty()) {
                         for (int i = 0; i < taskMemberList.size(); i++) {
                             if (taskMemberList.get(i).getUserId().equals(userId)) {
-                                if (currentChecklist == null) {
-                                    currentChecklist = new ArrayList<>();
-                                }
-                                currentChecklist.add(tmpChecklist);
-                                Log.i("Current checklist", tmpChecklist.getName());
+                                    currentChecklist.add(tmpChecklist);
                             }
                         }
                     }
+                    mCurrentChecklistAdapter.setChecklists(currentChecklist);
+                } else {
+
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-
-            }
-
-
-        //mCurrentChecklistAdapter.setChecklists(currentChecklist);
     }
 
 //
