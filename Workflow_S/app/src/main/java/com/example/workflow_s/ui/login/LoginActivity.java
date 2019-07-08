@@ -26,7 +26,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+<<<<<<< HEAD
 //import com.google.firebase.iid.FirebaseInstanceId;
+=======
+>>>>>>> ca3656b8b2b86d965813d2dbd0a29ffe8e8e12d4
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.LoginView {
 

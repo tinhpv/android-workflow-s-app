@@ -121,10 +121,10 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         
         mAdapter = new OrganizationMemberAdapter();
         organizationRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setupData() {
-        //FIXME HARDCODE
         mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
         String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));

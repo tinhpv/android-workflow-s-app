@@ -34,7 +34,6 @@ import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragm
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-30
