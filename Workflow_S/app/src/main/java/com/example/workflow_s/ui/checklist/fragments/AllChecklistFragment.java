@@ -19,11 +19,13 @@ import android.widget.Button;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
 import com.example.workflow_s.ui.search.SearchActivity;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,7 +98,8 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     //FIXME - HARDCODE FOR TESTING
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        mPresenter.loadAllChecklist("1");
+        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        mPresenter.loadAllChecklist(orgId);
     }
 
     private void setupChecklistRV() {
@@ -114,5 +117,10 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
 //        listSearch = new ArrayList<>();
 //        checklists = new ArrayList<>();
         mCurrentChecklistAdapter.setChecklists(datasource);
+    }
+
+    @Override
+    public void finishFirstTaskFromChecklist(Task task) {
+
     }
 }

@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.checklist;
 import android.util.Log;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,8 @@ import java.util.ArrayList;
 
 
 public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresenter,
-            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetChecklistListener{
+            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetChecklistListener,
+            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetFirstTaskFormChecklistListener{
 
     private static final String TAG = "CHECKLISTS_PRESENTER";
     private ChecklistContract.ChecklistView mChecklistView;
@@ -36,9 +38,19 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
     }
 
     @Override
+    public void loadFirstTaskFromChecklist(int checklistId) {
+        mChecklistDataInteractor.getFirstTask(checklistId, this);
+    }
+
+    @Override
     public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
         mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
         Log.i("ChecklistView", checklistArrayList.isEmpty() + "");
+    }
+
+    @Override
+    public void onFinishedGetFirstTask(Task task) {
+        mChecklistView.finishFirstTaskFromChecklist(task);
     }
 
     @Override

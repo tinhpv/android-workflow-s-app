@@ -5,6 +5,7 @@ package com.example.workflow_s.ui.checklist;
 import android.util.Log;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -33,13 +34,31 @@ public class ChecklistInteractor implements ChecklistContract.GetChecklistsDataI
             @Override
             public void onResponse(Call<List<Checklist>> call, Response<List<Checklist>> response) {
                 onFinishedGetChecklistListener.onFinishedGetChecklist((ArrayList<Checklist>) response.body());
-                Log.i("Success", "success");
+                //Log.i("Success", "success");
             }
 
             @Override
             public void onFailure(Call<List<Checklist>> call, Throwable t) {
                 onFinishedGetChecklistListener.onFailure(t);
-                Log.i("Fail", "fail");
+                //Log.i("Fail", "fail");
+            }
+        });
+    }
+
+    @Override
+    public void getFirstTask(int checklistId, final OnFinishedGetFirstTaskFormChecklistListener onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<Task> call = service.getFirstTaskFromChecklist(checklistId);
+
+        call.enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                onFinishedListener.onFinishedGetFirstTask( response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+                onFinishedListener.onFailure(t);
             }
         });
     }

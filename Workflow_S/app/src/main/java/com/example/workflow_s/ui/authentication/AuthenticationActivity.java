@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.authentication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import com.example.workflow_s.ui.main.MainActivity;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.goodiebag.pinview.Pinview;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
  * Workflow_S
@@ -66,10 +68,14 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
 
 
     public void handleContinueButtonTapped(View view) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i("Token", "Token is null");
+        }
         if (!onChangeButtonStatus) {
             phoneNum = mPhoneNumberEdt.getText().toString();
             onChangeButtonStatus = true;
-            mPresenter.updatePhone(userId, phoneNum);
+            mPresenter.updatePhone(userId, phoneNum, token);
         } else {
             mPresenter.submitVerifyCode(userId, verifyCode);
         }

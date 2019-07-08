@@ -10,7 +10,7 @@ package com.example.workflow_s.ui.authentication;
 public interface AuthenticationContract {
 
     interface AuthenticationPresenter {
-        void updatePhone(String userId, String phoneNumber);
+        void updatePhone(String userId, String phoneNumber, String devicetoken);
         void getVerifyCode(String userId);
         void submitVerifyCode(String userId, String code);
     }
@@ -38,7 +38,7 @@ public interface AuthenticationContract {
             void onFailure(Throwable t);
         }
 
-        void updatePhone(String userId, String phoneNum, ManipAuthenticationInteractor.OnFinishedUpdatePhoneListener listener);
+        void updatePhone(String userId, String phoneNum, String deviceToken, ManipAuthenticationInteractor.OnFinishedUpdatePhoneListener listener);
         void getVerifyCode(String userId, ManipAuthenticationInteractor.OnFinishedGetVerifyCodeListener listener);
         void submitVerifyCode(String userId, String code, ManipAuthenticationInteractor.OnFinishedSubmitCodeListener listener);
     }
