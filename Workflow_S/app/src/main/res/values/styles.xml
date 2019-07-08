@@ -33,8 +33,8 @@
 
     <!--navigation drawer style-->
     <style name="NavigationViewItem">
-        <item name="android:fontFamily">@font/avenir_heavy</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/avenir_light</item>
+        <item name="android:textSize">22dp</item>
     </style>
 
 </resources>
