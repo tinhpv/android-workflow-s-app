@@ -109,6 +109,14 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         checklists = new ArrayList<>();
         checklists = datasource;
         checkData();
+        if (currentChecklist != null) {
+            for (Checklist item : currentChecklist) {
+                Log.i("My current checklist: ", item.getName());
+            }
+        } else {
+            Log.i("My current checklist: ", "don't have data");
+        }
+
     }
 
     @Override
@@ -117,13 +125,14 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
             String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
             List<TaskMember> taskMemberList = task.getTaskMemberList();
             //taskMemberList = task.getTaskMemberList();
-            if (!taskMemberList.isEmpty()) {
+            if (taskMemberList != null) {
                 for (int i = 0; i < taskMemberList.size(); i++) {
                     if (taskMemberList.get(i).getUserId().equals(userId)) {
                         if (currentChecklist.isEmpty()) {
                             currentChecklist = new ArrayList<>();
                         }
                         currentChecklist.add(tmpChecklist);
+                        Log.i("Current checklist", tmpChecklist.getName());
                     }
                 }
             }
@@ -136,6 +145,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
             tmpChecklist = checklists.get(i);
             mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
             mPresenter.loadFirstTaskFromChecklist(tmpChecklist.getId());
+            Log.i("MyId current: ", tmpChecklist.getId() + "");
         }
     }
 
