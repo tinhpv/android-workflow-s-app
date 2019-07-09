@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.Template;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 
 public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresenter,
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetChecklistListener,
-            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetFirstTaskFormChecklistListener{
+            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetFirstTaskFormChecklistListener,
+            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetTemplateDataListener{
 
     private static final String TAG = "CHECKLISTS_PRESENTER";
     private ChecklistContract.ChecklistView mChecklistView;
@@ -51,6 +53,11 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
     }
 
     @Override
+    public void requestTemplateData(String orgId) {
+        mChecklistDataInteractor.getAllTemplates(orgId, this);
+    }
+
+    @Override
     public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
         if (mChecklistView != null) {
             mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
@@ -62,6 +69,11 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
     @Override
     public void onFinishedGetFirstTask(Task task, Checklist parentChecklistOfThisTask) {
         mChecklistView.finishFirstTaskFromChecklist(task, parentChecklistOfThisTask);
+    }
+
+    @Override
+    public void onFinishedGetTemplates(ArrayList<Template> templateList) {
+        mAllChecklistView.finishGetTemplates(templateList);
     }
 
     @Override

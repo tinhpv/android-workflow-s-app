@@ -2,8 +2,10 @@ package com.example.workflow_s.ui.checklist;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.Template;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -19,6 +21,7 @@ public interface ChecklistContract {
         void onDestroy();
         void loadAllChecklist(String organizationId);
         void loadFirstTaskFromChecklist(int checklistId, Checklist parentChecklistOfThisTask);
+        void requestTemplateData(String orgId);
     }
 
     //view
@@ -30,6 +33,8 @@ public interface ChecklistContract {
     //view
     interface AllChecklistView {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
+        void finishGetTemplates(List<Template> templateList);
+
     }
 
     //model
@@ -43,6 +48,13 @@ public interface ChecklistContract {
             void onFinishedGetFirstTask(Task task, Checklist parentChecklistOfThisTask);
             void onFailure(Throwable t);
         }
+
+        interface OnFinishedGetTemplateDataListener {
+            void onFinishedGetTemplates(ArrayList<Template> templateList);
+            void onFailure(Throwable t);
+        }
+
+        void getAllTemplates(String orgId, OnFinishedGetTemplateDataListener onFinishedListener);
 
         void getAllChecklist(String organizationId, OnFinishedGetChecklistListener onFinishedGetChecklistListener);
         void getFirstTask(int checklistId, Checklist parentChecklistOfThisTask, OnFinishedGetFirstTaskFormChecklistListener onFinishedListener);

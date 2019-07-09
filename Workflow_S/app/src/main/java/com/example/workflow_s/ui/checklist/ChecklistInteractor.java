@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.Template;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -24,6 +25,23 @@ import retrofit2.Response;
 
 
 public class ChecklistInteractor implements ChecklistContract.GetChecklistsDataInteractor {
+
+    @Override
+    public void getAllTemplates(String orgId, final OnFinishedGetTemplateDataListener onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<Template>> call = service.getAllCreatedTemplates(orgId);
+        call.enqueue(new Callback<List<Template>>() {
+            @Override
+            public void onResponse(Call<List<Template>> call, Response<List<Template>> response) {
+                onFinishedListener.onFinishedGetTemplates((ArrayList<Template>) response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Template>> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void getAllChecklist(String organizationId,final OnFinishedGetChecklistListener onFinishedGetChecklistListener) {
