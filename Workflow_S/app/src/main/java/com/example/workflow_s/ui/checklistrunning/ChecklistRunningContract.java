@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.checklistrunning;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Template;
 
 /**
@@ -18,7 +19,7 @@ public interface ChecklistRunningContract {
 
     interface ChecklistRunningView {
         void finishGetTemplateObject(Template template);
-        void finishedRunChecklist();
+        void finishedRunChecklist(Checklist checklist);
     }
 
     interface ChecklistRunningData {
@@ -28,7 +29,7 @@ public interface ChecklistRunningContract {
         }
 
         interface OnFinishedRunChecklistListener {
-            void onFinishedRunChecklist();
+            void onFinishedRunChecklist(Checklist checklist);
             void onFailure(Throwable t);
         }
 

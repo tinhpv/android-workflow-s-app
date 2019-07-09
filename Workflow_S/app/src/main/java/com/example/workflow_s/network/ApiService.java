@@ -91,7 +91,7 @@ public interface ApiService {
                                          @Path("userId") String userId);
 
     @POST("/api/Checklists/run/{userId}")
-    Call<ResponseBody> runChecklist(@Path("userId") String userId,
+    Call<Checklist> runChecklist(@Path("userId") String userId,
                                     @Body Template template);
 
     @GET("/api/UserOrganizations/organization/{userId}")

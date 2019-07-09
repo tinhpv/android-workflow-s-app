@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.Date;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
@@ -46,15 +47,15 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
     private Button saveButton,cancelButton;
     private ImageButton setDateButton, setTimeButton;
     private String previousDueTime, dateSelected, timeSelected;
-    private int taskId;
+    private int taskId, checklistId;
 
     TimeSettingContract.TimeSettingPresenter mPresenter;
 
-    public static TimeSettingDialogFragment newInstance(int taskId, String dueTime) {
+    public static TimeSettingDialogFragment newInstance(int taskId, int checklistId) {
         TimeSettingDialogFragment frag = new TimeSettingDialogFragment();
         Bundle args = new Bundle();
         args.putInt("taskId", taskId);
-        args.putString("dueTime", dueTime);
+        args.putInt("checklistId", checklistId);
         frag.setArguments(args);
         return frag;
     }
@@ -70,23 +71,29 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         getData();
-        bindUI();
     }
 
     private void getData() {
-        previousDueTime = getArguments().getString("dueTime");
-        dateSelected = previousDueTime.split("T")[0];
-        timeSelected = previousDueTime.split("T")[1];
         taskId = getArguments().getInt("taskId");
+        checklistId = getArguments().getInt("checklistId");
 
         mPresenter = new TimeSettingPresenterImpl(this, new TimeSettingInteractor());
+        mPresenter.getFirstTask(checklistId);
+    }
+
+    @Override
+    public void finishedGetFirstTask(Task task) {
+        previousDueTime = task.getDueTime();
+        dateSelected = previousDueTime.split("T")[0];
+        timeSelected = previousDueTime.split("T")[1];
+        bindUI();
     }
 
     private void bindUI() {
         dateTextView = view.findViewById(R.id.tv_date);
-        dateTextView.setText(previousDueTime.split("T")[0]);
+        dateTextView.setText(dateSelected);
         timeTextView = view.findViewById(R.id.tv_time);
-        timeTextView.setText(previousDueTime.split("T")[1]);
+        timeTextView.setText(timeSelected);
         saveButton = view.findViewById(R.id.bt_save_time);
         saveButton.setOnClickListener(this);
         cancelButton = view.findViewById(R.id.bt_cancel_save);
@@ -118,7 +125,7 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
     boolean isValueDateTime() {
         Date oldDate = DateUtils.parseDate(previousDueTime.split("T")[0]);
         Date newDateSelected = DateUtils.parseDate(dateSelected);
-        
+
         if (oldDate.after(newDateSelected)) {
             return false;
         } else if (oldDate.equals(newDateSelected)) {

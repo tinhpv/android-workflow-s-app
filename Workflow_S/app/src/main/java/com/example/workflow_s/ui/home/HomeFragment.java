@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,10 +24,12 @@ import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
+import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.common.internal.service.Common;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -51,6 +56,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private ShimmerFrameLayout mChecklistShimmerFrameLayout, mTaskShimmerFrameLayout;
     private LinearLayout mCheckListDataStatusMessage, mTaskDataStatusMessage;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_home, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notif:
+                CommonUtils.replaceFragments(getContext(), NotificationFragment.class, null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Nullable
     @Override

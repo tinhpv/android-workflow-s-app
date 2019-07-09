@@ -20,9 +20,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 
 import java.util.ArrayList;
@@ -43,6 +45,19 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private Button buttonCompleteTask;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
 
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +67,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
+        inflater.inflate(R.menu.menu_detail, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

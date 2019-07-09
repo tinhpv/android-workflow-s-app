@@ -49,6 +49,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     private int templateId;
     private String templateName, templateDescription, templateUserId;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.menu_search, menu);
     }
 
 

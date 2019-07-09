@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.checklistrunning;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.template.TemplateContract;
 
@@ -37,8 +38,8 @@ public class ChecklistRunningPresenterImpl implements ChecklistRunningContract.C
     }
 
     @Override
-    public void onFinishedRunChecklist() {
-        mRunningView.finishedRunChecklist();
+    public void onFinishedRunChecklist(Checklist checklist) {
+        mRunningView.finishedRunChecklist(checklist);
     }
 
     @Override

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Workflow S!</string>
     <string name="app_brand">WORKFLOW S!</string>
-    <string name="app_description_login">lightweight but powerful way to manage the workflow.</string>
+    <string name="app_description_login">Simplicity made powerful</string>
 
     <!--button title-->
     <string name="login_button">Login with Google</string>

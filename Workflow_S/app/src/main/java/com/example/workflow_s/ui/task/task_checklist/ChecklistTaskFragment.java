@@ -82,7 +82,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_set_time:
-                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), currentDueTime);
+                TimeSettingDialogFragment settingDialogFragment
+                        = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), checklistId);
+
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             case R.id.action_assign:
@@ -153,7 +155,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             checklistMemberList = tasks.get(0).getTaskMemberList();
             checklistDueTime = tasks.get(0).getDueTime();
             checklistFirstTaskId = String.valueOf(tasks.get(0).getId());
-            currentDueTime = tasks.get(0).getDueTime();
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
 
             initUI();
@@ -235,6 +236,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_complete_checklist) {
+            
             switchOnLoading();
         }
     }

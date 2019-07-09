@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.task.dialog.time_setting;
 
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
@@ -33,6 +34,24 @@ public class TimeSettingInteractor implements TimeSettingContract.TimeSettingDat
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 onFinishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void getTask(int checklistId, final OnFinishedGetTaskListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<Task> call = service.getFirstTaskFromChecklist(checklistId);
+
+        call.enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                listener.onFinishedGetTask(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+                listener.onFailure(t);
             }
         });
     }
