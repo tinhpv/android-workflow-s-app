@@ -2,10 +2,8 @@ package com.example.workflow_s.ui.organization;
 
 import android.util.Log;
 
-import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.model.UserOrganization;
-import com.example.workflow_s.ui.home.HomeContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +17,8 @@ import java.util.List;
 
 public class OrganizationPresenterImpl implements OrganizationContract.OrganizationPresenter,
         OrganizationContract.GetOrganizationDataContract.OnFinishedGetMembersListener,
-        OrganizationContract.GetOrganizationDataContract.OnFinishedGetOrganizatonListener,
-        OrganizationContract.GetOrganizationDataContract.OnFinishedGetListUserOrganizationListener{
+        OrganizationContract.GetOrganizationDataContract.OnFinishedGetListUserOrganizationListener,
+        OrganizationContract.GetOrganizationDataContract.OnFinishedSwitchOrganizationListener {
 
     private static final String TAG = "ORGANIZATION_PRESENTER";
     private OrganizationContract.OrganizationView mOrganizationView;
@@ -37,13 +35,13 @@ public class OrganizationPresenterImpl implements OrganizationContract.Organizat
     }
 
     @Override
-    public void requestOrganization(String userId) {
-        mOrganizationDataContract.getOrganization(userId, this);
+    public void requestListOrganization(String userId) {
+        mOrganizationDataContract.getListUserOrganization(userId, this);
     }
 
     @Override
-    public void requestListOrganization(String userId) {
-        mOrganizationDataContract.getListUserOrganization(userId, this);
+    public void switchOrganization(String userId, int targetOrgId, int oldOrgId) {
+        mOrganizationDataContract.switchOrganization(userId, targetOrgId, oldOrgId, this);
     }
 
     @Override
@@ -51,14 +49,15 @@ public class OrganizationPresenterImpl implements OrganizationContract.Organizat
         mOrganizationView.finishedGetMemeber(users);
     }
 
-    @Override
-    public void onFinishedGetOrg(UserOrganization organization) {
-        //mOrganizationView.finishedGetOrganization(organization);
-    }
 
     @Override
     public void onFinishedGetListUserOrg(List<UserOrganization> userOrganizationList) {
         mOrganizationView.finishedGetListUserOrganization(userOrganizationList);
+    }
+
+    @Override
+    public void onFinishedSwitchOrganization() {
+        mOrganizationView.finishedSwitchOrganization();
     }
 
     @Override

@@ -24,8 +24,8 @@ public class TemplatePresenterImpl implements TemplateContract.TemplatePresenter
     }
 
     @Override
-    public void requestTemplateData(String orgId, String userId) {
-        mTemplateDataContract.getAllTemplates(orgId, userId, this);
+    public void requestTemplateData(String orgId) {
+        mTemplateDataContract.getAllTemplates(orgId, this);
     }
 
     @Override

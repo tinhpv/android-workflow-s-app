@@ -61,15 +61,21 @@ public interface ApiService {
     @GET("/api/UserOrganizations/member/{organizationId}")
     Call<List<User>> getOrganizationMember(@Path("organizationId") int orgId);
 
+
+    @PUT("/api/UserOrganizations/switch/{userId}/{targetid}/{oldid}")
+    Call<ResponseBody> switchOrganization(@Path("userId") String userId,
+                                          @Path("targetid") int targetOrgId,
+                                          @Path("oldid") int oldOrgId);
+
     @GET("/api/TaskItems/taskitems/{checklistId}")
     Call<List<Task>> getTaskFromChecklist(@Path("checklistId") long checklistId);
 
     @GET("/api/ContentDetails/contentdetail/{taskid}")
     Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
-    @GET("/api/Checklists/listtemplate/{organizationId}/{userId}")
-    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId,
-                                                @Path("userId") String userId);
+    @GET("/api/Checklists/listtemplate/{organizationId}")
+    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId);
+
 
     @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,

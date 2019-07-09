@@ -56,6 +56,7 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private List<UserOrganization> userOrganizationArrayList;
     private String selectedOrgName;
     private ArrayList<Organization> organizationArrayList;
+    Organization targetOrganization = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,12 +128,13 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private void setupData() {
         mOrgShimmerLayout.startShimmerAnimation();
         mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
-        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
 
+        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         String orgName = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgName));
         Organization organization = new Organization(Integer.parseInt(orgId), orgName);
         //Log.i("orgId", orgId);
+
         mPresenter.requestListOrganization(userId);
         mPresenter.requestOrganizationData(Integer.parseInt(orgId));
 
@@ -146,31 +148,27 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     public void finishedGetMemeber(List<User> userList) {
         mOrgShimmerLayout.stopShimmerAnimation();
         mOrgShimmerLayout.setVisibility(View.INVISIBLE);
-        mAdapter.setUserList(userList);
+        if (userList != null) {
+            mAdapter.setUserList(userList);
+        }
+
     }
 
-    @Override
-    public void finishedGetOrganization(Organization organization) {
-//        txtOrgName.setText(organization.getName());
-//        mOrgShimmerLayout.startShimmerAnimation();
-//        mPresenter = new OrganizationPresenterImpl(this, new OrganizationInteractor());
-//        mPresenter.requestOrganizationData(organization.getId());
 
-        //Organization organization = new Organization(orgId, orgName);
-        //SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, organization);
-    }
-
+    // GET ALL ORGANIZATIONS THAT USER BELONGS TO
     @Override
     public void finishedGetListUserOrganization(List<UserOrganization> userOrganizationList) {
         userOrganizationArrayList = new ArrayList<>();
         userOrganizationArrayList = userOrganizationList;
         organizationArrayList = new ArrayList<>();
         orgNameList = new ArrayList<>();
+
         if (!userOrganizationArrayList.isEmpty()) {
             for (int i = 0; i < userOrganizationArrayList.size(); i++) {
                 organizationArrayList.add(userOrganizationArrayList.get(i).getOrganization());
             }
         }
+
         if (!organizationArrayList.isEmpty()) {
             for (int i = 0; i < organizationArrayList.size(); i++) {
                 orgNameList.add(organizationArrayList.get(i).getName());
@@ -179,17 +177,29 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         }
     }
 
+    @Override
+    public void finishedSwitchOrganization() {
+        getActivity().setTitle(targetOrganization.getName());
+        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, targetOrganization);
+        mPresenter.requestOrganizationData(targetOrganization.getId());
+    }
 
     @Override
     public void onFinishSelectOrgName(String orgName) {
-        Organization tmpOrg = null;
-        getActivity().setTitle(orgName);
+
+        targetOrganization = null;
         for (int i = 0; i < organizationArrayList.size(); i++) {
             if (organizationArrayList.get(i).getName().equals(orgName)) {
-                mPresenter.requestOrganizationData(organizationArrayList.get(i).getId());
-                tmpOrg = organizationArrayList.get(i);
+                targetOrganization = organizationArrayList.get(i);
+                break;
             }
         }
 
-        SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, tmpOrg);  }
+        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+        String oldOrgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        if (targetOrganization != null) {
+            mPresenter.switchOrganization(userId, targetOrganization.getId(), Integer.parseInt(oldOrgId));
+        }
+
+    }
 }

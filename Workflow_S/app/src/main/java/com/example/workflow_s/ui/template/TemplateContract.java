@@ -17,7 +17,7 @@ import java.util.List;
 public interface TemplateContract {
 
     interface TemplatePresenter {
-        void requestTemplateData(String orgId, String userId);
+        void requestTemplateData(String orgId);
     }
 
     interface TemplateView {
@@ -30,6 +30,6 @@ public interface TemplateContract {
             void onFailure(Throwable t);
         }
 
-        void getAllTemplates(String orgId, String userId, OnFinishedGetTemplateDataListener onFinishedListener);
+        void getAllTemplates(String orgId, OnFinishedGetTemplateDataListener onFinishedListener);
     }
 }
