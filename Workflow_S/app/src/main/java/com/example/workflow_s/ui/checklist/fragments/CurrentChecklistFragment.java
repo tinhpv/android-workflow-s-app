@@ -17,23 +17,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.Template;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
+import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView {
+public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView, ChecklistDialogFragment.DataBackContract, View.OnClickListener {
 
     private static final String NAME_ARG = "CurrentChecklist";
 
@@ -41,9 +44,12 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
     private RecyclerView.LayoutManager checklistLayoutManager;
+    private Button btnTemplateFilter;
 
-    private ArrayList<Checklist> currentChecklist;
-    private String userId, orgId;
+    private ArrayList<String> myTemplateListName;
+    private ArrayList<Checklist> currentChecklist, myTemplateChecklist;
+    private List<Template> templateList;
+    private String userId, orgId, selectedTemplate;
 
     private ChecklistContract.ChecklistPresenter mPresenter;
     //private LinearLayout mChecklistDataStatusMessage;
@@ -107,15 +113,31 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //mChecklistDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
-            setupChecklistRV();
-            initData();
+        btnTemplateFilter = view.findViewById(R.id.bt_template_checklist);
+        btnTemplateFilter.setOnClickListener(this);
+        btnTemplateFilter.setText("All");
+        selectedTemplate = "All";
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        setupChecklistRV();
+        initData();
+    }
+
+    private void prepareShowingTemplateDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("template_list", myTemplateListName);
+        bundle.putString("selected_template", selectedTemplate);
+        ChecklistDialogFragment checklistDialogFragment = ChecklistDialogFragment.newInstance();
+        checklistDialogFragment.setTargetFragment(this, 0);
+        checklistDialogFragment.setArguments(bundle);
+        checklistDialogFragment.show(getFragmentManager(), NAME_ARG);
     }
 
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
         mPresenter.loadAllChecklist(orgId);
+        mPresenter.requestTemplateData(orgId);
     }
 
     private void setupChecklistRV() {
@@ -156,6 +178,61 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
             }
             mCurrentChecklistAdapter.setChecklists(currentChecklist);
         } // end if
+    }
+
+    @Override
+    public void finishGetTemplates(List<Template> templateList) {
+        if (templateList != null) {
+            this.templateList = templateList;
+            collectTemplateName(templateList);
+        }
+    }
+
+    private void collectTemplateName(List<Template> templateList) {
+        myTemplateListName = new ArrayList<>();
+        myTemplateListName.add("All");
+        for (Template template : templateList) {
+            if (!myTemplateListName.contains(template.getName())) {
+                myTemplateListName.add(template.getName());
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bt_template_checklist) {
+            prepareShowingTemplateDialog();
+        }
+    }
+
+    @Override
+    public void onFinishSelectTemplate(String template) {
+        btnTemplateFilter.setText(template);
+        Template tmpTemplate = null;
+        for (Template template1 : templateList) {
+            if (template1.getName().equals(template)) {
+                tmpTemplate = template1;
+            }
+        }
+        categorizeTemplate(tmpTemplate);
+    }
+
+    private void categorizeTemplate(Template template) {
+        if (template == null) {
+            selectedTemplate = "All";
+            mCurrentChecklistAdapter.setChecklists(currentChecklist);
+        } else {
+            String tempName = template.getName();
+            selectedTemplate = tempName;
+            int templateId = template.getId();
+            myTemplateChecklist = new ArrayList<>();
+            for (Checklist checklist : currentChecklist) {
+                if (checklist.getTemplateId() == templateId) {
+                    myTemplateChecklist.add(checklist);
+                } //end if
+            } //end for
+            mCurrentChecklistAdapter.setChecklists(myTemplateChecklist);
+        }
     }
 
 //

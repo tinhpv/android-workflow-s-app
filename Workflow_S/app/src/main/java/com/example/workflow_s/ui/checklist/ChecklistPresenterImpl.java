@@ -73,7 +73,11 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
 
     @Override
     public void onFinishedGetTemplates(ArrayList<Template> templateList) {
-        mAllChecklistView.finishGetTemplates(templateList);
+        if (mChecklistView != null) {
+            mChecklistView.finishGetTemplates(templateList);
+        } else {
+            mAllChecklistView.finishGetTemplates(templateList);
+        }
     }
 
     @Override

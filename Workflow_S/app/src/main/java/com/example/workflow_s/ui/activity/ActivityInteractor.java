@@ -1,8 +1,8 @@
 package com.example.workflow_s.ui.activity;
 
 
-import android.util.Log;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
@@ -16,26 +16,39 @@ import retrofit2.Response;
 
 public class ActivityInteractor implements ActivityContract.GetActivitiesDataInteractor {
 
-    // FIXME Waiting for data
-    @Override
-    public void getAllTodayTasks(String userId, OnFinishedGetTodayTaskListener onFinishedGetTodayTaskListener) {
-
-    }
 
     @Override
-    public void getAllUpcomingTasks(String orgranizationId, String userId, final OnFinishedGetUpcomingTaskListener onFinishedGetUpcomingTaskListener) {
+    public void getFirstTask(int checklistId, final Checklist checklist, final OnFinishedGetFirstTaskListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<Task>> call = service.getUpcomingTasks(orgranizationId,userId);
+        Call<Task> call = service.getFirstTaskFromChecklist(checklistId);
 
-        call.enqueue(new Callback<List<Task>>() {
+        call.enqueue(new Callback<Task>() {
             @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                onFinishedGetUpcomingTaskListener.onFinishedGetUpcomingTasks((ArrayList<Task>) response.body());
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                onFinishedListener.onFinishedGetFirstTask(response.body(), checklist);
             }
 
             @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                onFinishedGetUpcomingTaskListener.onFailure(t);
+            public void onFailure(Call<Task> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void getAllChecklist(String organizationId, final OnFinishedGetChecklistListener onFinishedGetChecklistListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<Checklist>> call = service.getAllRunningChecklists(organizationId);
+
+        call.enqueue(new Callback<List<Checklist>>() {
+            @Override
+            public void onResponse(Call<List<Checklist>> call, Response<List<Checklist>> response) {
+                onFinishedGetChecklistListener.onFinishedGetChecklist((ArrayList<Checklist>) response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Checklist>> call, Throwable t) {
+                onFinishedGetChecklistListener.onFailure(t);
             }
         });
     }

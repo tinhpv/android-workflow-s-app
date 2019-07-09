@@ -115,7 +115,7 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
 
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         mPresenter.loadAllChecklist(orgId);
         mPresenter.requestTemplateData(orgId);
     }

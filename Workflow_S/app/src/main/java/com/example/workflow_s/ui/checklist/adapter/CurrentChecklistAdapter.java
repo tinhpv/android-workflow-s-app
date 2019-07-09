@@ -24,10 +24,17 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     //datasource for recyclerview
     private List<Checklist> mChecklists;
     private List<Checklist> mChecklistsFull;
+    private RecyclerView mRecyclerView;
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView =recyclerView;
+    }
 
     @NonNull
     @Override
-    public CurrentChecklistViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup,final int i) {
+    public CurrentChecklistViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.recyclerview_item_current_checklist, viewGroup, false);
@@ -37,9 +44,10 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         viewHolder.mChecklistItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
-                args.putString("checklistId", String.valueOf(mChecklists.get(i).getId()));
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
+                args.putString("checklistId", String.valueOf(mChecklists.get(index).getId()));
+                CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args);
             }
         });
         return viewHolder;
@@ -89,6 +97,8 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
             notifyDataSetChanged();
         }
     };
+
+
 
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {

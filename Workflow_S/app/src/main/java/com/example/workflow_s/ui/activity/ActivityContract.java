@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.activity;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
@@ -9,29 +10,29 @@ public interface ActivityContract {
     //presenter
     interface ActivityPresenter {
         void onDestroy();
-        void loadTodayTasks(String userId);
-        void loadUpcomingTasks(String orgranizationId,String userId);
+        void loadAllChecklist(String organizationId);
+        void loadFirstTaskFromChecklist(int checklistId, Checklist checklist);
     }
 
     //view
     interface ActivityView {
-        void setDataToTodayTasksRecyclerView(ArrayList<Task> datasource);
-        void setDataToUpcomingTasksRecyclerView(ArrayList<Task> datasource);
+        void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
+        void finishedGetFirstTask(Task task, Checklist checklist);
     }
 
     //model
     interface GetActivitiesDataInteractor {
-        interface  OnFinishedGetTodayTaskListener {
-            void onFinishedGetTodayTasks(ArrayList<Task> taskArrayList);
+        interface OnFinishedGetChecklistListener {
+            void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList);
             void onFailure(Throwable t);
         }
 
-        interface OnFinishedGetUpcomingTaskListener {
-            void onFinishedGetUpcomingTasks(ArrayList<Task> taskArrayList);
+        interface OnFinishedGetFirstTaskListener {
+            void onFinishedGetFirstTask(Task task, Checklist checklist);
             void onFailure(Throwable t);
         }
 
-        void getAllTodayTasks(String userId, OnFinishedGetTodayTaskListener onFinishedGetTodayTaskListener);
-        void getAllUpcomingTasks(String orgranizationId, String userId,  OnFinishedGetUpcomingTaskListener onFinishedGetUpcomingTaskListener);
+        void getFirstTask(int checklistId, Checklist checklist, OnFinishedGetFirstTaskListener onFinishedListener);
+        void getAllChecklist(String organizationId, OnFinishedGetChecklistListener onFinishedGetChecklistListener);
     }
 }

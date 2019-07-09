@@ -49,10 +49,8 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
     private OrganizationContract.OrganizationPresenter mPresenter;
 
     private ShimmerFrameLayout mOrgShimmerLayout;
-    private LinearLayout mOrganizationStatusMessage;
 
     private ArrayList<String> orgNameList;
-    private ArrayList<User> users;
     private List<UserOrganization> userOrganizationArrayList;
     private String selectedOrgName;
     private ArrayList<Organization> organizationArrayList;

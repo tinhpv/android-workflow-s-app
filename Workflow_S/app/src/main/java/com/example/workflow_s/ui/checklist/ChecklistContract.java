@@ -28,6 +28,7 @@ public interface ChecklistContract {
     interface ChecklistView {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
         void finishFirstTaskFromChecklist(Task task, Checklist parentChecklistOfThisTask);
+        void finishGetTemplates(List<Template> templateList);
     }
 
     //view

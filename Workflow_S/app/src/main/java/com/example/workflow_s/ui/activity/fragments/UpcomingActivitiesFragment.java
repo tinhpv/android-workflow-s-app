@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.activity.ActivityContract;
 import com.example.workflow_s.ui.activity.adapters.UpcomingActivitiesAdapter;
@@ -56,12 +57,13 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
     }
 
     @Override
-    public void setDataToTodayTasksRecyclerView(ArrayList<Task> datasource) {
+    public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
 
     }
 
     @Override
-    public void setDataToUpcomingTasksRecyclerView(ArrayList<Task> datasource) {
-        //mUpcomingActivitiesAdapter.setTasks(datasource);
+    public void finishedGetFirstTask(Task task, Checklist checklist) {
+
     }
+
 }

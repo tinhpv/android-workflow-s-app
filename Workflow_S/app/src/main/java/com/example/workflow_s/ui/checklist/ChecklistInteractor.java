@@ -52,13 +52,11 @@ public class ChecklistInteractor implements ChecklistContract.GetChecklistsDataI
             @Override
             public void onResponse(Call<List<Checklist>> call, Response<List<Checklist>> response) {
                 onFinishedGetChecklistListener.onFinishedGetChecklist((ArrayList<Checklist>) response.body());
-                //Log.i("Success", "success");
             }
 
             @Override
             public void onFailure(Call<List<Checklist>> call, Throwable t) {
                 onFinishedGetChecklistListener.onFailure(t);
-                //Log.i("Fail", "fail");
             }
         });
     }
