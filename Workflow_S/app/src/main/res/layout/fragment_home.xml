@@ -69,7 +69,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Checklist Progress"
+                    android:text="My checklists"
                     android:textSize="20sp"
                     android:fontFamily="@font/avenir_black"
                     android:textColor="@color/colorPrimaryDark"
@@ -169,7 +169,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Today's Task"
+                    android:text="Activities"
                     android:textSize="20sp"
                     android:fontFamily="@font/avenir_black"
                     android:textColor="@color/colorPrimaryDark"
