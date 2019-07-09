@@ -17,19 +17,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.ui.main.MainActivity;
-import com.example.workflow_s.ui.search.SearchActivity;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
 import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,7 +142,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 //        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
 //        mTemplatePresenter.requestOrganizationData(orgId, userId);
         // FIXME - HARDCODE HERE
-        mTemplatePresenter.requestTemplateData("1", "2372592022969346");
+        mTemplatePresenter.requestTemplateData(orgId, "111443286309620652239");
     }
 
     private void setupTemplateRV() {

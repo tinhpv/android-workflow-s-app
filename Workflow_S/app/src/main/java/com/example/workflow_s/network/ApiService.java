@@ -33,18 +33,19 @@ public interface ApiService {
     @GET("api/Checklists/checklistprogress/{organizationId}")
     Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId);
 
-
     @GET("api/Checklists/checklistprogress/{organizationId}/{userId}")
-    Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId, @Path("userId") String userId);
+    Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId,
+                                                  @Path("userId") String userId);
 
     @POST("api/Users/login/user")
     Call<User> addUser(@Body User user);
 
-    @GET("api/UserOrganizations/organization/{userId}")
-    Call<Organization> getUserOrganizations(@Path("userId") String userId);
+    @GET("/api/UserOrganizations/organization/{userId}")
+    Call<UserOrganization> getUserOrganizations(@Path("userId") String userId);
 
     @GET("/api/TaskItems/taskoverdue/{organizationId}/{userId}")
-    Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId, @Path("userId") String userId);
+    Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId,
+                                    @Path("userId") String userId);
 
     @POST("/api/Users/updatephone/{userid}/{phone}/{devicetoken}")
     Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId,
@@ -67,7 +68,8 @@ public interface ApiService {
     Call<List<ContentDetail>> getContentDetail(@Path("taskid") long taskid);
 
     @GET("/api/Checklists/listtemplate/{organizationId}/{userId}")
-    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId, @Path("userId") String userId);
+    Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId,
+                                                @Path("userId") String userId);
 
     @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
@@ -79,13 +81,14 @@ public interface ApiService {
                                          @Path("userId") String userId);
 
     @POST("/api/Checklists/run/{userId}")
-    Call<ResponseBody> runChecklist(@Path("userId") String userId, @Body Template template);
+    Call<ResponseBody> runChecklist(@Path("userId") String userId,
+                                    @Body Template template);
 
     @GET("/api/UserOrganizations/organization/{userId}")
     Call<Organization> getOrganization(@Path("userId") String userId);
 
     @GET("/api/Organizations/current/{userId}")
-    Call<Organization> getCurrentOrganization(@Path("userId") String userId);
+    Call<UserOrganization> getCurrentOrganization(@Path("userId") String userId);
 
     @GET("/api/UserOrganizations/user/{userId}")
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
@@ -101,7 +104,8 @@ public interface ApiService {
     Call<List<TaskMember>> getAllTaskMember(@Path("taskId") int taskId);
 
     @PUT("/api/TaskItems/duetime/{taskid}")
-    Call<ResponseBody> setDueTime(@Path("taskid") int taskId, @Body String datetime);
+    Call<ResponseBody> setDueTime(@Path("taskid") int taskId,
+                                  @Body String datetime);
 
     @GET("/api/TaskItems/getfirsttask/{checklistId}")
     Call<Task> getFirstTaskFromChecklist(@Path("checklistId") int checklistId);

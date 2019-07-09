@@ -38,7 +38,7 @@ public interface OrganizationContract {
         }
 
         interface OnFinishedGetOrganizatonListener {
-            void onFinishedGetOrg(Organization organization);
+            void onFinishedGetOrg(UserOrganization organization);
             void onFailure(Throwable t);
         }
 

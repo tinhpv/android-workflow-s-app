@@ -52,8 +52,8 @@ public class OrganizationPresenterImpl implements OrganizationContract.Organizat
     }
 
     @Override
-    public void onFinishedGetOrg(Organization organization) {
-        mOrganizationView.finishedGetOrganization(organization);
+    public void onFinishedGetOrg(UserOrganization organization) {
+        //mOrganizationView.finishedGetOrganization(organization);
     }
 
     @Override

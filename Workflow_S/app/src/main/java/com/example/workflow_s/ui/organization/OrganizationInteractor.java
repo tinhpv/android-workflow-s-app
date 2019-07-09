@@ -45,20 +45,18 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
     @Override
     public void getOrganization(String userId, final OnFinishedGetOrganizatonListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<Organization> call = service.getCurrentOrganization(userId);
-
-        call.enqueue(new Callback<Organization>() {
+        Call<UserOrganization> call = service.getUserOrganizations(userId);
+        call.enqueue(new Callback<UserOrganization>() {
             @Override
-            public void onResponse(Call<Organization> call, Response<Organization> response) {
-                onFinishedListener.onFinishedGetOrg((Organization) response.body());
+            public void onResponse(Call<UserOrganization> call, Response<UserOrganization> response) {
+                onFinishedListener.onFinishedGetOrg(response.body());
             }
 
             @Override
-            public void onFailure(Call<Organization> call, Throwable t) {
+            public void onFailure(Call<UserOrganization> call, Throwable t) {
                 onFinishedListener.onFailure(t);
             }
         });
-
 
     }
 

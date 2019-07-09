@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.login;
 
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 
 /**
  * Workflow_S
@@ -23,13 +24,13 @@ public interface LoginContract {
         void navigateToCodeVerifyActivity();
         void navigateToMainActivity();
         void onFinishedAddUser(User user);
-        void onFinishedGetOrg(Organization org);
+        void onFinishedGetOrg(UserOrganization org);
     }
 
     interface GetLoginDataInteractor {
 
         interface OnFinishedGetOrganizationListener {
-            void onFinished(Organization currentOrganization);
+            void onFinished(UserOrganization currentOrganization);
             void onFailure(Throwable t);
         }
 

@@ -24,10 +24,8 @@ import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
-import com.example.workflow_s.ui.search.SearchActivity;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

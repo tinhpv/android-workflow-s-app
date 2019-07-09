@@ -17,6 +17,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.ui.authentication.AuthenticationActivity;
 import com.example.workflow_s.ui.main.MainActivity;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -175,8 +176,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     }
 
     @Override
-    public void onFinishedGetOrg(Organization org) {
-        saveCurrentOrganizationToPreference(org);
+    public void onFinishedGetOrg(UserOrganization org) {
+        Organization tmpOrg = new Organization(org.getOrganizationId(), org.getOrganizationName());
+        saveCurrentOrganizationToPreference(tmpOrg);
         mLoginPresenter.checkRoleUser(currentUser.getRole());
     }
 

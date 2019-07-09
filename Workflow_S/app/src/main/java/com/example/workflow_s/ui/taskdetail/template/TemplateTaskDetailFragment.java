@@ -49,7 +49,6 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.menu_task_detail, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

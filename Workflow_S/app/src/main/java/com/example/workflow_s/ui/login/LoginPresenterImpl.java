@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 
 /**
  * Workflow_S
@@ -57,7 +58,7 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     }
 
     @Override
-    public void onFinished(Organization currentOrganization) {
+    public void onFinished(UserOrganization currentOrganization) {
         mLoginView.onFinishedGetOrg(currentOrganization);
     }
 

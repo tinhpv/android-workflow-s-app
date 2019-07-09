@@ -15,6 +15,9 @@ public class UserOrganization {
     @SerializedName("organizationId")
     private Integer organizationId;
 
+    @SerializedName("organizationName")
+    private String organizationName;
+
     @SerializedName("currentOrganization")
     private boolean currentOrganization;
 
@@ -31,6 +34,24 @@ public class UserOrganization {
         this.currentOrganization = currentOrganization;
         this.member = member;
         this.organization = organization;
+    }
+
+    public UserOrganization(Integer id, String memberId, Integer organizationId, String organizationName, boolean currentOrganization, List<User> member, Organization organization) {
+        this.id = id;
+        this.memberId = memberId;
+        this.organizationId = organizationId;
+        this.organizationName = organizationName;
+        this.currentOrganization = currentOrganization;
+        this.member = member;
+        this.organization = organization;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 
     public Integer getId() {
