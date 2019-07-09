@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.login;
 
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -21,15 +22,15 @@ public class LoginInteractor implements LoginContract.GetLoginDataInteractor {
     @Override
     public void getCurrentOrganization(String userId, final OnFinishedGetOrganizationListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<Organization> call = service.getUserOrganizations(userId);
-        call.enqueue(new Callback<Organization>() {
+        Call<UserOrganization> call = service.getUserOrganizations(userId);
+        call.enqueue(new Callback<UserOrganization>() {
             @Override
-            public void onResponse(Call<Organization> call, Response<Organization> response) {
+            public void onResponse(Call<UserOrganization> call, Response<UserOrganization> response) {
                 onFinishedListener.onFinished(response.body());
             }
 
             @Override
-            public void onFailure(Call<Organization> call, Throwable t) {
+            public void onFailure(Call<UserOrganization> call, Throwable t) {
                 onFinishedListener.onFailure(t);
             }
         });

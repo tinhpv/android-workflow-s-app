@@ -110,9 +110,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private void initData() {
         mPresenter = new HomePresenterImpl(this, new HomeInteractor());
+
+        String userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
+        String orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
         // FIXME - HARDCORD HERE FOR TESTING ONLY
-        mPresenter.loadRunningChecklists("1", "1");
-        mPresenter.loadDueTasks("1", "1");
+        mPresenter.loadRunningChecklists(userId, orgId);
+        mPresenter.loadDueTasks(userId, orgId);
     }
 
     private void setupTaskRV() {
@@ -166,7 +169,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void setDataToTasksRecyclerView(ArrayList<Task> datasource) {
         mTaskShimmerFrameLayout.stopShimmerAnimation();
         mTaskShimmerFrameLayout.setVisibility(View.INVISIBLE);
-        if (datasource.size() == 0) {
+        if (datasource == null) {
             mTaskDataStatusMessage.setVisibility(View.VISIBLE);
         } else {
             mTodayTaskAdapter.setTasks(datasource);

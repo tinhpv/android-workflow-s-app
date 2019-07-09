@@ -34,13 +34,27 @@ import java.util.ArrayList;
  **/
 
 
-public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView {
+public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView, View.OnClickListener {
 
     private View view;
     private int taskId;
     private String taskName;
     private LinearLayout mContainerLayout;
+    private Button buttonCompleteTask;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 
     @Nullable
     @Override
@@ -52,6 +66,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mContainerLayout = view.findViewById(R.id.task_detail_layout);
+        buttonCompleteTask = view.findViewById(R.id.bt_complete_task);
+        buttonCompleteTask.setOnClickListener(this);
         getTaskIdFromParentFragment();
         initData();
     }
@@ -103,5 +119,12 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                     break;
             } // end switch
         } // end for
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bt_complete_task) {
+
+        }
     }
 }

@@ -42,6 +42,12 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     private ChecklistRunningContract.ChecklistRunningPresenter mRunningPresenter;
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,7 +95,8 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
             Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
             checklistNameEditText.startAnimation(shakeAnimation);
         } else {
-            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, orgId);
+            // fixme - hardcode
+            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, "1");
         }
     }
 

@@ -17,19 +17,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.ui.main.MainActivity;
-import com.example.workflow_s.ui.search.SearchActivity;
 import com.example.workflow_s.ui.template.adapter.TemplateAdapter;
 import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,15 +134,9 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
 
     private void initData() {
         mTemplatePresenter = new TemplatePresenterImpl(this, new TemplateInteractor());
-        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-
-//        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-//        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-//        mTemplatePresenter.requestOrganizationData(orgId, userId);
-        // FIXME - HARDCODE HERE
-        mTemplatePresenter.requestTemplateData(orgId, userId);
+        // done - HARDCODE HERE
+        mTemplatePresenter.requestTemplateData(orgId);
     }
 
     private void setupTemplateRV() {

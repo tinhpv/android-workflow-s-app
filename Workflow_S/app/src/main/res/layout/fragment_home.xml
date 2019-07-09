@@ -116,7 +116,6 @@
                     </LinearLayout>
 
                 </com.facebook.shimmer.ShimmerFrameLayout>
-
                 <LinearLayout
                     android:id="@+id/checklist_data_notfound_message"
                     android:layout_width="match_parent"

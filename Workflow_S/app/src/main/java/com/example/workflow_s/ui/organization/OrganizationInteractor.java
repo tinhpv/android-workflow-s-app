@@ -10,6 +10,7 @@ import com.example.workflow_s.network.ApiService;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,25 +43,6 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
 
     }
 
-    @Override
-    public void getOrganization(String userId, final OnFinishedGetOrganizatonListener onFinishedListener) {
-        ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<Organization> call = service.getCurrentOrganization(userId);
-
-        call.enqueue(new Callback<Organization>() {
-            @Override
-            public void onResponse(Call<Organization> call, Response<Organization> response) {
-                onFinishedListener.onFinishedGetOrg((Organization) response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Organization> call, Throwable t) {
-                onFinishedListener.onFailure(t);
-            }
-        });
-
-
-    }
 
     @Override
     public void getListUserOrganization(String userId, final OnFinishedGetListUserOrganizationListener onFinishedListener) {
@@ -75,6 +57,23 @@ public class OrganizationInteractor implements OrganizationContract.GetOrganizat
 
             @Override
             public void onFailure(Call<List<UserOrganization>> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void switchOrganization(String userId, int newOrgId, int oldOrgId, final OnFinishedSwitchOrganizationListener onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.switchOrganization(userId, newOrgId, oldOrgId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                onFinishedListener.onFinishedSwitchOrganization();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 onFinishedListener.onFailure(t);
             }
         });

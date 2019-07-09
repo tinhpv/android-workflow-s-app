@@ -20,9 +20,9 @@ import retrofit2.Response;
 
 public class TemplateInteractor implements TemplateContract.GetTemplateDataContract {
     @Override
-    public void getAllTemplates(String orgId, String userId, final OnFinishedGetTemplateDataListener onFinishedListener) {
+    public void getAllTemplates(String orgId, final OnFinishedGetTemplateDataListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<Template>> call = service.getAllCreatedTemplates(orgId, userId);
+        Call<List<Template>> call = service.getAllCreatedTemplates(orgId);
         call.enqueue(new Callback<List<Template>>() {
             @Override
             public void onResponse(Call<List<Template>> call, Response<List<Template>> response) {

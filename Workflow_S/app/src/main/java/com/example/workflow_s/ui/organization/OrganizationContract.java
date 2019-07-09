@@ -19,15 +19,15 @@ public interface OrganizationContract {
     //presenter
     interface OrganizationPresenter {
         void requestOrganizationData(int orgId);
-        void requestOrganization(String userId);
         void requestListOrganization(String userId);
+        void switchOrganization(String userId, int targetOrgId, int oldOrgId);
     }
 
     //view
     interface OrganizationView {
         void finishedGetMemeber(List<User> userList);
-        void finishedGetOrganization(Organization organization);
         void finishedGetListUserOrganization(List<UserOrganization> userOrganizationList);
+        void finishedSwitchOrganization();
     }
 
     //model
@@ -37,18 +37,18 @@ public interface OrganizationContract {
             void onFailure(Throwable t);
         }
 
-        interface OnFinishedGetOrganizatonListener {
-            void onFinishedGetOrg(Organization organization);
-            void onFailure(Throwable t);
-        }
-
         interface OnFinishedGetListUserOrganizationListener {
             void onFinishedGetListUserOrg(List<UserOrganization> userOrganizationList);
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedSwitchOrganizationListener {
+            void onFinishedSwitchOrganization();
+            void onFailure(Throwable t);
+        }
+
         void getAllMember(int orgId, OnFinishedGetMembersListener onFinishedListener);
-        void getOrganization(String userId, OnFinishedGetOrganizatonListener onFinishedListener);
         void getListUserOrganization(String userId, OnFinishedGetListUserOrganizationListener onFinishedListener);
+        void switchOrganization(String userId, int newOrgId, int oldOrgId, OnFinishedSwitchOrganizationListener onFinishedListener);
     }
 }

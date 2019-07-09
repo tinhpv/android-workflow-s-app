@@ -69,7 +69,6 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 int doneTask = mChecklists.get(index).getDoneTask();
                 int totalTask = mChecklists.get(index).getTotalTask();
 
-
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
                 args.putString("checklistName", checklistName);
