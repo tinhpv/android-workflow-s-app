@@ -20,11 +20,19 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
 
     private static final String TAG = "CHECKLISTS_PRESENTER";
     private ChecklistContract.ChecklistView mChecklistView;
+    private ChecklistContract.AllChecklistView mAllChecklistView;
     private ChecklistContract.GetChecklistsDataInteractor mChecklistDataInteractor;
 
     public ChecklistPresenterImpl(ChecklistContract.ChecklistView mChecklistView, ChecklistContract.GetChecklistsDataInteractor mChecklistDataInteractor) {
         this.mChecklistView = mChecklistView;
+        this.mAllChecklistView = null;
         this.mChecklistDataInteractor = mChecklistDataInteractor;
+    }
+
+    public ChecklistPresenterImpl(ChecklistContract.AllChecklistView allChecklistView, ChecklistContract.GetChecklistsDataInteractor checklistDataInteractor) {
+        mAllChecklistView = allChecklistView;
+        mChecklistView = null;
+        mChecklistDataInteractor = checklistDataInteractor;
     }
 
     @Override
@@ -38,19 +46,22 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
     }
 
     @Override
-    public void loadFirstTaskFromChecklist(int checklistId) {
-        mChecklistDataInteractor.getFirstTask(checklistId, this);
+    public void loadFirstTaskFromChecklist(int checklistId, Checklist parentChecklistOfThisTask) {
+        mChecklistDataInteractor.getFirstTask(checklistId, parentChecklistOfThisTask,this);
     }
 
     @Override
     public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
-        mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
-        Log.i("ChecklistView", checklistArrayList.isEmpty() + "");
+        if (mChecklistView != null) {
+            mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
+        } else {
+            mAllChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
+        } // end if
     }
 
     @Override
-    public void onFinishedGetFirstTask(Task task) {
-        mChecklistView.finishFirstTaskFromChecklist(task);
+    public void onFinishedGetFirstTask(Task task, Checklist parentChecklistOfThisTask) {
+        mChecklistView.finishFirstTaskFromChecklist(task, parentChecklistOfThisTask);
     }
 
     @Override
