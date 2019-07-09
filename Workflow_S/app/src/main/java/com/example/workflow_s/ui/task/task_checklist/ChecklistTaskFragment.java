@@ -145,8 +145,8 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             checklistName = checklist.getName();
             checklistDescription = checklist.getDescription();
             checklistUserId = checklist.getUserId();
-            //totalTask = checklist.getTotalTask();
-           // doneTask = checklist.getDoneTask();
+            totalTask = checklist.getTotalTask();
+            doneTask = checklist.getDoneTask();
             List<Task> tasks = checklist.getTaskItems();
 
             checklistMemberList = new ArrayList<>();

@@ -76,7 +76,7 @@ public interface ApiService {
     @GET("/api/Checklists/listtemplate/{organizationId}")
     Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId);
 
-    @GET("/api/Checklists/checklist/{organizationId}/{checklistId}")
+    @GET("/api/Checklists/checklistmobile/{organizationId}/{checklistId}")
     Call<Checklist> getChecklistById(@Path("organizationId") int orgId,
                                      @Path("checklistId") int checklistId);
 
