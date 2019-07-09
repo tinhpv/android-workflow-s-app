@@ -18,13 +18,18 @@ public interface ChecklistContract {
     interface ChecklistPresenter {
         void onDestroy();
         void loadAllChecklist(String organizationId);
-        void loadFirstTaskFromChecklist(int checklistId);
+        void loadFirstTaskFromChecklist(int checklistId, Checklist parentChecklistOfThisTask);
     }
 
     //view
     interface ChecklistView {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
-        void finishFirstTaskFromChecklist(Task task);
+        void finishFirstTaskFromChecklist(Task task, Checklist parentChecklistOfThisTask);
+    }
+
+    //view
+    interface AllChecklistView {
+        void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
     }
 
     //model
@@ -35,11 +40,11 @@ public interface ChecklistContract {
         }
 
         interface OnFinishedGetFirstTaskFormChecklistListener {
-            void onFinishedGetFirstTask(Task task);
+            void onFinishedGetFirstTask(Task task, Checklist parentChecklistOfThisTask);
             void onFailure(Throwable t);
         }
 
         void getAllChecklist(String organizationId, OnFinishedGetChecklistListener onFinishedGetChecklistListener);
-        void getFirstTask(int checklistId, OnFinishedGetFirstTaskFormChecklistListener onFinishedListener);
+        void getFirstTask(int checklistId, Checklist parentChecklistOfThisTask, OnFinishedGetFirstTaskFormChecklistListener onFinishedListener);
     }
 }

@@ -37,9 +37,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     private RecyclerView checklistRecyclerView;
     private RecyclerView.LayoutManager checklistLayoutManager;
 
-    private ArrayList<Checklist> checklists, currentChecklist;
-    private Checklist tmpChecklist;
-    private boolean flag;
+    private ArrayList<Checklist> currentChecklist;
+    private String userId, orgId;
 
     private ChecklistContract.ChecklistPresenter mPresenter;
     //private LinearLayout mChecklistDataStatusMessage;
@@ -78,7 +77,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         mPresenter.loadAllChecklist(orgId);
     }
 
@@ -94,32 +94,32 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-        currentChecklist = new ArrayList<>();
-        checklists = new ArrayList<>();
-        checklists = datasource;
-        for (Checklist checklist : checklists) {
-           tmpChecklist = checklist;
-           mPresenter.loadFirstTaskFromChecklist(tmpChecklist.getId());
-       }
-
+        if (null != datasource) {
+            currentChecklist = new ArrayList<>();
+            for (Checklist checklist : datasource) {
+                if (checklist.getUserId().equals(userId)) {
+                    currentChecklist.add(checklist);
+                } else {
+                    mPresenter.loadFirstTaskFromChecklist(checklist.getId(), checklist);
+                } // end if
+            } // end for
+        } // end if null
+        mCurrentChecklistAdapter.setChecklists(currentChecklist);
     }
 
     @Override
-    public void finishFirstTaskFromChecklist(Task task) {
-            String userId = SharedPreferenceUtils.retrieveData(getContext(),getContext().getString(R.string.pref_userId));
-                if (task != null) {
-                    List<TaskMember> taskMemberList = new ArrayList<>(task.getTaskMemberList());
-                    if (!taskMemberList.isEmpty()) {
-                        for (int i = 0; i < taskMemberList.size(); i++) {
-                            if (taskMemberList.get(i).getUserId().equals(userId)) {
-                                    currentChecklist.add(tmpChecklist);
-                            }
-                        }
+    public void finishFirstTaskFromChecklist(Task task, Checklist parentChecklistOfThisTask) {
+        if (task != null) {
+            List<TaskMember> taskMemberList = new ArrayList<>(task.getTaskMemberList());
+            if (!taskMemberList.isEmpty()) {
+                for (int i = 0; i < taskMemberList.size(); i++) {
+                    if (taskMemberList.get(i).getUserId().equals(userId)) {
+                        currentChecklist.add(parentChecklistOfThisTask);
                     }
-                    mCurrentChecklistAdapter.setChecklists(currentChecklist);
-                } else {
-
                 }
+            }
+            mCurrentChecklistAdapter.setChecklists(currentChecklist);
+        } // end if
     }
 
 //

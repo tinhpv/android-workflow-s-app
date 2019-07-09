@@ -46,14 +46,14 @@ public class ChecklistInteractor implements ChecklistContract.GetChecklistsDataI
     }
 
     @Override
-    public void getFirstTask(int checklistId, final OnFinishedGetFirstTaskFormChecklistListener onFinishedListener) {
+    public void getFirstTask(int checklistId, final Checklist parentChecklistOfThisTask, final OnFinishedGetFirstTaskFormChecklistListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<Task> call = service.getFirstTaskFromChecklist(checklistId);
 
         call.enqueue(new Callback<Task>() {
             @Override
             public void onResponse(Call<Task> call, Response<Task> response) {
-                onFinishedListener.onFinishedGetFirstTask( response.body());
+                onFinishedListener.onFinishedGetFirstTask(response.body(), parentChecklistOfThisTask);
             }
 
             @Override
