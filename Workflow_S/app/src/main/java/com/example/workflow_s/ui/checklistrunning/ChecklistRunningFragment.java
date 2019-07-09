@@ -96,7 +96,7 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
             checklistNameEditText.startAnimation(shakeAnimation);
         } else {
             // fixme - hardcode
-            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, "1");
+            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, orgId);
         }
     }
 

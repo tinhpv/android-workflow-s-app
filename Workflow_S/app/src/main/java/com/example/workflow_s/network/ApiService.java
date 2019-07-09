@@ -76,6 +76,10 @@ public interface ApiService {
     @GET("/api/Checklists/listtemplate/{organizationId}")
     Call<List<Template>> getAllCreatedTemplates(@Path("organizationId") String orgId);
 
+    @GET("/api/Checklists/checklist/{organizationId}/{checklistId}")
+    Call<Checklist> getChecklistById(@Path("organizationId") int orgId,
+                                     @Path("checklistId") int checklistId);
+
 
     @GET("/api/TaskItems/getupcoming/{organizationId}/{userId}")
     Call<List<Task>> getUpcomingTasks(@Path("organizationId") String organizationId,
@@ -119,7 +123,7 @@ public interface ApiService {
     @PUT("/api/Checklists/done/{checklistid}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId);
 
-    @PUT("/api/TaskItems/done/{taskid}")
-    Call<ResponseBody> completeTask(@Path("taskid") int taskId);
+    @PUT("/api/TaskItems/done/{taskid}/{status}")
+    Call<ResponseBody> completeTask(@Path("taskid") int taskId, @Path("status") String taskStatus);
 
 }

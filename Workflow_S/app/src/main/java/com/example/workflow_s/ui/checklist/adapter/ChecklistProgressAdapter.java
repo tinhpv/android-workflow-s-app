@@ -63,20 +63,8 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             public void onClick(View v) {
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 String checklistId = String.valueOf(mChecklists.get(index).getId());
-                String checklistUserId = mChecklists.get(index).getUserId();
-                String checklistName = mChecklists.get(index).getName();
-                String desc = mChecklists.get(index).getDescription();
-                int doneTask = mChecklists.get(index).getDoneTask();
-                int totalTask = mChecklists.get(index).getTotalTask();
-
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
-                args.putString("checklistName", checklistName);
-                args.putString("checklistUserId", checklistUserId);
-                args.putString("checklistDescription", desc);
-                args.putInt("totalTask", totalTask);
-                args.putInt("doneTask", doneTask);
-
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });

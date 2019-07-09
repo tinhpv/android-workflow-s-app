@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.task.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
     CheckboxListener listener;
     private RecyclerView mRecyclerView;
+    int tappedPosition;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -41,7 +43,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     }
 
     public interface CheckboxListener {
-        void onEventCheckBox(Boolean isSelected);
+        void onEventCheckBox(Boolean isSelected, int taskId);
     }
 
     // list task
@@ -139,12 +141,27 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
 
     @Override
-    public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final TaskViewHolder taskViewHolder, int i) {
         taskViewHolder.mTextView.setText(mTaskList.get(i).getName());
+
+        if (mTaskList.get(i).getTaskStatus().equals("Done")) {
+            taskViewHolder.mCheckBox.setChecked(true);
+            taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            taskViewHolder.mCheckBox.setChecked(false);
+        }
+
         taskViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listener.onEventCheckBox(isChecked);
+                if (isChecked) {
+                    taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                }
+
+                listener.onEventCheckBox(isChecked, mTaskList.get(taskViewHolder.getAdapterPosition()).getId());
+
             }
         });
     }

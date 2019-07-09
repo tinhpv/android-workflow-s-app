@@ -41,4 +41,9 @@
     <string name="description_task_demo">Student Registration Process is engineered to assist in welcoming a new student to an educational establishment and integrate them into the required systems and the community.</string>
     <string name="run_checklist">run checklist</string>
     <string name="data_na_message">NOTHING TO SHOW</string>
+
+    <!--task status value-->
+    <string name="task_done">Done</string>
+    <string name="task_running">Running</string>
+    <string name="task_unavailable">Unavailable</string>
 </resources>
