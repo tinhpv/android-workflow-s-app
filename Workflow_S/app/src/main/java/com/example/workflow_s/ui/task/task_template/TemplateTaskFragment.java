@@ -1,42 +1,29 @@
 package com.example.workflow_s.ui.task.task_template;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.checklistrunning.ChecklistRunningFragment;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
-import com.example.workflow_s.ui.task.TaskPresenterImpl;
-import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
+import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.TemplateTaskAdapter;
 import com.example.workflow_s.utils.CommonUtils;
-import com.example.workflow_s.utils.SharedPreferenceUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -61,6 +48,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     private TaskContract.TaskPresenter mPresenter;
     private int templateId;
     private String templateName, templateDescription, templateUserId;
+
 
     @Nullable
     @Override
@@ -87,7 +75,6 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.menu_search, menu);
     }
 
 
@@ -100,7 +87,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
         templateUserId = arguments.getString("templateUserId");
 
         // request data from server
-        mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
+        mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
         mPresenter.loadTasks(templateId);
     }
 

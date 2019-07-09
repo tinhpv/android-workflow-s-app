@@ -18,7 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Template;
+import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 /**
@@ -96,7 +99,7 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
             checklistNameEditText.startAnimation(shakeAnimation);
         } else {
             // fixme - hardcode
-            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, "1");
+            mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, orgId);
         }
     }
 
@@ -109,7 +112,9 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     }
 
     @Override
-    public void finishedRunChecklist() {
-        Toast.makeText(getContext(), "Run checklist successfully", Toast.LENGTH_SHORT).show();
+    public void finishedRunChecklist(Checklist checklist) {
+        Bundle args = new Bundle();
+        args.putString("checklistId", String.valueOf(checklist.getId()));
+        CommonUtils.replaceFragments(getContext(), ChecklistTaskFragment.class, args);
     }
 }

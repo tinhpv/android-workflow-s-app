@@ -19,18 +19,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
-import com.example.workflow_s.ui.task.TaskPresenterImpl;
+import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
 import com.example.workflow_s.ui.task.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragment;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
-    private String checklistName, checklistDescription, checklistUserId, currentDueTime;
+    private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId;
     private List<TaskMember> checklistMemberList;
     private String checklistDueTime, checklistFirstTaskId;
 
@@ -81,7 +82,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_set_time:
-                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), currentDueTime);
+                TimeSettingDialogFragment settingDialogFragment
+                        = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), checklistId);
+
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             case R.id.action_assign:
@@ -110,7 +113,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         completeChecklistButton.setOnClickListener(this);
         setupTaskRV();
         initData();
-        initUI();
     }
 
     private void setupTaskRV() {
@@ -127,15 +129,36 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
-        checklistName = arguments.getString("checklistName");
-        checklistDescription = arguments.getString("checklistDescription");
-        checklistUserId = arguments.getString("checklistUserId");
-        totalTask = arguments.getInt("totalTask");
-        doneTask = arguments.getInt("doneTask");
+
+        // USER's DATA
+        userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
+        orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
 
         // OK - HARDCODE HERE
-        mPresenter = new TaskPresenterImpl(this, new TaskInteractor());
-        mPresenter.loadTasks(checklistId);
+        mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
+        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void finishGetChecklist(Checklist checklist) {
+        if (null != checklist) {
+            checklistName = checklist.getName();
+            checklistDescription = checklist.getDescription();
+            checklistUserId = checklist.getUserId();
+            totalTask = checklist.getTotalTask();
+            doneTask = checklist.getDoneTask();
+            List<Task> tasks = checklist.getTaskItems();
+
+            checklistMemberList = new ArrayList<>();
+            checklistMemberList = tasks.get(0).getTaskMemberList();
+            checklistDueTime = tasks.get(0).getDueTime();
+            checklistFirstTaskId = String.valueOf(tasks.get(0).getId());
+            mChecklistChecklistTaskAdapter.setTaskList(tasks);
+
+            initUI();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -174,16 +197,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     }
 
 
-    @Override
-    public void setDataToTaskRecyclerView(ArrayList<Task> datasource) {
-        checklistMemberList = new ArrayList<>();
-        checklistMemberList = datasource.get(0).getTaskMemberList();
-        checklistDueTime = datasource.get(0).getDueTime();
-        checklistFirstTaskId = String.valueOf(datasource.get(0).getId());
-        currentDueTime = datasource.get(0).getDueTime();
-        mChecklistChecklistTaskAdapter.setTaskList(datasource);
-    }
-
     private void switchOnLoading() {
         mAnimationView.setVisibility(View.VISIBLE);
         if (!mAnimationView.isAnimating()) {
@@ -203,14 +216,27 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void onEventCheckBox(Boolean isSelected) {
-        doneTask++;
+    public void onEventCheckBox(Boolean isSelected, int taskId) {
+        if (isSelected) {
+            doneTask++;
+            mPresenter.changeTaskStatus(taskId, getString(R.string.task_done));
+        } else {
+            doneTask--;
+            mPresenter.changeTaskStatus(taskId, getString(R.string.task_running));
+        }
         updateProgressBar();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void finishedChangeTaskStatus() {
+//        updateProgressBar();
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_complete_checklist) {
+            
             switchOnLoading();
         }
     }

@@ -1,13 +1,9 @@
 package com.example.workflow_s.ui.task;
 
-import android.util.Log;
-
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.Template;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
-import com.example.workflow_s.ui.template.TemplateContract;
-import com.google.android.gms.common.api.Api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +14,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
+
+    @Override
+    public void getChecklistData(int orgId, int checklistId, final OnFinishedLoadChecklistDataListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<Checklist> call = service.getChecklistById(orgId, checklistId);
+        call.enqueue(new Callback<Checklist>() {
+            @Override
+            public void onResponse(Call<Checklist> call, Response<Checklist> response) {
+                listener.onFinishedGetChecklistData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Checklist> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
+
     @Override
     public void getAllTasks(int checklistId, final OnFinishedGetTasksListener onFinishedLIstener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
@@ -32,6 +46,23 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
                 onFinishedLIstener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.completeTask(taskId, taskStatus);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedChangeTaskStatus();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
             }
         });
     }

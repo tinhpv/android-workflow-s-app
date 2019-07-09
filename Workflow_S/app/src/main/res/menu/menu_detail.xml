@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/action_notif"
-        android:title="Notification"
+        android:id="@+id/action_save"
+        android:title="Save"
         android:orderInCategory="1"
-        android:icon="@mipmap/notif_icon"
+        android:icon="@mipmap/icon_save_white"
         app:showAsAction="ifRoom">
     </item>
 

@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.checklistrunning;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
@@ -39,15 +40,15 @@ public class ChecklistRunningInteractor implements ChecklistRunningContract.Chec
     @Override
     public void runChecklist(String userId, Template template, final OnFinishedRunChecklistListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.runChecklist(userId, template);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<Checklist> call = service.runChecklist(userId, template);
+        call.enqueue(new Callback<Checklist>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedRunChecklist();
+            public void onResponse(Call<Checklist> call, Response<Checklist> response) {
+                listener.onFinishedRunChecklist(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Checklist> call, Throwable t) {
                 listener.onFailure(t);
             }
         });

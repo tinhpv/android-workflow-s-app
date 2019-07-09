@@ -170,41 +170,40 @@ public class MainActivity extends AppCompatActivity {
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass;
-        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                Intent intent = new Intent(this, SearchActivity.class);
-//                startActivity(intent);
-//                return true;
-            case R.id.action_notif:
-                //Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();
-                fragmentClass = NotificationFragment.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.flContent, fragment)
-                        .commit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        return true;
+//    }
+////
+////    @Override
+////    public boolean onOptionsItemSelected(MenuItem item) {
+////        Fragment fragment = null;
+////        Class fragmentClass;
+////        switch (item.getItemId()) {
+//////            case R.id.action_search:
+//////                Intent intent = new Intent(this, SearchActivity.class);
+//////                startActivity(intent);
+//////                return true;
+////            case R.id.action_notif:
+////                //Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();
+//////                fragmentClass = NotificationFragment.class;
+//////                try {
+//////                    fragment = (Fragment) fragmentClass.newInstance();
+//////                } catch (Exception e) {
+//////                    e.printStackTrace();
+//////                }
+//////
+//////                FragmentManager fragmentManager = getSupportFragmentManager();
+//////                fragmentManager
+//////                        .beginTransaction()
+//////                        .replace(R.id.flContent, fragment)
+//////                        .commit();
+////                return true;
+////            default:
+////                return super.onOptionsItemSelected(item);
+////        }
+//
+//
+//    }
 }

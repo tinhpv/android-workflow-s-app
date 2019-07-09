@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Workflow S!</string>
     <string name="app_brand">WORKFLOW S!</string>
-    <string name="app_description_login">lightweight but powerful way to manage the workflow.</string>
+    <string name="app_description_login">Simplicity made powerful</string>
 
     <!--button title-->
     <string name="login_button">Login with Google</string>
@@ -41,4 +41,9 @@
     <string name="description_task_demo">Student Registration Process is engineered to assist in welcoming a new student to an educational establishment and integrate them into the required systems and the community.</string>
     <string name="run_checklist">run checklist</string>
     <string name="data_na_message">NOTHING TO SHOW</string>
+
+    <!--task status value-->
+    <string name="task_done">Done</string>
+    <string name="task_running">Running</string>
+    <string name="task_unavailable">Unavailable</string>
 </resources>

@@ -2,6 +2,8 @@ package com.example.workflow_s.ui.task.dialog.time_setting;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Task;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-07-07
@@ -9,7 +11,9 @@ import android.util.Log;
  **/
 
 
-public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSettingPresenter, TimeSettingContract.TimeSettingDataContract.OnFinishedSetTimeListener {
+public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSettingPresenter,
+        TimeSettingContract.TimeSettingDataContract.OnFinishedSetTimeListener,
+        TimeSettingContract.TimeSettingDataContract.OnFinishedGetTaskListener {
 
     TimeSettingContract.TimeSettingView mSettingView;
     TimeSettingContract.TimeSettingDataContract mDataContract;
@@ -25,8 +29,18 @@ public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSetting
     }
 
     @Override
+    public void getFirstTask(int checklistId) {
+        mDataContract.getTask(checklistId, this);
+    }
+
+    @Override
     public void onFinishedSetTime() {
         mSettingView.finishSetDueTime();
+    }
+
+    @Override
+    public void onFinishedGetTask(Task task) {
+        mSettingView.finishedGetFirstTask(task);
     }
 
     @Override
