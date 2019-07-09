@@ -116,7 +116,6 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
                     Log.i("compareTime", "equal");
                     checklists.add(checklist);
                     dueTimeList.add(dateTimeSelected);
-
                 }
                 mTodayActivitiesAdapter.setmChecklists(checklists, dueTimeList);
             } catch (ParseException e) {

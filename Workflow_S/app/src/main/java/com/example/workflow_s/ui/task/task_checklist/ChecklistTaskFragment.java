@@ -225,6 +225,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             mPresenter.changeTaskStatus(taskId, getString(R.string.task_running));
         }
         updateProgressBar();
+
+        if (doneTask == totalTask) {
+            handleCompleteChecklist();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -236,8 +240,11 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_complete_checklist) {
-            
-            switchOnLoading();
+            handleCompleteChecklist();
         }
+    }
+
+    private void handleCompleteChecklist() {
+        switchOnLoading();
     }
 }
