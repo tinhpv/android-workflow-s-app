@@ -14,28 +14,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
+import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllChecklistFragment extends Fragment implements ChecklistContract.AllChecklistView {
+public class AllChecklistFragment extends Fragment implements ChecklistContract.AllChecklistView, ChecklistDialogFragment.DataBackContract, View.OnClickListener {
 
     private static final String NAME_ARG = "AllChecklist";
 
     View view;
+    private Button templateButton;
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
     private RecyclerView.LayoutManager checklistLayoutManager;
 
     private ChecklistContract.ChecklistPresenter mPresenter;
+
+    private ArrayList<String> templateListName;
+    private ArrayList<Checklist> checklists, templateChecklists;
+    private List<Template> templateList;
+    private String selectedTemplate;
+
+    private String orgId;
 
     public AllChecklistFragment() {}
 
@@ -54,6 +65,11 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        templateButton = view.findViewById(R.id.bt_template_checklist);
+        templateButton.setOnClickListener(this);
+        templateButton.setText("All");
+        selectedTemplate = "All";
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         setupChecklistRV();
         initData();
     }
@@ -87,11 +103,21 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         });
     }
 
-    //FIXME - HARDCODE FOR TESTING
+    private void prepareShowingTemplateDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("template_list", templateListName);
+        bundle.putString("selected_template", selectedTemplate);
+        ChecklistDialogFragment checklistDialogFragment = ChecklistDialogFragment.newInstance();
+        checklistDialogFragment.setTargetFragment(this, 0);
+        checklistDialogFragment.setArguments(bundle);
+        checklistDialogFragment.show(getFragmentManager(), NAME_ARG);
+    }
+
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         mPresenter.loadAllChecklist(orgId);
+        mPresenter.requestTemplateData(orgId);
     }
 
     private void setupChecklistRV() {
@@ -107,7 +133,70 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
 //        listSearch = new ArrayList<>();
-//        checklists = new ArrayList<>();
-        mCurrentChecklistAdapter.setChecklists(datasource);
+           checklists = new ArrayList<>();
+        if (datasource != null) {
+            checklists = datasource;
+            mCurrentChecklistAdapter.setChecklists(datasource);
+        }
+
+    }
+
+    @Override
+    public void finishGetTemplates(List<Template> templateList) {
+        if (templateList != null) {
+            this.templateList = templateList;
+            collectTemplateName(templateList);
+        }
+    }
+
+    private void collectTemplateName(List<Template> templateList) {
+        //this.templateList = (ArrayList<Template>) templateList;
+        templateListName = new ArrayList<>();
+        templateListName.add("All");
+        for (Template template : templateList) {
+            if (!templateListName.contains(template.getName())) {
+                templateListName.add(template.getName());
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bt_template_checklist) {
+            prepareShowingTemplateDialog();
+        }
+    }
+
+    @Override
+    public void onFinishSelectTemplate(String template) {
+        templateButton.setText(template);
+        Template tmpTemplate = null;
+        for (Template template1 : templateList) {
+            if (template1.getName().equals(template)) {
+                tmpTemplate = template1;
+            }
+        }
+        categorizeTemplate(tmpTemplate);
+    }
+
+    private void categorizeTemplate(Template template) {
+
+        if (template == null) {
+            selectedTemplate = "All";
+            mCurrentChecklistAdapter.setChecklists(checklists);
+        } else {
+            String tempName = template.getName();
+            selectedTemplate = tempName;
+            int templateId = template.getId();
+                templateChecklists = new ArrayList<>();
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateId() == templateId) {
+                        templateChecklists.add(checklist);
+                    } //end if
+                } // end for
+                mCurrentChecklistAdapter.setChecklists(templateChecklists);
+
+        }
+
     }
 }

@@ -7,7 +7,6 @@ import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.example.workflow_s.ui.activity.adapters.ViewPagerAdapter;
  **/
 
 
-public class ActivityFragment extends Fragment  {
+public class ActivityFragment extends Fragment {
 
     private final static int NUMBER_OF_TABS = 2;
     private final static String TAG = "ACTIVITIES";

@@ -34,9 +34,9 @@ public class ChecklistPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Current";
+                return "My Checklist";
             case 1:
-                return "All";
+                return "Other";
                 default:
                     return null;
         }

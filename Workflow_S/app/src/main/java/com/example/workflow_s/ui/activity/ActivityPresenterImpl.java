@@ -2,13 +2,14 @@ package com.example.workflow_s.ui.activity;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
 
 public class ActivityPresenterImpl implements ActivityContract.ActivityPresenter,
-            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetUpcomingTaskListener,
-            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetTodayTaskListener {
+            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetChecklistListener,
+            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetFirstTaskListener{
 
     private static final  String TAG = "ACTIVITIES_PRESENTER";
     private ActivityContract.ActivityView mActivityView;
@@ -25,23 +26,23 @@ public class ActivityPresenterImpl implements ActivityContract.ActivityPresenter
     }
 
     @Override
-    public void loadTodayTasks(String userId) {
-        mGetActivityDataInteractor.getAllTodayTasks(userId, this);
+    public void loadAllChecklist(String organizationId) {
+        mGetActivityDataInteractor.getAllChecklist(organizationId, this);
     }
 
     @Override
-    public void loadUpcomingTasks(String orgranizationId, String userId) {
-        mGetActivityDataInteractor.getAllUpcomingTasks(orgranizationId, userId, this);
+    public void loadFirstTaskFromChecklist(int checklistId, Checklist checklist) {
+        mGetActivityDataInteractor.getFirstTask(checklistId, checklist ,this);
     }
 
     @Override
-    public void onFinishedGetTodayTasks(ArrayList<Task> taskArrayList) {
-        mActivityView.setDataToTodayTasksRecyclerView(taskArrayList);
+    public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
+        mActivityView.setDataToChecklistRecyclerView(checklistArrayList);
     }
 
     @Override
-    public void onFinishedGetUpcomingTasks(ArrayList<Task> taskArrayList) {
-        mActivityView.setDataToUpcomingTasksRecyclerView(taskArrayList);
+    public void onFinishedGetFirstTask(Task task, Checklist checklist) {
+        mActivityView.finishedGetFirstTask(task, checklist);
     }
 
     @Override
