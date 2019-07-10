@@ -119,25 +119,37 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             switch (detail.getType()) {
                 case "img":
 //                    if (detail.getLabel().isEmpty()) { // image from admin
-                    final int orderContent = detail.getOrderContent();
                     if (detail.getLabel() == null) {
                         ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                         Glide.with(this).load(Constant.IMG_BASE_URL + detail.getImageSrc()).into(imgView);
                         mContainerLayout.addView(imgView);
-                    } else { // image from user
+                    } else {
+
+                        final int orderContent = detail.getOrderContent();
+
+                        // image from user
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
+                        ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                         label.setText(detail.getLabel());
+
+                        // image to show after picking image
+                        String tmpImageTag = "img_task_detail_" + orderContent;
+                        ImageView tmpImg = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
+                        tmpImg.setTag(tmpImageTag);
+                        tmpImg.setVisibility(View.INVISIBLE);
+                        mContainerLayout.addView(tmpImg);
+
+                        // button to upload image
                         Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button, mContainerLayout, false);
                         mContainerLayout.addView(label);
                         mContainerLayout.addView(uploadButton);
+
                         uploadButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-                                //sharedpreference
+                                //shared preferences
                                 SharedPreferenceUtils.saveCurrentOrder(getContext(),orderContent);
                                 showDialog();
-
                             }
                         });
                     } // end if
@@ -148,6 +160,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                         TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
                         description.setText(detail.getText());
                         mContainerLayout.addView(description);
+
                     } else { // will be the edit text
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
                         label.setText(detail.getLabel());
@@ -159,22 +172,23 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             } // end switch
         } // end for
     }
-    public void showDialog()
-    {
 
+    public void showDialog() {
         myDialog = new Dialog(getContext());
         myDialog.setContentView(R.layout.dialog_upload_picture);
         myDialog.setTitle("Choose Image");
-        btnCamera=myDialog.findViewById(R.id.btnCamera);
-        btnGallery=myDialog.findViewById(R.id.btnGallery);
+
+        btnCamera = myDialog.findViewById(R.id.btnCamera);
+        btnGallery = myDialog.findViewById(R.id.btnGallery);
         btnGallery.setEnabled(true);
         btnCamera.setEnabled(true);
+
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentGallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intentGallery.setType("image/*");
-                startActivityForResult(intentGallery,REQUEST_GALLERY);
+                startActivityForResult(intentGallery, REQUEST_GALLERY);
             }
         });
 
@@ -182,14 +196,12 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             @Override
             public void onClick(View v) {
                 Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(intentCamera.resolveActivity(getContext().getPackageManager())!=null)
-                {
-                    startActivityForResult(intentCamera,REQUEST_CAMERA);
-
+                if (intentCamera.resolveActivity(getContext().getPackageManager()) != null) {
+                    startActivityForResult(intentCamera, REQUEST_CAMERA);
                 }
-
             }
         });
+
         myDialog.show();
     }
 
@@ -198,24 +210,19 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         super.onActivityResult(requestCode, resultCode, data);
         int order =  SharedPreferenceUtils.retrieveDataInt(getContext(),getContext().getString(R.string.order));
         Log.i("order", order + "");
-        if(resultCode== Activity.RESULT_OK)
-        {
-            if(requestCode==REQUEST_CAMERA)
-            {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                // set image to ui here
-            }else if(requestCode==REQUEST_GALLERY)
-            {
+
+        if(resultCode== Activity.RESULT_OK) {
+            String tmpImageTag = "img_task_detail_" + order;
+            ImageView imageToShow = mContainerLayout.findViewWithTag(tmpImageTag);
+            imageToShow.setVisibility(View.VISIBLE);
+
+            if (requestCode == REQUEST_CAMERA) {
+                Uri selectedImage = data.getData();
+                imageToShow.setImageURI(selectedImage);
+            } else if(requestCode == REQUEST_GALLERY) {
                 Uri uri = data.getData();
-                try {
-
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
-                    // set image here
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                imageToShow.setImageURI(uri);
             }
-
         }
     }
 
