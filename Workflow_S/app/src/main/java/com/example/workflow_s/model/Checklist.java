@@ -42,6 +42,9 @@ public class Checklist {
     @SerializedName("countDoneTask")
     private Integer doneTask;
 
+    @SerializedName("templateName")
+    private String templateName;
+
     @SerializedName("checklistMembers")
     private List<ChecklistMember> checklistMembers;
 
@@ -80,7 +83,7 @@ public class Checklist {
         this.dueTime = dueTime;
     }
 
-    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<ChecklistMember> checklistMembers, List<Task> taskItems) {
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, String templateName, List<ChecklistMember> checklistMembers, List<Task> taskItems) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -91,6 +94,7 @@ public class Checklist {
         this.templateId = templateId;
         this.totalTask = totalTask;
         this.doneTask = doneTask;
+        this.templateName = templateName;
         this.checklistMembers = checklistMembers;
         this.taskItems = taskItems;
     }
@@ -189,6 +193,14 @@ public class Checklist {
 
     public void setDoneTask(Integer doneTask) {
         this.doneTask = doneTask;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 
     public List<Task> getTaskItems() {

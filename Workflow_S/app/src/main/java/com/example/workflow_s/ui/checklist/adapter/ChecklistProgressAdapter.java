@@ -9,9 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.ui.checklist.viewholder.ChecklistProgressViewHolder;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
@@ -25,7 +29,7 @@ import java.util.List;
  **/
 
 
-public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressViewHolder> {
+public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressAdapter.ChecklistProgressViewHolder> {
 
     // Constants
     private final int MAX_ITEM_NUMBER = 4;
@@ -35,6 +39,49 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     private RecyclerView mRecyclerView;
 
     public ChecklistProgressAdapter() {
+    }
+
+    @NonNull
+    @Override
+    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
+        Context context = viewGroup.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
+        ChecklistProgressViewHolder viewHolder = new ChecklistProgressViewHolder(view);
+
+        viewHolder.item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int index = mRecyclerView.getChildLayoutPosition(v);
+                String checklistId = String.valueOf(mChecklists.get(index).getId());
+                Bundle args = new Bundle();
+                args.putString("checklistId", checklistId);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
+            }
+        });
+        return viewHolder;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onBindViewHolder(@NonNull ChecklistProgressViewHolder checklistProgressViewHolder, int i) {
+        checklistProgressViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
+        checklistProgressViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
+        checklistProgressViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
+        List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
+        if (checklistMembers != null) {
+            int numberMember = checklistMembers.size();
+            checklistProgressViewHolder.mMemberNumber.setText(String.valueOf(numberMember));
+        }
+        int doneTask = mChecklists.get(i).getDoneTask();
+        int totalTask = mChecklists.get(i).getTotalTask();
+
+        if (totalTask == 0) {
+            checklistProgressViewHolder.progressBar.setProgress(0, true);
+        } else {
+            int progress = (int) ((doneTask / totalTask * 1.0) * 100);
+            checklistProgressViewHolder.progressBar.setProgress(progress, true);
+        }
     }
 
 
@@ -49,45 +96,6 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         mRecyclerView = recyclerView;
     }
 
-    @NonNull
-    @Override
-    public ChecklistProgressViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        int layoutId = R.layout.recyclerview_item_checklist_progress;
-        View view = layoutInflater.inflate(layoutId, viewGroup, false);
-        ChecklistProgressViewHolder viewHolder = new ChecklistProgressViewHolder(view);
-
-        viewHolder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int index = mRecyclerView.getChildLayoutPosition(v);
-                String checklistId = String.valueOf(mChecklists.get(index).getId());
-                Bundle args = new Bundle();
-                args.putString("checklistId", checklistId);
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
-            }
-        });
-
-        return viewHolder;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void onBindViewHolder(@NonNull ChecklistProgressViewHolder checklistProgressViewHolder, int i) {
-        // DONE - MODIFY VIEWHOLDER'S CONTENT
-        checklistProgressViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
-        checklistProgressViewHolder.mChecklistTaskProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
-        int doneTask = mChecklists.get(i).getDoneTask();
-        int totalTask = mChecklists.get(i).getTotalTask();
-
-        if (totalTask == 0) {
-            checklistProgressViewHolder.mProgressChecklistBar.setProgress(0, true);
-        } else {
-            int progress = (int) ((doneTask / totalTask * 1.0) * 100);
-            checklistProgressViewHolder.mProgressChecklistBar.setProgress(progress, true);
-        } // end if
-    }
 
     @Override
     public int getItemCount() {
@@ -98,5 +106,21 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             int numberOfItems = mChecklists.size();
             return numberOfItems > MAX_ITEM_NUMBER ? MAX_ITEM_NUMBER : numberOfItems;
         } // end if
+    }
+
+    public class ChecklistProgressViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView mChecklistName, mChecklistProgress, mMemberNumber, mTemplateName;
+        private LinearLayout item;
+        private ProgressBar progressBar;
+        public ChecklistProgressViewHolder(@NonNull View itemView) {
+            super(itemView);
+            item = itemView.findViewById(R.id.item_checklist_progress);
+            mChecklistName = itemView.findViewById(R.id.tv_checklist_name);
+            mChecklistProgress = itemView.findViewById(R.id.tv_checklist_progress);
+            mMemberNumber = itemView.findViewById(R.id.tv_people_number);
+            mTemplateName = itemView.findViewById(R.id.tv_template_name);
+            progressBar = itemView.findViewById(R.id.pb_checklist_home);
+        }
     }
 }
