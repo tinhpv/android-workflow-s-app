@@ -86,7 +86,6 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
                 mPresenter.loadFirstTaskFromChecklist(checklist.getId(), checklist);
             }
             mTodayActivitiesAdapter.setmChecklists(checklists, dueTimeList);
-
         }
     }
 

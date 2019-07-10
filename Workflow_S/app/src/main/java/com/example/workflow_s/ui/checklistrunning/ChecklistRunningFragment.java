@@ -45,12 +45,6 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     private ChecklistRunningContract.ChecklistRunningPresenter mRunningPresenter;
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -115,6 +109,7 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     public void finishedRunChecklist(Checklist checklist) {
         Bundle args = new Bundle();
         args.putString("checklistId", String.valueOf(checklist.getId()));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         CommonUtils.replaceFragments(getContext(), ChecklistTaskFragment.class, args);
     }
 }
