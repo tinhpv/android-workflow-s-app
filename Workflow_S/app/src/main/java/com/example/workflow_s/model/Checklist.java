@@ -42,6 +42,12 @@ public class Checklist {
     @SerializedName("countDoneTask")
     private Integer doneTask;
 
+    @SerializedName("checklistMembers")
+    private List<ChecklistMember> checklistMembers;
+
+    @SerializedName("dueTime")
+    private String dueTime;
+
     @SerializedName("taskItem")
     private List<Task> taskItems;
 
@@ -58,7 +64,23 @@ public class Checklist {
         this.doneTask = doneTask;
     }
 
-    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<Task> taskItems) {
+    public List<ChecklistMember> getChecklistMembers() {
+        return checklistMembers;
+    }
+
+    public void setChecklistMembers(List<ChecklistMember> checklistMembers) {
+        this.checklistMembers = checklistMembers;
+    }
+
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(String dueTime) {
+        this.dueTime = dueTime;
+    }
+
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<ChecklistMember> checklistMembers, List<Task> taskItems) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -69,6 +91,23 @@ public class Checklist {
         this.templateId = templateId;
         this.totalTask = totalTask;
         this.doneTask = doneTask;
+        this.checklistMembers = checklistMembers;
+        this.taskItems = taskItems;
+    }
+
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<ChecklistMember> checklistMembers, String dueTime, List<Task> taskItems) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.templateId = templateId;
+        this.totalTask = totalTask;
+        this.doneTask = doneTask;
+        this.checklistMembers = checklistMembers;
+        this.dueTime = dueTime;
         this.taskItems = taskItems;
     }
 
