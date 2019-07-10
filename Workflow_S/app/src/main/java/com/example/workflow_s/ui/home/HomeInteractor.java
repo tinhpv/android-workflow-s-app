@@ -22,9 +22,8 @@ import retrofit2.Response;
 public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
 
 
-    // FIXME - HARDCODE FOR TESTING
     @Override
-    public void getAllRunningChecklists(String userId, String orgId, final OnFinishedGetRunningChecklistsListener onFinishedListener) {
+    public void getAllRunningChecklists(String orgId,final OnFinishedGetRunningChecklistsListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<List<Checklist>> call = service.getAllRunningChecklists(orgId);
 
@@ -42,9 +41,9 @@ public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
     }
 
     @Override
-    public void getAllDueTasks(String userId, String orgId, final OnFinishedGetDueTasksListener onFinishedListener) {
+    public void getAllDueTasks(String orgId, String userId, final OnFinishedGetDueTasksListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<Task>> call = service.getAllDueTasks(userId, orgId);
+        Call<List<Task>> call = service.getAllDueTasks(orgId, userId);
 
         call.enqueue(new Callback<List<Task>>() {
             @Override

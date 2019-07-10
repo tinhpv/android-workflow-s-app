@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.Template;
@@ -48,6 +49,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     private ArrayList<String> myTemplateListName;
     private ArrayList<Checklist> currentChecklist, myTemplateChecklist;
+    private List<ChecklistMember> checklistMembers;
     private List<Template> templateList;
     private String userId, orgId, selectedTemplate;
 
@@ -158,26 +160,34 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                 if (checklist.getUserId().equals(userId)) {
                     currentChecklist.add(checklist);
                 } else {
-                    mPresenter.loadFirstTaskFromChecklist(checklist.getId(), checklist);
+                    checklistMembers = new ArrayList<>();
+                    checklistMembers = checklist.getChecklistMembers();
+                    if (checklistMembers != null) {
+                        for (ChecklistMember member : checklistMembers) {
+                            if (member.getUserId().equals(userId)) {
+                                currentChecklist.add(checklist);
+                            }
+                        }
+                    }
                 } // end if
             } // end for
+            mCurrentChecklistAdapter.setChecklists(currentChecklist);
         } // end if null
-        mCurrentChecklistAdapter.setChecklists(currentChecklist);
     }
 
     @Override
     public void finishFirstTaskFromChecklist(Task task, Checklist parentChecklistOfThisTask) {
-        if (task != null) {
-            List<TaskMember> taskMemberList = new ArrayList<>(task.getTaskMemberList());
-            if (!taskMemberList.isEmpty()) {
-                for (int i = 0; i < taskMemberList.size(); i++) {
-                    if (taskMemberList.get(i).getUserId().equals(userId)) {
-                        currentChecklist.add(parentChecklistOfThisTask);
-                    }
-                }
-            }
-            mCurrentChecklistAdapter.setChecklists(currentChecklist);
-        } // end if
+//        if (task != null) {
+//            List<TaskMember> taskMemberList = new ArrayList<>(task.getTaskMemberList());
+//            if (!taskMemberList.isEmpty()) {
+//                for (int i = 0; i < taskMemberList.size(); i++) {
+//                    if (taskMemberList.get(i).getUserId().equals(userId)) {
+//                        currentChecklist.add(parentChecklistOfThisTask);
+//                    }
+//                }
+//            }
+//            mCurrentChecklistAdapter.setChecklists(currentChecklist);
+//        } // end if
     }
 
     @Override

@@ -14,9 +14,14 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.activity.ActivityContract;
+import com.example.workflow_s.ui.activity.ActivityInteractor;
+import com.example.workflow_s.ui.activity.ActivityPresenterImpl;
+import com.example.workflow_s.ui.activity.adapters.TodayActivitiesAdapter;
 import com.example.workflow_s.ui.activity.adapters.UpcomingActivitiesAdapter;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -25,12 +30,15 @@ import java.util.ArrayList;
  **/
 
 
-public class UpcomingActivitiesFragment extends Fragment implements ActivityContract.ActivityView {
+public class UpcomingActivitiesFragment extends Fragment implements ActivityContract.UpcomingActivityView {
 
     View view;
     private RecyclerView upcomingActivitiesRecyclerView;
-    private UpcomingActivitiesAdapter mUpcomingActivitiesAdapter;
+    private TodayActivitiesAdapter mAdapter;
     private RecyclerView.LayoutManager upcomingLayoutManager;
+
+    private ActivityContract.ActivityPresenter mPresenter;
+    private String orgId, userId;
 
     @Nullable
     @Override
@@ -42,7 +50,15 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        initData();
         setupUpcomingActivitiesRV();
+    }
+
+    private void initData() {
+        mPresenter = new ActivityPresenterImpl(this, new ActivityInteractor());
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+        mPresenter.loadUpcomingTasks(orgId, userId);
     }
 
     public void setupUpcomingActivitiesRV() {
@@ -51,19 +67,12 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
         upcomingLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         upcomingActivitiesRecyclerView.setLayoutManager(upcomingLayoutManager);
 
-        //FIXME - TEST DATASOURCE OF ACTIVITIES_RV
-        mUpcomingActivitiesAdapter = new UpcomingActivitiesAdapter();
-        upcomingActivitiesRecyclerView.setAdapter(mUpcomingActivitiesAdapter);
+        mAdapter = new TodayActivitiesAdapter();
+        upcomingActivitiesRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-
+    public void finishedGetUpcomingTasks(List<Task> lisUpcomingTask) {
+        mAdapter.setTasks(lisUpcomingTask);
     }
-
-    @Override
-    public void finishedGetFirstTask(Task task, Checklist checklist) {
-
-    }
-
 }

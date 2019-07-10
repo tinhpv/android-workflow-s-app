@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
-import com.example.workflow_s.model.Checklist;
-import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
+import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragment;
+import com.example.workflow_s.ui.taskdetail.template.TemplateTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
 import java.util.List;
@@ -19,8 +20,8 @@ import java.util.List;
 public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivitiesAdapter.TodayActivitiesViewHolder> {
 
     //datasource for recyclerview
-    private List<Checklist> mChecklists;
-    private List<String> mDueTime;
+
+    private List<Task> mTasks;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -44,8 +45,9 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
             public void onClick(View v) {
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
-                args.putString("checklistId", String.valueOf(mChecklists.get(index).getId()));
-                CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args);
+                args.putString("checklistId", String.valueOf(mTasks.get(index).getId()));
+                args.putString("taskName", mTasks.get(index).getName());
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
             }
         });
         return viewHolder;
@@ -53,16 +55,16 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
 
     @Override
     public void onBindViewHolder(@NonNull TodayActivitiesViewHolder todayActivitiesViewHolder, int i) {
-        todayActivitiesViewHolder.mTextView.setText(mChecklists.get(i).getName());
-        todayActivitiesViewHolder.mTextViewTime.setText(mDueTime.get(i));
+        todayActivitiesViewHolder.mTextView.setText(mTasks.get(i).getName());
+        todayActivitiesViewHolder.mTextViewTime.setText(mTasks.get(i).getDueTime());
     }
 
     @Override
     public int getItemCount() {
-        if (mChecklists == null) {
+        if (mTasks == null) {
             return 0;
         }
-        return mChecklists.size();
+        return mTasks.size();
     }
 
     //viewholder
@@ -79,9 +81,8 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
 
     public TodayActivitiesAdapter() {}
 
-    public void setmChecklists(List<Checklist> checklists, List<String> dueTime) {
-        mChecklists = checklists;
-        mDueTime = dueTime;
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
         this.notifyDataSetChanged();
     }
 

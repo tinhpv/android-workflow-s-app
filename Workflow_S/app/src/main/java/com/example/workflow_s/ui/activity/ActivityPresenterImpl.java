@@ -6,17 +6,26 @@ import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityPresenterImpl implements ActivityContract.ActivityPresenter,
-            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetChecklistListener,
-            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetFirstTaskListener{
+            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetDueTasksListener,
+            ActivityContract.GetActivitiesDataInteractor.OnFinishedGetUpcomingTasksListener{
 
     private static final  String TAG = "ACTIVITIES_PRESENTER";
     private ActivityContract.ActivityView mActivityView;
+    private ActivityContract.UpcomingActivityView mUpcomingView;
     private ActivityContract.GetActivitiesDataInteractor mGetActivityDataInteractor;
 
     public ActivityPresenterImpl(ActivityContract.ActivityView activityView, ActivityContract.GetActivitiesDataInteractor getActivitiesDataInteractor) {
         mActivityView = activityView;
+        mUpcomingView = null;
+        mGetActivityDataInteractor = getActivitiesDataInteractor;
+    }
+
+    public ActivityPresenterImpl(ActivityContract.UpcomingActivityView mUpcomingView, ActivityContract.GetActivitiesDataInteractor getActivitiesDataInteractor) {
+        mActivityView = null;
+        this.mUpcomingView = mUpcomingView;
         mGetActivityDataInteractor = getActivitiesDataInteractor;
     }
 
@@ -26,23 +35,23 @@ public class ActivityPresenterImpl implements ActivityContract.ActivityPresenter
     }
 
     @Override
-    public void loadAllChecklist(String organizationId) {
-        mGetActivityDataInteractor.getAllChecklist(organizationId, this);
+    public void loadAllDueTasks(String organizationId, String userId) {
+        mGetActivityDataInteractor.getAllDueTasks(organizationId, userId, this);
     }
 
     @Override
-    public void loadFirstTaskFromChecklist(int checklistId, Checklist checklist) {
-        mGetActivityDataInteractor.getFirstTask(checklistId, checklist ,this);
+    public void loadUpcomingTasks(String organizationId, String userId) {
+        mGetActivityDataInteractor.getUpcomingTasks(organizationId, userId, this);
     }
 
     @Override
-    public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
-        mActivityView.setDataToChecklistRecyclerView(checklistArrayList);
+    public void onFinishedGetDueTasks(List<Task> listDueTask) {
+        mActivityView.finishedGetDueTasks(listDueTask);
     }
 
     @Override
-    public void onFinishedGetFirstTask(Task task, Checklist checklist) {
-        mActivityView.finishedGetFirstTask(task, checklist);
+    public void onFinishedGetUpcomingTasks(List<Task> listUpcomingTask) {
+        mUpcomingView.finishedGetUpcomingTasks(listUpcomingTask);
     }
 
     @Override

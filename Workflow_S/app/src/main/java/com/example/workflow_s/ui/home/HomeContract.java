@@ -17,8 +17,8 @@ public interface HomeContract {
 
     interface HomePresenter {
         void onDestroy();
-        void loadRunningChecklists(String userId, String orgId);
-        void loadDueTasks(String userId, String orgId);
+        void loadRunningChecklists(String orgId);
+        void loadDueTasks(String orgId, String userId);
     }
 
     interface HomeView  {
@@ -40,8 +40,8 @@ public interface HomeContract {
             void onFailureGetTasks(Throwable t);
         }
 
-        void getAllRunningChecklists(String userId, String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
-        void getAllDueTasks(String userId, String orgId, OnFinishedGetDueTasksListener onFinishedListener);
+        void getAllRunningChecklists(String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
+        void getAllDueTasks(String orgId, String userId, OnFinishedGetDueTasksListener onFinishedListener);
 
     }
 }
