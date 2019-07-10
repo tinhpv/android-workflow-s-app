@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
@@ -34,6 +36,7 @@ import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -56,6 +59,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private ShimmerFrameLayout mChecklistShimmerFrameLayout, mTaskShimmerFrameLayout;
     private LinearLayout mCheckListDataStatusMessage, mTaskDataStatusMessage;
+
+    private String userId, orgId;
+    private ArrayList<Checklist> checklists;
 
 
     @Override
@@ -142,11 +148,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     private void initData() {
         mPresenter = new HomePresenterImpl(this, new HomeInteractor());
 
-        String userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
-        String orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
-        // FIXME - HARDCORD HERE FOR TESTING ONLY
-        mPresenter.loadRunningChecklists(userId, orgId);
-        mPresenter.loadDueTasks(userId, orgId);
+        userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
+        orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
+        mPresenter.loadRunningChecklists(orgId);
+        mPresenter.loadDueTasks(orgId, userId);
     }
 
     private void setupTaskRV() {
@@ -191,7 +196,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         if (datasource.size() == 0) {
             mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
         } else {
-            mChecklistProgressAdapter.setChecklists(datasource);
+            checklists = new ArrayList<>();
+            for (Checklist checklist : datasource) {
+                if (checklist.getUserId().equals(userId)) {
+                    checklists.add(checklist);
+                } else {
+                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                    if (listMember != null) {
+                        for (ChecklistMember member : listMember) {
+                            if (member.getUserId().equals(userId)) {
+                                checklists.add(checklist);
+                            }
+                        }
+                    }
+                }
+            }
+            mChecklistProgressAdapter.setChecklists(checklists);
         }
 
     }
@@ -203,6 +223,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         if (datasource == null) {
             mTaskDataStatusMessage.setVisibility(View.VISIBLE);
         } else {
+            //tasks = new ArrayList<>();
             mTodayTaskAdapter.setTasks(datasource);
         }
     }

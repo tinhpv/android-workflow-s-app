@@ -55,13 +55,13 @@ public class HomePresenterImpl implements HomeContract.HomePresenter,
     }
 
     @Override
-    public void loadRunningChecklists(String userId, String orgId) {
-        mGetHomeDataInteractor.getAllRunningChecklists(userId, orgId, this);
+    public void loadRunningChecklists(String orgId) {
+        mGetHomeDataInteractor.getAllRunningChecklists(orgId, this);
     }
 
     @Override
-    public void loadDueTasks(String userId, String orgId) {
-        mGetHomeDataInteractor.getAllDueTasks(userId, orgId, this);
+    public void loadDueTasks(String orgId, String userId) {
+        mGetHomeDataInteractor.getAllDueTasks(orgId,userId, this);
     }
 
 }
