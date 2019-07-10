@@ -160,7 +160,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         todayTaskLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         todayTaskRecyclerView.setLayoutManager(todayTaskLayoutManager);
 
-        // FIXME - TEST DATASOURCE OF TASK_RV
         mTodayTaskAdapter = new TodayTaskAdapter();
         todayTaskRecyclerView.setAdapter(mTodayTaskAdapter);
     }
