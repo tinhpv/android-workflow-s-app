@@ -126,4 +126,7 @@ public interface ApiService {
     @PUT("/api/TaskItems/done/{taskid}/{status}")
     Call<ResponseBody> completeTask(@Path("taskid") int taskId, @Path("status") String taskStatus);
 
+    @PUT("/api/ContentDetails/update")
+    Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
+
 }

@@ -6,9 +6,10 @@ import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPresenter,
-                TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener{
+                TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener, TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -30,8 +31,18 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     }
 
     @Override
+    public void updateTaskDetail(List<ContentDetail> detailList) {
+        mGetTaskDetailDataInteractor.saveDetail(detailList, this);
+    }
+
+    @Override
     public void onFinishedGetTaskDetail(ArrayList<ContentDetail> taskDetailArrayList) {
         mTaskDetailView.setDataToView(taskDetailArrayList);
+    }
+
+    @Override
+    public void onFinishedSave() {
+        mTaskDetailView.finishedSaveContent();
     }
 
     @Override
