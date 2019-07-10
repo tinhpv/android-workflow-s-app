@@ -1,9 +1,16 @@
 package com.example.workflow_s.ui.taskdetail.checklist;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +33,9 @@ import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -44,6 +53,9 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private LinearLayout mContainerLayout;
     private Button buttonCompleteTask;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
+    Dialog myDialog;
+    Button btnCamera,btnGallery;
+    private final int REQUEST_CAMERA=1,REQUEST_GALLERY =2;
 
 
 
@@ -107,6 +119,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             switch (detail.getType()) {
                 case "img":
 //                    if (detail.getLabel().isEmpty()) { // image from admin
+                    final int orderContent = detail.getOrderContent();
                     if (detail.getLabel() == null) {
                         ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                         Glide.with(this).load(Constant.IMG_BASE_URL + detail.getImageSrc()).into(imgView);
@@ -117,6 +130,16 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                         Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button, mContainerLayout, false);
                         mContainerLayout.addView(label);
                         mContainerLayout.addView(uploadButton);
+                        uploadButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                //sharedpreference
+                                SharedPreferenceUtils.saveCurrentOrder(getContext(),orderContent);
+                                showDialog();
+
+                            }
+                        });
                     } // end if
                     break;
                 case "text":
@@ -135,6 +158,65 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                     break;
             } // end switch
         } // end for
+    }
+    public void showDialog()
+    {
+
+        myDialog = new Dialog(getContext());
+        myDialog.setContentView(R.layout.dialog_upload_picture);
+        myDialog.setTitle("Choose Image");
+        btnCamera=myDialog.findViewById(R.id.btnCamera);
+        btnGallery=myDialog.findViewById(R.id.btnGallery);
+        btnGallery.setEnabled(true);
+        btnCamera.setEnabled(true);
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentGallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intentGallery.setType("image/*");
+                startActivityForResult(intentGallery,REQUEST_GALLERY);
+            }
+        });
+
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(intentCamera.resolveActivity(getContext().getPackageManager())!=null)
+                {
+                    startActivityForResult(intentCamera,REQUEST_CAMERA);
+
+                }
+
+            }
+        });
+        myDialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int order =  SharedPreferenceUtils.retrieveDataInt(getContext(),getContext().getString(R.string.order));
+        Log.i("order", order + "");
+        if(resultCode== Activity.RESULT_OK)
+        {
+            if(requestCode==REQUEST_CAMERA)
+            {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                // set image to ui here
+            }else if(requestCode==REQUEST_GALLERY)
+            {
+                Uri uri = data.getData();
+                try {
+
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),uri);
+                    // set image here
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 
     @Override

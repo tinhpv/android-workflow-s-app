@@ -34,6 +34,16 @@ public class SharedPreferenceUtils {
 
         editor.commit();
     }
+    public static void saveCurrentOrder(Context context, int orderContent) {
+        SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(context.getString(R.string.order),orderContent);
+        editor.commit();
+    }
+    public static int retrieveDataInt(Context context, String key) {
+        SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getInt(key, 0);
+    }
 
     public static String retrieveData(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);

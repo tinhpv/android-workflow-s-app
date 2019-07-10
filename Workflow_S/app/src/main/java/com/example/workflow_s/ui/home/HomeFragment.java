@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
             Log.i("Token", "Token is null");
         } else {
             Log.i("Token", token);
-            Log.i("UserToken", SharedPreferenceUtils.retrieveData(view.getContext(), view.getContext().getString(R.string.pref_token)));
+            //Log.i("UserToken", SharedPreferenceUtils.retrieveData(view.getContext(), view.getContext().getString(R.string.pref_token)));
         }
 
     }
