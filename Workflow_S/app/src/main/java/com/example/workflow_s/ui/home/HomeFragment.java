@@ -116,9 +116,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
             Log.i("Token", token);
             //Log.i("UserToken", SharedPreferenceUtils.retrieveData(view.getContext(), view.getContext().getString(R.string.pref_token)));
         }
-        getActivity().setTitle("Home");
 
     }
+
 
     @Override
     public void onResume() {

@@ -145,6 +145,13 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
         mShimmerFrameLayout.startShimmerAnimation();
     }
 
+    //In Fragment
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().setTitle("Home");
+    }
+
     private void initData() {
         mTemplatePresenter = new TemplatePresenterImpl(this, new TemplateInteractor());
         String orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));

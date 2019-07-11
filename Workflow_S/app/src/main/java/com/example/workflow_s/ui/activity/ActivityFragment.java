@@ -53,5 +53,10 @@ public class ActivityFragment extends Fragment {
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().setTitle("Home");
+    }
 
 }
