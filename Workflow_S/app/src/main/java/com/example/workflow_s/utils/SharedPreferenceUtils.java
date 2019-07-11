@@ -49,4 +49,11 @@ public class SharedPreferenceUtils {
         SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(key, null);
     }
+
+    public static void clearDataUser(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
+    }
 }

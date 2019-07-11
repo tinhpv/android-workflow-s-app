@@ -48,7 +48,7 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView {
 
     View view;
-    private Button btnTemplate, btnChecklist, btnActivity;
+    private Button btnTemplate, btnChecklist, btnActivity, btnViewAllChecklist, btnViewAllActivities;
 
     private RecyclerView checklistProgressRecyclerView, todayTaskRecyclerView;
     private ChecklistProgressAdapter mChecklistProgressAdapter;
@@ -93,6 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        getActivity().setTitle("Home");
         return view;
     }
 
@@ -118,6 +119,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -130,19 +132,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         switch (v.getId()) {
             case R.id.btn_activity:
                 CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null);
+                getActivity().setTitle("Activity");
                 break;
             case R.id.btn_checklist:
                 CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null);
+                getActivity().setTitle("Active checklist");
                 break;
             case R.id.btn_template:
                 CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null);
+                getActivity().setTitle("Template");
                 break;
             case R.id.bt_view_all_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.newInstance().getClass(), null);
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null);
+                getActivity().setTitle("Active checklist");
                 break;
             case R.id.bt_view_all_task:
+                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null);
+                getActivity().setTitle("Activity");
                 break;
         } // end switch
+
     }
 
     private void initData() {
@@ -178,10 +187,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         btnTemplate = view.findViewById(R.id.btn_template);
         btnChecklist = view.findViewById(R.id.btn_checklist);
         btnActivity = view.findViewById(R.id.btn_activity);
+        btnViewAllChecklist = view.findViewById(R.id.bt_view_all_checklist);
+        btnViewAllActivities = view.findViewById(R.id.bt_view_all_task);
 
         btnTemplate.setOnClickListener(this);
         btnChecklist.setOnClickListener(this);
         btnActivity.setOnClickListener(this);
+        btnViewAllChecklist.setOnClickListener(this);
+        btnViewAllActivities.setOnClickListener(this);
 
         btnTemplate.setBackgroundResource(0);
         btnChecklist.setBackgroundResource(0);

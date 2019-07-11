@@ -82,5 +82,10 @@ public class ChecklistFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().setTitle("Home");
+    }
 
 }
