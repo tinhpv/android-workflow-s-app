@@ -98,10 +98,6 @@ public class OrganizationDialogAdapter extends RecyclerView.Adapter<Organization
         return viewHolder;
     }
 
-    private void showConfirmDialog(Context context) {
-
-    }
-
     @Override
     public void onBindViewHolder(@NonNull OrganizationDialogViewHolder organizationDialogViewHolder, int i) {
         organizationDialogViewHolder.mOrganiztonName.setText(mOrganizationNameList.get(i));

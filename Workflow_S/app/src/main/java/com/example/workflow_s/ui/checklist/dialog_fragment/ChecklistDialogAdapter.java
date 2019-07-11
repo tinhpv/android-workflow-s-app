@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 
-import java.util.EventListener;
 import java.util.List;
 
 public class ChecklistDialogAdapter extends RecyclerView.Adapter<ChecklistDialogAdapter.ChecklistDialogViewHolder>{

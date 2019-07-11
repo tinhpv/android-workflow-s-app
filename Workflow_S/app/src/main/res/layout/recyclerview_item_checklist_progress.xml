@@ -55,17 +55,40 @@
 
     </LinearLayout>
 
-    <!--the 2nd line, including template's name-->
-    <TextView
-        android:id="@+id/tv_template_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Template's Name here"
-        android:textSize="10dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:fontFamily="@font/avenir_light_oblique"
-        android:layout_marginTop="2dp"/>
+        android:orientation="horizontal">
+
+        <!--the 2nd line, including template's name-->
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/tv_template_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Template's Name here"
+            android:textSize="12dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/avenir_light_oblique"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:layout_marginRight="20dp"
+            android:layout_gravity="right"
+            android:id="@+id/tv_due_time_checklist"
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:text="May 28 "
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:fontFamily="@font/avenir_heavy"
+            android:gravity="center"
+            android:background="@drawable/container_radius_yellow" />
+    </LinearLayout>
+
 
     <!--the 3rd line, including just progress bar-->
     <ProgressBar

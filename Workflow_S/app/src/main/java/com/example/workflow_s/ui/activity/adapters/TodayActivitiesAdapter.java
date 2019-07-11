@@ -71,10 +71,8 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
         try {
             overdue = sdf.parse(dueTime);
             long totalTime = overdue.getTime() - currentTime.getTime();
-            String time  = String.format("%dh%dm",
-                    TimeUnit.MILLISECONDS.toHours(totalTime),
-                    TimeUnit.MILLISECONDS.toMinutes(totalTime)
-
+            String time  = String.format("%dh",
+                    TimeUnit.MILLISECONDS.toHours(totalTime)
             );
             if (Integer.parseInt(time.split("h")[0]) == 0) {
                 time  = String.format("%dm",
