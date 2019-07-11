@@ -14,4 +14,5 @@
     <color name="shimmerCellColor">#dddddd</color>
 
     <color name="color_alert">#800000</color>
+    <color name="colorForSafe">#0F8013</color>
 </resources>

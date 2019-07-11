@@ -41,6 +41,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     private TaskDetailContract.TaskDetailPresenter mPresenter;
 
     @Override
+    public void finishedSaveContent() {
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
