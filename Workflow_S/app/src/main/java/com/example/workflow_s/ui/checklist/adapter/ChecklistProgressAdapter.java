@@ -94,25 +94,29 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     private String getDueTimeOfChecklist(int index) {
         String time = "not set";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String dateSelected = mChecklists.get(index).getDueTime().split("T")[0];
-        String timeSelected = mChecklists.get(index).getDueTime().split("T")[1];
-        Date currentTime = Calendar.getInstance().getTime();
-        String dueTime = dateSelected + " " + timeSelected;
-        try {
-            Date overdue = sdf.parse(dueTime);
-            long totalTime = overdue.getTime() - currentTime.getTime();
-            time = String.format("%dh",
-                    TimeUnit.MILLISECONDS.toHours(totalTime));
-            if (Integer.parseInt(time.split("h")[0]) == 0) {
-                time = String.format("%dm",
-                        TimeUnit.MILLISECONDS.toMinutes(totalTime));
-                if (Integer.parseInt(time.split("m")[0]) <= 0) {
+        if (mChecklists.get(index).getDueTime() != null) {
+            String dateSelected = mChecklists.get(index).getDueTime().split("T")[0];
+            String timeSelected = mChecklists.get(index).getDueTime().split("T")[1];
+            Date currentTime = Calendar.getInstance().getTime();
+            String dueTime = dateSelected + " " + timeSelected;
+            try {
+                Date overdue = sdf.parse(dueTime);
+                long totalTime = overdue.getTime() - currentTime.getTime();
+                time = String.format("%dh",
+                        TimeUnit.MILLISECONDS.toHours(totalTime));
+                if (Integer.parseInt(time.split("h")[0]) == 0) {
+                    time = String.format("%dm",
+                            TimeUnit.MILLISECONDS.toMinutes(totalTime));
+                    if (Integer.parseInt(time.split("m")[0]) <= 0) {
+                        time = "expired";
+                    }
+                } else if (Integer.parseInt(time.split("h")[0]) <= 0){
                     time = "expired";
                 }
-            }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         return  time;

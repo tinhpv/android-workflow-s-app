@@ -1,10 +1,12 @@
 package com.example.workflow_s.ui.template;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
@@ -67,9 +70,19 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
+
         MenuItem searchItem = menu.findItem(R.id.action_search_item);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        EditText searchEditText = searchView.findViewById(R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.white));
+
+        searchEditText.setHint("Search template");
+        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+
+        Typeface myFont = ResourcesCompat.getFont(getContext(), R.font.avenir_light);
+        searchEditText.setTypeface(myFont);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -210,4 +223,6 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             prepareShowingCategoryDialog();
         }
     }
+
+
 }
