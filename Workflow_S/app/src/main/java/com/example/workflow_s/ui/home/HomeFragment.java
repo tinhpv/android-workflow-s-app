@@ -202,6 +202,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 } else {
                     List<ChecklistMember> listMember = checklist.getChecklistMembers();
                     if (listMember != null) {
+
                         for (ChecklistMember member : listMember) {
                             if (member.getUserId().equals(userId)) {
                                 checklists.add(checklist);
@@ -219,7 +220,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void setDataToTasksRecyclerView(ArrayList<Task> datasource) {
         mTaskShimmerFrameLayout.stopShimmerAnimation();
         mTaskShimmerFrameLayout.setVisibility(View.INVISIBLE);
-        if (datasource == null) {
+        if (datasource.size() == 0) {
             mTaskDataStatusMessage.setVisibility(View.VISIBLE);
         } else {
             //tasks = new ArrayList<>();

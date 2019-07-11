@@ -105,7 +105,7 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         bundle.putSerializable("org_list", orgNameList);
         bundle.putString("selected_org_name", orgName);
         OrganizationDialogFragment organizationDialogFragment = OrganizationDialogFragment.newInstance();
-        organizationDialogFragment.setTargetFragment(this, 0);
+        organizationDialogFragment.setTargetFragment(OrganizationFragment.this, 0);
         organizationDialogFragment.setArguments(bundle);
         organizationDialogFragment.show(getActivity().getSupportFragmentManager(), TAG);
     }
@@ -153,6 +153,7 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         mOrgShimmerLayout.setVisibility(View.INVISIBLE);
         if (userList != null) {
             mAdapter.setUserList(userList);
+            mAdapter.notifyDataSetChanged();
         }
 
     }
@@ -185,6 +186,9 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
         getActivity().setTitle(targetOrganization.getName());
         SharedPreferenceUtils.saveCurrentUserData(getActivity(), null, targetOrganization);
         mPresenter.requestOrganizationData(targetOrganization.getId());
+
+        //reload fragment
+        this.getFragmentManager().beginTransaction().detach(this).attach(this).commit();
     }
 
     @Override
