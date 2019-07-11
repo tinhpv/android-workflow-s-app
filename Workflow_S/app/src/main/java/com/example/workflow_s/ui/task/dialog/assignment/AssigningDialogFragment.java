@@ -35,7 +35,7 @@ import java.util.List;
 /*
  * WE NEED ARGUMENTS
  *     CHECKLIST_USER_ID
- *
+ *     CHECKLIST_ID
  */
 
 
@@ -57,11 +57,11 @@ public class AssigningDialogFragment extends DialogFragment
     private String checklistUserId, taskId, userEmailToAssign, unassignedUserId, orgId;
     AssigningDialogContract.AssigningDialogPresenter mDialogPresenter;
 
-    public static AssigningDialogFragment newInstance(String checklistUserId, String taskId) {
+    public static AssigningDialogFragment newInstance(String checklistUserId, int checklistId) {
         AssigningDialogFragment frag = new AssigningDialogFragment();
         Bundle args = new Bundle();
         args.putString("checklistUserId", checklistUserId);
-        args.putString("taskId", taskId);
+        args.putInt("checklistId", checklistId);
         frag.setArguments(args);
         return frag;
     }
@@ -86,7 +86,6 @@ public class AssigningDialogFragment extends DialogFragment
         Bundle args = getArguments();
         //mTaskMemberList = (ArrayList<TaskMember>) args.getSerializable("memberList");
         checklistUserId = args.getString("checklistUserId");
-        taskId = args.getString("taskId");
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
 
         setupRV();

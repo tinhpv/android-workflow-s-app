@@ -83,13 +83,12 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         switch (item.getItemId()) {
             case R.id.action_set_time:
                 TimeSettingDialogFragment settingDialogFragment
-                        = TimeSettingDialogFragment.newInstance(Integer.parseInt(checklistFirstTaskId), checklistId);
-
+                        = TimeSettingDialogFragment.newInstance(checklistId);
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             case R.id.action_assign:
                 // convert List to ArrayList so that we can store it in Bundle
-                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId, checklistFirstTaskId);
+                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId, checklistId);
                 assigningDialogFragment.show(fm, "fragment_assign_user");
                 return true;
             default:

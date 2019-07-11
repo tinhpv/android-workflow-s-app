@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,8 +39,10 @@ import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
+import com.example.workflow_s.utils.FirebaseUtils;
 import com.example.workflow_s.utils.ImageUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +57,8 @@ import java.util.List;
  **/
 
 
-public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView, View.OnClickListener {
+public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
+        View.OnClickListener, FirebaseUtils.UploadImageListener {
 
     private final int REQUEST_CAMERA=1, REQUEST_GALLERY =2;
 
@@ -70,6 +74,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private ArrayList<ContentDetail> mContentDetailArrayList;
     private HashMap<String, String> imageDataEncoded;
     private Boolean isChanged;
+    private int totalImagesNumberToUpload;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -122,6 +127,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     }
 
     public void initData() {
+        totalImagesNumberToUpload = 0;
+
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.loadDetails(taskId);
     }
@@ -155,22 +162,19 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
                             // image from user
                             TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
-                            ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                             label.setText(detail.getLabel());
 
                             String tmpImageTag = "img_task_detail_" + orderContent;
                             ImageView tmpImg = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                             tmpImg.setTag(tmpImageTag);
+
                             tmpImg.setVisibility(View.GONE);
 
-                            if (detail.getImageSrc() != null) {
+                            if (!detail.getImageSrc().isEmpty()) {
                                 tmpImg.setVisibility(View.VISIBLE);
-                                try {
-                                    Bitmap image = ImageUtils.decodeFromFirebaseBase64(detail.getImageSrc());
-                                    tmpImg.setImageBitmap(image);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                Picasso.with(getActivity())
+                                        .load(detail.getImageSrc())
+                                        .into(tmpImg);
                             }
 
                             mContainerLayout.addView(tmpImg);
@@ -304,45 +308,19 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             isChanged = true;
 
             if (requestCode == REQUEST_CAMERA) {
-
-                // Get the dimensions of the View
-                int targetW = imageToShow.getWidth();
-                int targetH = imageToShow.getHeight();
-
-                // Get the dimensions of the bitmap
-                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                bmOptions.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-                int photoW = bmOptions.outWidth;
-                int photoH = bmOptions.outHeight;
-
-                // Determine how much to scale down the image
-                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-                // Decode the image file into a Bitmap sized to fill the View
-                bmOptions.inJustDecodeBounds = false;
-                bmOptions.inSampleSize = scaleFactor;
-                bmOptions.inPurgeable = true;
-
-                Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-                imageToShow.setImageBitmap(bitmap);
-
-                // encode image to save to DB
-                String imageEncoded = ImageUtils.encodeBitmap(bitmap);
-                imageDataEncoded.put(tmpImageTag, imageEncoded);
+                Uri imageURI = data.getData();
+                imageToShow.setImageURI(imageURI);
+                totalImagesNumberToUpload++;
+                imageDataEncoded.put(tmpImageTag, imageURI.toString());
+                //FirebaseUtils.uploadImageToStorage(imageURI, tmpImageTag,this);
 
             } else if(requestCode == REQUEST_GALLERY) {
                 Uri pickedImage = data.getData();
                 imageToShow.setImageURI(pickedImage);
+                totalImagesNumberToUpload++;
+                imageDataEncoded.put(tmpImageTag, pickedImage.toString());
+                //FirebaseUtils.uploadImageToStorage(pickedImage, tmpImageTag,this);
 
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pickedImage);
-                    String imageEncoded = ImageUtils.encodeBitmap(bitmap);
-                    imageDataEncoded.put(tmpImageTag, imageEncoded);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } // end try
             } // end if
         }
     }
@@ -362,13 +340,22 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 int orderContent = detail.getOrderContent();
                 switch (detail.getType()) {
                     case "img":
+
                         if (detail.getLabel() != null) {
 
                             String tmpImageTag = "img_task_detail_" + orderContent;
-                            String imageSource = imageDataEncoded.get(tmpImageTag);
-                            if (imageSource != null) {
-                                detail.setImageSrc(imageSource);
+                            String uriImageString = imageDataEncoded.get(tmpImageTag);
+                            Uri imageURI = Uri.parse(uriImageString);
+
+                            try {
+                                Bitmap fullBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
+                                byte[] imageByteArray = ImageUtils.getByteArrayOf(fullBitmap);
+                                FirebaseUtils.uploadImageToStorage(imageByteArray, orderContent, this);
+                             } catch (IOException e) {
+                                e.printStackTrace();
                             }
+
+
                         }
                         break;
 
@@ -389,7 +376,10 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             } // end for
 
             // update DB
-            mPresenter.updateTaskDetail(mContentDetailArrayList);
+            if (totalImagesNumberToUpload == 0) {
+                mPresenter.updateTaskDetail(mContentDetailArrayList);
+            }
+
 
         } // end if
 
@@ -406,5 +396,17 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 handleSaveContentDetail();
                 break;
         }
+    }
+
+    @Override
+    public void onFinishedUploadToFirebase(Uri downloadImageURL, int orderContent) {
+        if (null != downloadImageURL) {
+            totalImagesNumberToUpload--;
+            mContentDetailArrayList.get(orderContent - 1).setImageSrc(downloadImageURL.toString());
+        }
+
+        if (totalImagesNumberToUpload == 0) {
+            mPresenter.updateTaskDetail(mContentDetailArrayList);
+        } // end if
     }
 }

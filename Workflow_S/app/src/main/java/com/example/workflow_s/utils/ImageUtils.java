@@ -5,10 +5,6 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +41,31 @@ public class ImageUtils {
         return image;
     }
 
+    public static byte[] getByteArrayOf(Bitmap imageBitmap) throws IOException {
+        // aiming for ~500kb max. assumes typical device image size is around 2megs
+        int scaleDivider = 4;
+        int scaleWidth = imageBitmap.getWidth() / scaleDivider;
+        int scaleHeight = imageBitmap.getHeight() / scaleDivider;
+        byte[] downsizedImageBytes = getDownsizedImageBytes(imageBitmap, scaleWidth, scaleHeight);
+        return downsizedImageBytes;
+    }
+
+    public static byte[] getDownsizedImageBytes(Bitmap fullBitmap, int scaleWidth, int scaleHeight) throws IOException {
+
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(fullBitmap, scaleWidth, scaleHeight, true);
+
+        // 2. Instantiate the downsized image content as a byte[]
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] downsizedImageBytes = baos.toByteArray();
+
+        return downsizedImageBytes;
+    }
+
     static public String encodeBitmap(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
         return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
