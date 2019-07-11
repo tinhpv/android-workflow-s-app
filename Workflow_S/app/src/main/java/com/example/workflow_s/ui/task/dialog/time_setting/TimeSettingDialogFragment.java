@@ -51,10 +51,9 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
 
     TimeSettingContract.TimeSettingPresenter mPresenter;
 
-    public static TimeSettingDialogFragment newInstance(int taskId, int checklistId) {
+    public static TimeSettingDialogFragment newInstance(int checklistId) {
         TimeSettingDialogFragment frag = new TimeSettingDialogFragment();
         Bundle args = new Bundle();
-        args.putInt("taskId", taskId);
         args.putInt("checklistId", checklistId);
         frag.setArguments(args);
         return frag;
