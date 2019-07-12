@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.task.dialog.time_setting;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 
 /**
@@ -13,7 +14,7 @@ import com.example.workflow_s.model.Task;
 
 public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSettingPresenter,
         TimeSettingContract.TimeSettingDataContract.OnFinishedSetTimeListener,
-        TimeSettingContract.TimeSettingDataContract.OnFinishedGetTaskListener {
+        TimeSettingContract.TimeSettingDataContract.OnFinishedGetChecklistInfoListener {
 
     TimeSettingContract.TimeSettingView mSettingView;
     TimeSettingContract.TimeSettingDataContract mDataContract;
@@ -24,13 +25,13 @@ public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSetting
     }
 
     @Override
-    public void setDueTime(int taskId, String datetime) {
-        mDataContract.setTime(taskId, datetime, this);
+    public void setDueTime(int checklistId, String datetime) {
+        mDataContract.setTime(checklistId, datetime, this);
     }
 
     @Override
-    public void getFirstTask(int checklistId) {
-        mDataContract.getTask(checklistId, this);
+    public void getChecklistInfo(int checklistId) {
+        mDataContract.getChecklistInfo(checklistId, this);
     }
 
     @Override
@@ -38,9 +39,10 @@ public class TimeSettingPresenterImpl implements TimeSettingContract.TimeSetting
         mSettingView.finishSetDueTime();
     }
 
+
     @Override
-    public void onFinishedGetTask(Task task) {
-        mSettingView.finishedGetFirstTask(task);
+    public void onFinishedGetChecklistInfo(Checklist checklist) {
+        mSettingView.finishedGetChecklist(checklist);
     }
 
     @Override

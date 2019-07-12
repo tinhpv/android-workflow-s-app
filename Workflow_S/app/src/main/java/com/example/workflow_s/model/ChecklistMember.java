@@ -10,34 +10,35 @@ import com.google.gson.annotations.SerializedName;
 
 
 public class ChecklistMember {
+
     @SerializedName("id")
-    private int id;
+    private Integer id;
 
     @SerializedName("checklistId")
-    private int checklistId;
+    private Integer checklistId;
 
     @SerializedName("userId")
     private String userId;
 
-    public ChecklistMember(int id, int checklistId, String userId) {
+    public ChecklistMember(Integer id, Integer checklistId, String userId) {
         this.id = id;
         this.checklistId = checklistId;
         this.userId = userId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getChecklistId() {
+    public Integer getChecklistId() {
         return checklistId;
     }
 
-    public void setChecklistId(int checklistId) {
+    public void setChecklistId(Integer checklistId) {
         this.checklistId = checklistId;
     }
 

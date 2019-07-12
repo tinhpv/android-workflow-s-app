@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.ui.notification.NotificationFragment;
+import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
@@ -78,9 +80,16 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
-            case R.id.action_save:
+            case R.id.action_task_assign:
+//                TimeSettingDialogFragment settingDialogFragment
+//                        = TimeSettingDialogFragment.newInstance(checklistId);
+//                settingDialogFragment.show(fm, "fragment_set_time");
+//                return true;
+                return true;
 
+            case R.id.action_task_set_time:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

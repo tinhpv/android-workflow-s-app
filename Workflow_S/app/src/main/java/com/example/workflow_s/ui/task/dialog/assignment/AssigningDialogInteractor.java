@@ -1,5 +1,7 @@
 package com.example.workflow_s.ui.task.dialog.assignment;
 
+import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
@@ -21,6 +23,7 @@ import retrofit2.Response;
 
 
 public class AssigningDialogInteractor implements AssigningDialogContract.GetDataAssignInteractor {
+
     @Override
     public void getAllMember(int orgId, final OnFinishedGetMembersListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
@@ -40,10 +43,11 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
 
     }
 
+
     @Override
-    public void assignTaskMember(TaskMember member, final OnFinishedAssignMemberListener listener) {
+    public void assignChecklistMember(ChecklistMember checklistMember, final OnFinishedAssignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.assignMember(member);
+        Call<ResponseBody> call = service.assignChecklistMember(checklistMember);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -58,9 +62,9 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
     }
 
     @Override
-    public void unassignTaskMember(int memberId, final OnFinishedUnassignMemberListener listener) {
+    public void unassignChecklistMember(int memberId, final OnFinishedUnassignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.unassignMember(memberId);
+        Call<ResponseBody> call = service.unassignChecklistMember(memberId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -74,21 +78,21 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
         });
     }
 
+
     @Override
-    public void getAllTaskMembers(int taskId, final OnFinishedGetTaskMembersListener listener) {
+    public void getChecklistInfo(int checklistId, final OnFinishedGetChecklistInfoListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<TaskMember>> call = service.getAllTaskMember(taskId);
-        call.enqueue(new Callback<List<TaskMember>>() {
+        Call<Checklist> call = service.getChecklistById(checklistId);
+        call.enqueue(new Callback<Checklist>() {
             @Override
-            public void onResponse(Call<List<TaskMember>> call, Response<List<TaskMember>> response) {
-                listener.onFinishedGetTaskMembers((ArrayList<TaskMember>) response.body());
+            public void onResponse(Call<Checklist> call, Response<Checklist> response) {
+                listener.onFinishedGetChecklist(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<TaskMember>> call, Throwable t) {
+            public void onFailure(Call<Checklist> call, Throwable t) {
                 listener.onFailure(t);
             }
         });
-
     }
 }

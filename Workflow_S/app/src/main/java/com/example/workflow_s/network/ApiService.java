@@ -1,6 +1,7 @@
 package com.example.workflow_s.network;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.TaskMember;
@@ -104,11 +105,16 @@ public interface ApiService {
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
 
     @POST("/api/TaskMembers/assign")
-    Call<ResponseBody> assignMember(@Body TaskMember taskMember);
+    Call<ResponseBody> assignTaskMember(@Body TaskMember taskMember);
+
+    @POST("/api/ChecklistMembers/member")
+    Call<ResponseBody> assignChecklistMember(@Body ChecklistMember checklistMember);
 
     @DELETE("/api/TaskMembers/delete/{memberId}")
-    Call<ResponseBody> unassignMember(@Path("memberId") int memberId);
+    Call<ResponseBody> unassignTaskMember(@Path("memberId") int memberId);
 
+    @DELETE("/api/ChecklistMembers/delete/{memberid}")
+    Call<ResponseBody> unassignChecklistMember(@Path("memberid") int memberId);
 
     @GET("/api/TaskMembers/taskmember/{taskId}")
     Call<List<TaskMember>> getAllTaskMember(@Path("taskId") int taskId);
@@ -129,4 +135,10 @@ public interface ApiService {
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
+
+    @GET("/api/Checklists/getchecklistmobile/{checklistid}")
+    Call<Checklist> getChecklistById(@Path("checklistid") int checklistId);
+
+    @PUT("/api/Checklists/duetime/{checklistid}/{datetime}")
+    Call<ResponseBody> setChecklistDueTime(@Path("checklistid") int checklistId, @Path("datetime") String datetime);
 }

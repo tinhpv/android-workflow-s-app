@@ -2,6 +2,8 @@ package com.example.workflow_s.ui.task.dialog.assignment;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 
@@ -18,7 +20,7 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedAssignMemberListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedUnassignMemberListener,
-        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetTaskMembersListener {
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetChecklistInfoListener {
 
     private AssigningDialogContract.AssigningDialogView mDialogView;
     private AssigningDialogInteractor mDialogInteractor;
@@ -34,18 +36,18 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void assignUser(TaskMember taskMember) {
-        mDialogInteractor.assignTaskMember(taskMember, this);
+    public void assignUser(ChecklistMember checklistMember) {
+        mDialogInteractor.assignChecklistMember(checklistMember, this);
     }
 
     @Override
     public void unassignUser(int memberId) {
-        mDialogInteractor.unassignTaskMember(memberId, this);
+        mDialogInteractor.unassignChecklistMember(memberId, this);
     }
 
     @Override
-    public void getTaskMember(int taskId) {
-        mDialogInteractor.getAllTaskMembers(taskId, this);
+    public void getChecklistInfo(int checklistId) {
+        mDialogInteractor.getChecklistInfo(checklistId, this);
     }
 
     @Override
@@ -65,8 +67,8 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void onFinishedGetTaskMembers(ArrayList<TaskMember> taskMembers) {
-        mDialogView.finishedGetTaskMember(taskMembers);
+    public void onFinishedGetChecklist(Checklist checklist) {
+        mDialogView.finishedGetChecklistInfoById(checklist);
     }
 
     @Override

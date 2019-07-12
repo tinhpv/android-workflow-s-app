@@ -45,7 +45,7 @@ public class Checklist {
     @SerializedName("templateName")
     private String templateName;
 
-    @SerializedName("checklistMembers")
+    @SerializedName("checklistMember")
     private List<ChecklistMember> checklistMembers;
 
     @SerializedName("dueTime")
