@@ -19,6 +19,7 @@ import retrofit2.Response;
 
 public class LoginInteractor implements LoginContract.GetLoginDataInteractor {
 
+
     @Override
     public void getCurrentOrganization(String userId, final OnFinishedGetOrganizationListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
@@ -52,4 +53,5 @@ public class LoginInteractor implements LoginContract.GetLoginDataInteractor {
             }
         });
     }
+
 }

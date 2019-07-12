@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,14 +105,15 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 long totalTime = overdue.getTime() - currentTime.getTime();
                 time = String.format("%dh",
                         TimeUnit.MILLISECONDS.toHours(totalTime));
-                if (Integer.parseInt(time.split("h")[0]) == 0) {
+                if (Integer.parseInt(time.split("h")[0]) < 0) {
+                    time = "expired";
+
+                } else if (Integer.parseInt(time.split("h")[0]) == 0){
                     time = String.format("%dm",
                             TimeUnit.MILLISECONDS.toMinutes(totalTime));
-                    if (Integer.parseInt(time.split("m")[0]) <= 0) {
+                    if (Integer.parseInt(time.split("m")[0]) < 1) {
                         time = "expired";
                     }
-                } else if (Integer.parseInt(time.split("h")[0]) <= 0){
-                    time = "expired";
                 }
 
             } catch (ParseException e) {

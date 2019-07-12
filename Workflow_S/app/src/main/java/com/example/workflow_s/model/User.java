@@ -29,7 +29,7 @@ public class User {
     @SerializedName("avatar")
     private String avatar;
 
-    @SerializedName("token")
+    @SerializedName("deviceToken")
     private String token;
 
     public User(String id, String name, String email, String type, String role, String avatar, String token) {

@@ -31,8 +31,11 @@ import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
 import com.example.workflow_s.ui.setting.SettingFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -61,9 +64,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         setupToolbar();
         setupNavigationDrawer();
+        onNewIntent(getIntent());
         setupDefaultFragment();
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //super.onNewIntent(intent);
+        String notify = intent.getStringExtra("flag_notify");
+        if (notify != null) {
+            NotificationFragment notificationFragment = new NotificationFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.flContent, notificationFragment)
+                    .commit();
+        }
     }
 
     private void setupDefaultFragment() {
@@ -129,27 +149,34 @@ public class MainActivity extends AppCompatActivity {
     private void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
+        boolean flag = false;
         switch (menuItem.getItemId()) {
             case R.id.nav_organization_fragment:
                 fragmentClass = OrganizationFragment.class;
+                flag = true;
                 break;
             case R.id.nav_home_fragment:
                 fragmentClass = HomeFragment.class;
+                flag = true;
                 break;
             case R.id.nav_template_fragment:
                 fragmentClass = TemplateFragment.class;
+                flag = true;
                 break;
             case R.id.nav_checklist_fragment:
                 fragmentClass = ChecklistFragment.class;
+                flag = true;
                 break;
             case R.id.nav_activity_fragment:
                 fragmentClass = ActivityFragment.class;
+                flag = true;
                 break;
             case R.id.nav_settings_fragment:
                 fragmentClass = SettingFragment.class;
+                flag = true;
                 break;
             case R.id.nav_logout:
-                fragmentClass = null;
+                fragmentClass = HomeFragment.class;
                 revokeAccess();
                 break;
             default:
@@ -162,11 +189,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
-                .add(R.id.flContent, fragment)
-                .commit();
+        if (flag) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.flContent, fragment)
+                    .commit();
+        }
+
+
 
         menuItem.setChecked(true); // Highlight the selected item has been done by NavigationView
         setTitle(menuItem.getTitle());
@@ -175,6 +206,10 @@ public class MainActivity extends AppCompatActivity {
 
     //log out
     private void revokeAccess() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mGoogleSignInClient.revokeAccess()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override

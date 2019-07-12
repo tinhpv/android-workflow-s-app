@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,23 @@ public class SettingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mNotfication = view.findViewById(R.id.tv_switch_notification);
+        mNotfication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+
+                //for Android 5-7
+                intent.putExtra("app_package", v.getContext().getPackageName());
+                intent.putExtra("app_uid", v.getContext().getApplicationInfo().uid);
+
+
+                // for Android 8 and above
+                intent.putExtra("android.provider.extra.APP_PACKAGE", v.getContext().getPackageName());
+
+                startActivity(intent);
+            }
+        });
 
         mLibrariy = view.findViewById(R.id.tv_third_libraries);
         mLibrariy.setOnClickListener(new View.OnClickListener() {

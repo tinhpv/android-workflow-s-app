@@ -74,16 +74,18 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
             String time  = String.format("%dh",
                     TimeUnit.MILLISECONDS.toHours(totalTime)
             );
-            if (Integer.parseInt(time.split("h")[0]) == 0) {
+            if (Integer.parseInt(time.split("h")[0]) < 0) {
+                time = "expired";
+            } else if (Integer.parseInt(time.split("h")[0]) > 24) {
+                Date upcomingDate = DateUtils.parseDate(dateSelected);
+                time = upcomingDate.toString().split(" ")[1] + " " + upcomingDate.toString().split(" ")[2];
+            } else if (Integer.parseInt(time.split("h")[0]) == 0) {
                 time  = String.format("%dm",
                         TimeUnit.MILLISECONDS.toMinutes(totalTime)
                 );
                 if (Integer.parseInt(time.split("m")[0]) <= 0) {
                     time = "expired";
                 }
-            } else if (Integer.parseInt(time.split("h")[0]) > 24) {
-                Date upcomingDate = DateUtils.parseDate(dateSelected);
-                time = upcomingDate.toString().split(" ")[1] + " " + upcomingDate.toString().split(" ")[2];
             }
             //Log.i("overdue", String.valueOf(totalTime));
             todayActivitiesViewHolder.mTextViewTime.setText(time);
