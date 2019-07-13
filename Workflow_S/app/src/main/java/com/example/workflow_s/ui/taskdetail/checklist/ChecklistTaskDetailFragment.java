@@ -39,6 +39,7 @@ import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragm
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
+import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.FirebaseUtils;
@@ -65,7 +66,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private final int REQUEST_CAMERA=1, REQUEST_GALLERY =2;
 
     private View view;
-    private int taskId;
+    private int taskId, checklistId;
     private String taskName, currentPhotoPath;;
     private LinearLayout mContainerLayout;
     private Button buttonCompleteTask, buttonSaveContent;
@@ -73,7 +74,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private Dialog myDialog;
     private Button btnCamera,btnGallery;
 
-    private ArrayList<ContentDetail> mContentDetailArrayList;
+    private ArrayList<ContentDetail> mContentDetailArrayList, mChecklistMembers;
     private HashMap<String, String> imageDataEncoded;
     private Boolean isChanged;
     private int totalImagesNumberToUpload;
@@ -83,13 +84,14 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_task_assign:
-//                TimeSettingDialogFragment settingDialogFragment
-//                        = TimeSettingDialogFragment.newInstance(checklistId);
-//                settingDialogFragment.show(fm, "fragment_set_time");
-//                return true;
+                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(taskId, checklistId);
+                assigningDialogFragment.show(fm, "fragment_assign_");
                 return true;
 
             case R.id.action_task_set_time:
+//                TimeSettingDialogFragment settingDialogFragment
+//                        = TimeSettingDialogFragment.newInstance(checklistId);
+//                settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -146,7 +148,11 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
         taskName = arguments.getString("taskName");
+        checklistId = arguments.getInt("checklistId");
+
+
         getActivity().setTitle(taskName);
+
         isChanged = false;
         imageDataEncoded = new HashMap<String, String>();
     }

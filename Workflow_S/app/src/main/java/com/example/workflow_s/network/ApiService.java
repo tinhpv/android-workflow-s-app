@@ -30,7 +30,6 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-
     @GET("api/Checklists/checklistprogress/{organizationId}")
     Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId);
 
@@ -54,7 +53,8 @@ public interface ApiService {
                                          @Path("devicetoken") String deviceToken);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
-    Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
+    Call<String> submitVerifyCode(@Path("userid") String userId,
+                                  @Path("code") String verifyCode);
 
     @GET("/api/Users/getverifycode/{id}")
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
@@ -125,6 +125,9 @@ public interface ApiService {
 
     @GET("/api/TaskItems/getfirsttask/{checklistId}")
     Call<Task> getFirstTaskFromChecklist(@Path("checklistId") int checklistId);
+
+    @GET("/api/TaskItems/gettaskitem/{taskitemId}")
+    Call<Task> getTaskById(@Path("taskitemId") int taskId);
 
     @PUT("/api/Checklists/done/{checklistid}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId);

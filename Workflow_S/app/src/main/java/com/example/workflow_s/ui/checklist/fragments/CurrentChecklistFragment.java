@@ -1,9 +1,7 @@
 package com.example.workflow_s.ui.checklist.fragments;
 
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,15 +18,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
