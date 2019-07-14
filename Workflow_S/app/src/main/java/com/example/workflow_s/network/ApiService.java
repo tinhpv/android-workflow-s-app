@@ -105,7 +105,7 @@ public interface ApiService {
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
 
     @POST("/api/TaskMembers/assign")
-    Call<ResponseBody> assignTaskMember(@Body TaskMember taskMember);
+    Call<TaskMember> assignTaskMember(@Body TaskMember taskMember);
 
     @POST("/api/ChecklistMembers/member")
     Call<ResponseBody> assignChecklistMember(@Body ChecklistMember checklistMember);

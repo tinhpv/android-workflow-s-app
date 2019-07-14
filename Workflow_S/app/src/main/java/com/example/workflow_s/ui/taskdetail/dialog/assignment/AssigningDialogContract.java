@@ -17,17 +17,18 @@ import java.util.List;
 
 
 public interface AssigningDialogContract {
+
     interface AssigningDialogPresenter {
         void getOrgMember(int orgId);
         void getTaskMember(int taskId);
-        void assignUser(ChecklistMember checklistMember);
+        void assignUser(TaskMember taskMember);
         void unassignUser(int memberId);
         void getChecklistInfo(int checklistId);
     }
 
     interface AssigningDialogView {
         void finishedGetMember(List<User> userList);
-        void finishedAssignMember();
+        void finishedAssignMember(TaskMember taskMember);
         void finishedUnassignMember();
         void finishedGetChecklistInfoById(Checklist checklist);
         void finishedGetTaskMember(List<TaskMember> taskMemberList);
@@ -46,7 +47,7 @@ public interface AssigningDialogContract {
         }
 
         interface OnFinishedAssignMemberListener {
-            void onFinishedAssigning();
+            void onFinishedAssigning(TaskMember taskMember);
             void onFailure(Throwable t);
         }
 
@@ -65,8 +66,8 @@ public interface AssigningDialogContract {
         void getAllMember(int orgId, OnFinishedGetMembersListener onFinishedListener);
         void getTaskMember(int taskId, OnFinishedGetTaskMemberListener listener);
         void getChecklistInfo(int checklistId, OnFinishedGetChecklistInfoListener listener);
-        void assignChecklistMember(ChecklistMember checklistMember, OnFinishedAssignMemberListener listener);
-        void unassignChecklistMember(int memberId, OnFinishedUnassignMemberListener listener);
+        void assignTaskMember(TaskMember taskMember, OnFinishedAssignMemberListener listener);
+        void unassignTaskMember(int memberId, OnFinishedUnassignMemberListener listener);
 
     }
 }

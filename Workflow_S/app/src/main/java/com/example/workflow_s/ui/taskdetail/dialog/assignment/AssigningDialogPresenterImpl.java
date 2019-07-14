@@ -48,13 +48,13 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void assignUser(ChecklistMember checklistMember) {
-        mDialogInteractor.assignChecklistMember(checklistMember, this);
+    public void assignUser(TaskMember taskMember) {
+        mDialogInteractor.assignTaskMember(taskMember, this);
     }
 
     @Override
     public void unassignUser(int memberId) {
-        mDialogInteractor.unassignChecklistMember(memberId, this);
+        mDialogInteractor.unassignTaskMember(memberId, this);
     }
 
     @Override
@@ -68,10 +68,9 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void onFinishedAssigning() {
-        mDialogView.finishedAssignMember();
+    public void onFinishedAssigning(TaskMember taskMember) {
+        mDialogView.finishedAssignMember(taskMember);
     }
-
 
     @Override
     public void onFinishedUnassigning() {

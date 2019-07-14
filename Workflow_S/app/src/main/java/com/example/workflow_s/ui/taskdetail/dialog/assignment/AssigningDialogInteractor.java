@@ -62,26 +62,26 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
 
 
     @Override
-    public void assignChecklistMember(ChecklistMember checklistMember, final OnFinishedAssignMemberListener listener) {
+    public void assignTaskMember(TaskMember taskMember, final OnFinishedAssignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.assignChecklistMember(checklistMember);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<TaskMember> call = service.assignTaskMember(taskMember);
+        call.enqueue(new Callback<TaskMember>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedAssigning();
+            public void onResponse(Call<TaskMember> call, Response<TaskMember> response) {
+                listener.onFinishedAssigning(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<TaskMember> call, Throwable t) {
                 listener.onFailure(t);
             }
         });
     }
 
     @Override
-    public void unassignChecklistMember(int memberId, final OnFinishedUnassignMemberListener listener) {
+    public void unassignTaskMember(int memberId, final OnFinishedUnassignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.unassignChecklistMember(memberId);
+        Call<ResponseBody> call = service.unassignTaskMember(memberId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -100,6 +100,7 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
     public void getChecklistInfo(int checklistId, final OnFinishedGetChecklistInfoListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<Checklist> call = service.getChecklistById(checklistId);
+
         call.enqueue(new Callback<Checklist>() {
             @Override
             public void onResponse(Call<Checklist> call, Response<Checklist> response) {
