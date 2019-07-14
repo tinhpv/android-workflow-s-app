@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_logout:
                 fragmentClass = HomeFragment.class;
-                revokeAccess();
+                handleSignOut();
                 break;
             default:
                 fragmentClass = HomeFragment.class;
@@ -210,11 +210,25 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.closeDrawers();
     }
 
+    private void handleSignOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        SharedPreferenceUtils.clearDataUser(getApplicationContext());
+                        finish();
+                    }
+                });
+    }
+
     //log out
     private void revokeAccess() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mGoogleSignInClient.revokeAccess()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -241,40 +255,4 @@ public class MainActivity extends AppCompatActivity {
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        return true;
-//    }
-////
-////    @Override
-////    public boolean onOptionsItemSelected(MenuItem item) {
-////        Fragment fragment = null;
-////        Class fragmentClass;
-////        switch (item.getItemId()) {
-//////            case R.id.action_search:
-//////                Intent intent = new Intent(this, SearchActivity.class);
-//////                startActivity(intent);
-//////                return true;
-////            case R.id.action_notif:
-////                //Toast.makeText(this, "NOFITICATION", Toast.LENGTH_SHORT).show();
-//////                fragmentClass = NotificationFragment.class;
-//////                try {
-//////                    fragment = (Fragment) fragmentClass.newInstance();
-//////                } catch (Exception e) {
-//////                    e.printStackTrace();
-//////                }
-//////
-//////                FragmentManager fragmentManager = getSupportFragmentManager();
-//////                fragmentManager
-//////                        .beginTransaction()
-//////                        .replace(R.id.flContent, fragment)
-//////                        .commit();
-////                return true;
-////            default:
-////                return super.onOptionsItemSelected(item);
-////        }
-//
-//
-//    }
 }

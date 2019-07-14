@@ -19,6 +19,7 @@ import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.ui.authentication.AuthenticationActivity;
+import com.example.workflow_s.ui.authentication.OopsActivity;
 import com.example.workflow_s.ui.main.MainActivity;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -56,7 +57,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         super.onStart();
         // Check for existing Google Sign In account
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+        if (null != account) {
+            String orgName = SharedPreferenceUtils.retrieveData(this, getString(R.string.pref_orgName));
+            if (null == orgName) {
+                Intent intent = new Intent(this, OopsActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } // end if
+        }
     }
 
     private void setupLoadingAnimation() {
@@ -107,16 +117,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    // TODO -  HANDLE CASE GOOGLE ACCOUNT
-    private void updateUI(GoogleSignInAccount account) {
-        if (null != account) {
-            Log.d(TAG, "Sign-In successfully!");
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            Log.d(TAG, "Sign-In fail!");
-        } // end if
-    }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
@@ -186,9 +186,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     @Override
     public void onFinishedGetOrg(UserOrganization org) {
-        Organization tmpOrg = new Organization(org.getOrganizationId(), org.getOrganizationName());
-        saveCurrentOrganizationToPreference(tmpOrg);
-        mLoginPresenter.checkRoleUser(currentUser.getRole());
+
+        if (org != null) {
+            Organization tmpOrg = new Organization(org.getOrganizationId(), org.getOrganizationName());
+            saveCurrentOrganizationToPreference(tmpOrg);
+            mLoginPresenter.checkRoleUser(currentUser.getRole());
+        } else {
+            Intent intent = new Intent(this, OopsActivity.class);
+            startActivity(intent);
+        }
+
     }
 
 
