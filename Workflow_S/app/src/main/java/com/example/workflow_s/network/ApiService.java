@@ -1,6 +1,7 @@
 package com.example.workflow_s.network;
 
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.TaskMember;
@@ -17,6 +18,8 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -47,10 +50,9 @@ public interface ApiService {
     Call<List<Task>> getAllDueTasks(@Path("organizationId") String organizationId,
                                     @Path("userId") String userId);
 
-    @POST("/api/Users/updatephone/{userid}/{phone}/{devicetoken}")
+    @PUT("/api/Users/updatephone/{userid}/{phone}")
     Call<ResponseBody> updatePhoneNumber(@Path("userid") String userId,
-                                         @Path("phone") String phoneNumber,
-                                         @Path("devicetoken") String deviceToken);
+                                         @Path("phone") String phoneNumber);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
     Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
@@ -128,5 +130,13 @@ public interface ApiService {
 
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
+
+    @GET("/api/Comments/mobilenotification/{organizationId}/{userId}")
+    Call<List<Comment>> getCommentNotification(@Path("organizationId") String orgId, @Path("userId") String userId);
+
+    //@Headers("Content-Type: application/json")
+    @PUT("/api/Users/updatedevicetoken/{userid}/{devicetoken}")
+    Call<ResponseBody> updateDeviceToken(@Path("userid") String userId, @Path("devicetoken") String deviceToken);
+
 
 }

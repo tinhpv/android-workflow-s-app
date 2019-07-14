@@ -84,6 +84,12 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().setTitle("Home");
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();

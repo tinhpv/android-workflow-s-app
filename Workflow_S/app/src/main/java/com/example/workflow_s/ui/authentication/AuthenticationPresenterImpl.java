@@ -25,8 +25,8 @@ AuthenticationContract.ManipAuthenticationInteractor.OnFinishedGetVerifyCodeList
 
 
     @Override
-    public void updatePhone(String userId, String phoneNumber, String devicetoken) {
-        mInteractor.updatePhone(userId, phoneNumber, devicetoken, this);
+    public void updatePhone(String userId, String phoneNumber) {
+        mInteractor.updatePhone(userId, phoneNumber, this);
     }
 
     @Override

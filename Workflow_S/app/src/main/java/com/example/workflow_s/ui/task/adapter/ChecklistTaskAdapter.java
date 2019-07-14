@@ -101,6 +101,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 Bundle args = new Bundle();
                 args.putString("taskId", String.valueOf(mTaskList.get(index).getId()));
                 args.putString("taskName", mTaskList.get(index).getName());
+                args.putInt("location_activity", 2);
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
 
 //                int index = mRecyclerView.getChildLayoutPosition(v);

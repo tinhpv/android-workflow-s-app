@@ -74,7 +74,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private ArrayList<ContentDetail> mContentDetailArrayList;
     private HashMap<String, String> imageDataEncoded;
     private Boolean isChanged;
-    private int totalImagesNumberToUpload;
+    private int totalImagesNumberToUpload, location;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -137,6 +137,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
         taskName = arguments.getString("taskName");
+        location = arguments.getInt("location_activity");
         getActivity().setTitle(taskName);
         isChanged = false;
         imageDataEncoded = new HashMap<String, String>();
@@ -408,5 +409,18 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         if (totalImagesNumberToUpload == 0) {
             mPresenter.updateTaskDetail(mContentDetailArrayList);
         } // end if
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        switch (location) {
+            case  1:
+                getActivity().setTitle("Home");
+                break;
+            case 2:
+                getActivity().setTitle("Checklist's Task");
+                break;
+        }
     }
 }

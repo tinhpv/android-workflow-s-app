@@ -17,6 +17,8 @@ import com.example.workflow_s.ui.main.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -41,7 +43,15 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         Log.i("Notification", "Receive");
+        Map<String, String> data = remoteMessage.getData();
+        for (String key : data.keySet()){
+            String value =data.get(key);
+            Log.d("message_notification", "Key: " + key + " Value: " + value);
+        }
         sendNotification(remoteMessage.getNotification().getBody());
+
+
+
 
 
         // Check if message contains a notification payload.
@@ -102,7 +112,8 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("body", messageBody);
         intent.putExtra("flag_notify", "notify");
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -141,5 +152,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
         notificationManager.notify(0, notificationBuilder.build());
     }
+
+
 
 }

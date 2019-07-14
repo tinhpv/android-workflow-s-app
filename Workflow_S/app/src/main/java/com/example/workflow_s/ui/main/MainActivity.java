@@ -68,21 +68,27 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
         setupNavigationDrawer();
         onNewIntent(getIntent());
-        setupDefaultFragment();
+        //setupDefaultFragment();
     }
 
 
     @Override
     protected void onNewIntent(Intent intent) {
         //super.onNewIntent(intent);
-        String notify = intent.getStringExtra("flag_notify");
-        if (notify != null) {
-            NotificationFragment notificationFragment = new NotificationFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager
-                    .beginTransaction()
-                    .add(R.id.flContent, notificationFragment)
-                    .commit();
+        if (intent.hasExtra("flag_notify")) {
+            String notify = intent.getStringExtra("flag_notify");
+            if (notify != null) {
+                NotificationFragment notificationFragment = new NotificationFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager
+                        .beginTransaction()
+                        .add(R.id.flContent, notificationFragment)
+                        .commit();
+            } else {
+                setupDefaultFragment();
+            }
+        } else {
+            setupDefaultFragment();
         }
     }
 

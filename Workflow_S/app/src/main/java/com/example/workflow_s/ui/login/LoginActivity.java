@@ -122,12 +122,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         try {
             mGoogleAccount = completedTask.getResult(ApiException.class);
             if (null != mGoogleAccount) {
-                String token = FirebaseInstanceId.getInstance().getToken();
-                if (token == null) {
-                    Log.i("Token", "Token is null");
-                } else {
-                    Log.i("Token", token);
-                }
                 //currentUser.setToken(token);
                 switchOnLoading();
                 initializeCurrentUser(mGoogleAccount);
@@ -163,6 +157,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     @Override
     public void navigateToCodeVerifyActivity() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i("Token", "Token is null");
+        } else {
+            Log.i("Token", token);
+        }
+        mLoginPresenter.updateToken(currentUser.getId(), token);
         switchOffLoading();
         Intent intent = new Intent(this, AuthenticationActivity.class);
         startActivity(intent);

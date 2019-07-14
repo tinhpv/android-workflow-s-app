@@ -4,10 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
@@ -49,21 +50,22 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
 
     @NonNull
     @Override
-    public TodayTaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public TodayTaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.recyclerview_item_today_task, viewGroup, false);
         TodayTaskViewHolder viewHolder = new TodayTaskViewHolder(view);
 
         //item click
-        viewHolder.mTextView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
-                args.putString("checklistId", String.valueOf(mTasks.get(index).getId()));
+                args.putString("taskId", String.valueOf(mTasks.get(index).getId()));
                 args.putString("taskName", mTasks.get(index).getName());
-                CommonUtils.replaceFragments(v.getContext(), ChecklistTaskDetailFragment.class, args);
+                args.putInt("location_activity", 1);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
             }
         });
         return viewHolder;
@@ -117,9 +119,12 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
     public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView, mTextViewTime;
+        private RelativeLayout item;
+
 
         public TodayTaskViewHolder(@NonNull View itemView) {
             super(itemView);
+            item = itemView.findViewById(R.id.item_today_activity);
             mTextView = itemView.findViewById(R.id.tv_today_activity_name);
             mTextViewTime = itemView.findViewById(R.id.tv_due_time);
         }
