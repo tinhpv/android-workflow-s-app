@@ -88,7 +88,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         if (totalTask == 0) {
             checklistProgressViewHolder.progressBar.setProgress(0, true);
         } else {
-            int progress = (int) ((doneTask / totalTask * 1.0) * 100);
+            int progress = (int) ((doneTask / (totalTask * 1.0)) * 100);
             checklistProgressViewHolder.progressBar.setProgress(progress, true);
         }
 
