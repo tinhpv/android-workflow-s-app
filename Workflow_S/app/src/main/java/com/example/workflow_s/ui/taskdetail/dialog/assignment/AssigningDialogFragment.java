@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.task.dialog.assignment;
+package com.example.workflow_s.ui.taskdetail.dialog.assignment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +20,7 @@ import android.widget.Button;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -46,8 +47,7 @@ public class AssigningDialogFragment extends DialogFragment
         View.OnClickListener, MemberAdapter.EventListener {
 
     View view;
-    private AutoCompleteTextView userEmailForAssigning;
-    private Button cancelButton, addUserButton;
+    private Button cancelButton;
 
     private RecyclerView userAssigningRecylerView;
     private MemberAdapter mAdapter;
@@ -55,15 +55,16 @@ public class AssigningDialogFragment extends DialogFragment
 
     private List<User> mUserList, mUnassignedUserList;
     private ArrayList<ChecklistMember> mChecklistMembers;
+    private ArrayList<TaskMember> mTaskMembers;
     private ArrayList<String> emailList;
-    private String checklistUserId, userEmailToAssign, unassignedUserId, orgId;
-    private int checklistId;
+    private String checklistUserId, userEmailToAssign, orgId;
+    private int taskId, checklistId;
     AssigningDialogContract.AssigningDialogPresenter mDialogPresenter;
 
-    public static AssigningDialogFragment newInstance(String checklistUserId, int checklistId) {
+    public static AssigningDialogFragment newInstance(int taskId, int checklistId) {
         AssigningDialogFragment frag = new AssigningDialogFragment();
         Bundle args = new Bundle();
-        args.putString("checklistUserId", checklistUserId);
+        args.putInt("taskId", taskId);
         args.putInt("checklistId", checklistId);
         frag.setArguments(args);
         return frag;
@@ -72,23 +73,24 @@ public class AssigningDialogFragment extends DialogFragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialog_assign_user, container, false);
+        view = inflater.inflate(R.layout.dialog_assign_user_detail, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        addUserButton = view.findViewById(R.id.bt_add_user);
-        addUserButton.setOnClickListener(this);
-        cancelButton = view.findViewById(R.id.bt_cancel_add);
+        cancelButton = view.findViewById(R.id.bt_dismiss);
         cancelButton.setOnClickListener(this);
 
 
+        // init list
+        mChecklistMembers = new ArrayList<>();
+        mTaskMembers = new ArrayList<>();
+
         // get args
         Bundle args = getArguments();
-        mChecklistMembers = new ArrayList<>();
-        checklistUserId = args.getString("checklistUserId");
+        taskId = args.getInt("taskId");
         checklistId = args.getInt("checklistId");
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
 
@@ -119,58 +121,71 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     @Override
+    public void finishedGetTaskMember(List<TaskMember> taskMemberList) {
+        if (null != taskMemberList) {
+            mTaskMembers = (ArrayList<TaskMember>) taskMemberList;
+            mAdapter.setUserList(mUserList);
+            mAdapter.setChecklistMembers(mChecklistMembers);
+            mAdapter.setTaskMembers(mTaskMembers);
+        }
+    }
+
+    @Override
     public void finishedGetChecklistInfoById(Checklist checklist) {
         if (null != checklist) {
             this.mChecklistMembers = (ArrayList<ChecklistMember>) checklist.getChecklistMembers();
-            getUnassignedUser();
-            manipulateDataToDisplayOnRV();
-            setupAutoCompleteTextView();
+            mDialogPresenter.getTaskMember(taskId);
+            // FIXME - FIX HERE
+//            getUnassignedUser();
+//            manipulateDataToDisplayOnRV();
+//            setupAutoCompleteTextView();
         } // endif
     }
 
-    @Override
-    public void finishedAssignMember(ChecklistMember member) {
-        updateUsersToDisplay(true, member);
-    }
 
     @Override
-    public void finishedUnassignMember() {
-        updateUsersToDisplay(false, null);
+    public void finishedUnassignMember(int memberId) {
+        for (TaskMember taskMember : mTaskMembers) {
+            if (taskMember.getId() == memberId) {
+                mTaskMembers.remove(taskMember);
+                mAdapter.setTaskMembers(mTaskMembers);
+                break;
+            } // end if
+        } // end for
     }
 
 
-    private void updateUsersToDisplay(boolean isAssigned, ChecklistMember member) {
-        if (isAssigned) {
-            // remove user who was assigned out of mUnassignedUserList
-            // add user to the taskMemberList
-            for (User user : mUnassignedUserList) {
-                if (user.getEmail().equals(userEmailToAssign)) {
-                    mUnassignedUserList.remove(user);
-                    mChecklistMembers.add(member);
-                    userEmailForAssigning.setText("");
-                    break;
-                }
-            } // end for
-        } else {
-            // remove user from taskMemberList
-            // add user to unAssignMemberList
-
-            for (User user : mUserList) {
-                if (user.getId().equals(unassignedUserId)) {
-                    mUnassignedUserList.add(user);
-                    for (ChecklistMember tempUser : mChecklistMembers) {
-                        if (tempUser.getUserId().equals(unassignedUserId) && (tempUser.getChecklistId() == checklistId)) {
-                            mChecklistMembers.remove(tempUser);
-                            break;
-                        } // end if
-                    } // end for
-                    break;
-                } // end if
-            } // end for
-        } // end if
+    private void updateUsersToDisplay(boolean isAssigned) {
+//        if (isAssigned) {
+//            // remove user who was assigned out of mUnassignedUserList
+//            // add user to the taskMemberList
+//            for (User user : mUnassignedUserList) {
+//                if (user.getEmail().equals(userEmailToAssign)) {
+//                    mUnassignedUserList.remove(user);
+//                    mChecklistMembers.add(new ChecklistMember(null, taskId, user.getId()));
+//                    userEmailForAssigning.setText("");
+//                    break;
+//                }
+//            } // end for
+//        } else {
+//            // remove user from taskMemberList
+//            // add user to unAssignMemberList
+//
+//            for (User user : mUserList) {
+//                if (user.getId().equals(unassignedUserId)) {
+//                    mUnassignedUserList.add(user);
+//                    for (ChecklistMember tempUser : mChecklistMembers) {
+//                        if (tempUser.getUserId().equals(unassignedUserId) && (tempUser.getChecklistId() == taskId)) {
+//                            mChecklistMembers.remove(tempUser);
+//                            break;
+//                        } // end if
+//                    } // end for
+//                    break;
+//                } // end if
+//            } // end for
+//        } // end if
 
         manipulateDataToDisplayOnRV();
-        setupAutoCompleteTextView();
     }
 
     private void manipulateDataToDisplayOnRV() {
@@ -212,30 +227,10 @@ public class AssigningDialogFragment extends DialogFragment
         } // end for
     }
 
-    private void setupAutoCompleteTextView() {
-        userEmailForAssigning = view.findViewById(R.id.edt_user_email_for_assigning);
-
-        emailList = new ArrayList<>();
-        for (User user : mUnassignedUserList) {
-            emailList.add(user.getEmail());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice, emailList);
-        userEmailForAssigning.setAdapter(adapter);
-    }
-
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.bt_add_user) {
-            userEmailToAssign = userEmailForAssigning.getText().toString();
-            if (!emailList.contains(userEmailToAssign)) {
-                Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
-                userEmailForAssigning.startAnimation(shakeAnimation);
-            } else {
-                handleAssignUser(userEmailToAssign);
-            }
-        } else {
+        if (v.getId() == R.id.bt_dismiss) {
             dismiss();
         }
     }
@@ -249,18 +244,22 @@ public class AssigningDialogFragment extends DialogFragment
         return null;
     }
 
-    private void handleAssignUser(String userEmail) {
-        User user = findUser(userEmail);
-        ChecklistMember checklistMember = new ChecklistMember(null, checklistId, user.getId());
-        mDialogPresenter.assignUser(checklistMember);
+    @Override
+    public void finishedAssignMember(TaskMember taskMember) {
+        mTaskMembers.add(taskMember);
+        mAdapter.setTaskMembers(mTaskMembers);
     }
 
     @Override
-    public void onEvent(String userId) {
-        unassignedUserId = userId;
+    public void onEvent(String userId, Integer taskMemberId, boolean doAssign) {
         for (ChecklistMember member : mChecklistMembers) {
-            if (member.getUserId().equals(unassignedUserId)) {
-                mDialogPresenter.unassignUser(member.getId());
+            if (member.getUserId().equals(userId)) {
+                if (!doAssign) {
+                    mDialogPresenter.unassignUser(taskMemberId);
+                } else {
+                    TaskMember tmpMember = new TaskMember(null, taskId, member.getUserId());
+                    mDialogPresenter.assignUser(tmpMember);
+                }
                 break;
             } // end if
         } // end for

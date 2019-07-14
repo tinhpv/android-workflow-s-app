@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.task.dialog.assignment;
+package com.example.workflow_s.ui.taskdetail.dialog.assignment;
 
 import android.util.Log;
 
@@ -8,6 +8,7 @@ import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -15,12 +16,12 @@ import java.util.ArrayList;
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
-
 public class AssigningDialogPresenterImpl implements AssigningDialogContract.AssigningDialogPresenter,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedAssignMemberListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedUnassignMemberListener,
-        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetChecklistInfoListener {
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetChecklistInfoListener,
+        AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetTaskMemberListener {
 
     private AssigningDialogContract.AssigningDialogView mDialogView;
     private AssigningDialogInteractor mDialogInteractor;
@@ -31,18 +32,28 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
+    public void getTaskMember(int taskId) {
+        mDialogInteractor.getTaskMember(taskId, this);
+    }
+
+    @Override
+    public void onFinishedGetTaskMember(List<TaskMember> taskMemberList) {
+        mDialogView.finishedGetTaskMember(taskMemberList);
+    }
+
+    @Override
     public void getOrgMember(int orgId) {
         mDialogInteractor.getAllMember(orgId, this);
     }
 
     @Override
-    public void assignUser(ChecklistMember checklistMember) {
-        mDialogInteractor.assignChecklistMember(checklistMember, this);
+    public void assignUser(TaskMember taskMember) {
+        mDialogInteractor.assignTaskMember(taskMember, this);
     }
 
     @Override
     public void unassignUser(int memberId) {
-        mDialogInteractor.unassignChecklistMember(memberId, this);
+        mDialogInteractor.unassignTaskMember(memberId, this);
     }
 
     @Override
@@ -56,14 +67,13 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void onFinishedAssigning(ChecklistMember member) {
-        mDialogView.finishedAssignMember(member);
+    public void onFinishedAssigning(TaskMember taskMember) {
+        mDialogView.finishedAssignMember(taskMember);
     }
 
-
     @Override
-    public void onFinishedUnassigning() {
-        mDialogView.finishedUnassignMember();
+    public void onFinishedUnassigning(int memberId) {
+        mDialogView.finishedUnassignMember(memberId);
     }
 
     @Override

@@ -1,11 +1,11 @@
-package com.example.workflow_s.ui.task.dialog.assignment;
+package com.example.workflow_s.ui.taskdetail.dialog.assignment;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
-import com.example.workflow_s.ui.organization.OrganizationContract;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,18 +17,21 @@ import java.util.List;
 
 
 public interface AssigningDialogContract {
+
     interface AssigningDialogPresenter {
         void getOrgMember(int orgId);
-        void assignUser(ChecklistMember checklistMember);
+        void getTaskMember(int taskId);
+        void assignUser(TaskMember taskMember);
         void unassignUser(int memberId);
         void getChecklistInfo(int checklistId);
     }
 
     interface AssigningDialogView {
         void finishedGetMember(List<User> userList);
-        void finishedAssignMember(ChecklistMember member);
-        void finishedUnassignMember();
+        void finishedAssignMember(TaskMember taskMember);
+        void finishedUnassignMember(int memberId);
         void finishedGetChecklistInfoById(Checklist checklist);
+        void finishedGetTaskMember(List<TaskMember> taskMemberList);
     }
 
     interface GetDataAssignInteractor {
@@ -44,21 +47,27 @@ public interface AssigningDialogContract {
         }
 
         interface OnFinishedAssignMemberListener {
-            void onFinishedAssigning(ChecklistMember member);
+            void onFinishedAssigning(TaskMember taskMember);
             void onFailure(Throwable t);
         }
 
         interface OnFinishedUnassignMemberListener {
-            void onFinishedUnassigning();
+            void onFinishedUnassigning(int memberId);
+            void onFailure(Throwable t);
+        }
+
+        interface OnFinishedGetTaskMemberListener {
+            void onFinishedGetTaskMember(List<TaskMember> taskMemberList);
             void onFailure(Throwable t);
         }
 
 
 
         void getAllMember(int orgId, OnFinishedGetMembersListener onFinishedListener);
+        void getTaskMember(int taskId, OnFinishedGetTaskMemberListener listener);
         void getChecklistInfo(int checklistId, OnFinishedGetChecklistInfoListener listener);
-        void assignChecklistMember(ChecklistMember checklistMember, OnFinishedAssignMemberListener listener);
-        void unassignChecklistMember(int memberId, OnFinishedUnassignMemberListener listener);
+        void assignTaskMember(TaskMember taskMember, OnFinishedAssignMemberListener listener);
+        void unassignTaskMember(int memberId, OnFinishedUnassignMemberListener listener);
 
     }
 }

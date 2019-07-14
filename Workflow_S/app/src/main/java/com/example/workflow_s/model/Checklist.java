@@ -8,6 +8,7 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Checklist {
@@ -45,8 +46,8 @@ public class Checklist {
     @SerializedName("templateName")
     private String templateName;
 
-    @SerializedName("checklistMembers")
-    private List<ChecklistMember> checklistMembers;
+    @SerializedName("checklistMember")
+    private ArrayList<ChecklistMember> checklistMembers;
 
     @SerializedName("dueTime")
     private String dueTime;
@@ -67,11 +68,11 @@ public class Checklist {
         this.doneTask = doneTask;
     }
 
-    public List<ChecklistMember> getChecklistMembers() {
+    public ArrayList<ChecklistMember> getChecklistMembers() {
         return checklistMembers;
     }
 
-    public void setChecklistMembers(List<ChecklistMember> checklistMembers) {
+    public void setChecklistMembers(ArrayList<ChecklistMember> checklistMembers) {
         this.checklistMembers = checklistMembers;
     }
 
@@ -83,7 +84,7 @@ public class Checklist {
         this.dueTime = dueTime;
     }
 
-    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, String templateName, List<ChecklistMember> checklistMembers, List<Task> taskItems) {
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, String templateName, ArrayList<ChecklistMember> checklistMembers, List<Task> taskItems) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -99,7 +100,7 @@ public class Checklist {
         this.taskItems = taskItems;
     }
 
-    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, List<ChecklistMember> checklistMembers, String dueTime, List<Task> taskItems) {
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, ArrayList<ChecklistMember> checklistMembers, String dueTime, List<Task> taskItems) {
         this.id = id;
         this.userId = userId;
         this.name = name;

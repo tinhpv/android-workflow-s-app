@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
@@ -27,6 +28,8 @@ import com.example.workflow_s.ui.taskdetail.template.TemplateTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdapter.TaskViewHolder> {
@@ -34,7 +37,13 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
     CheckboxListener listener;
     private RecyclerView mRecyclerView;
-    int tappedPosition;
+    private ArrayList<Task> mTaskList;
+    private Dialog errorDialog;
+    private int checklistId;
+
+    public void setChecklistId(int checklistId) {
+        this.checklistId = checklistId;
+    }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -46,11 +55,6 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         void onEventCheckBox(Boolean isSelected, int taskId);
     }
 
-    // list task
-    private List<Task> mTaskList;
-
-    //dialog
-    private Dialog errorDialog;
 
     // viewholder
     public class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +77,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         this.listener = listener;
     }
 
-    public void setTaskList(List<Task> taskList) {
+    public void setTaskList(ArrayList<Task> taskList) {
         mTaskList = taskList;
         notifyDataSetChanged();
     }
@@ -99,9 +103,12 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
+
                 args.putString("taskId", String.valueOf(mTaskList.get(index).getId()));
                 args.putString("taskName", mTaskList.get(index).getName());
                 args.putInt("location_activity", 2);
+                args.putInt("checklistId", checklistId);
+
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
 
 //                int index = mRecyclerView.getChildLayoutPosition(v);

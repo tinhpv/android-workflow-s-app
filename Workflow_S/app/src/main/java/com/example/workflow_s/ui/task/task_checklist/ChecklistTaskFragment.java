@@ -23,8 +23,8 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
@@ -56,8 +56,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
     private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId;
-    private List<TaskMember> checklistMemberList;
-    private String checklistDueTime, checklistFirstTaskId;
 
     private ProgressBar mTaskProgressBar;
     private int totalTask, doneTask, location;
@@ -100,6 +98,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
                         = TimeSettingDialogFragment.newInstance(checklistId);
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
+
             case R.id.action_assign:
                 // convert List to ArrayList so that we can store it in Bundle
                 AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId, checklistId);
@@ -146,6 +145,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         // USER's DATA
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
+        mChecklistChecklistTaskAdapter.setChecklistId(checklistId);
 
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
@@ -162,12 +162,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             checklistUserId = checklist.getUserId();
             totalTask = checklist.getTotalTask();
             doneTask = checklist.getDoneTask();
-            List<Task> tasks = checklist.getTaskItems();
-
-            checklistMemberList = new ArrayList<>();
-            checklistMemberList = tasks.get(0).getTaskMemberList();
-            checklistDueTime = tasks.get(0).getDueTime();
-            checklistFirstTaskId = String.valueOf(tasks.get(0).getId());
+            ArrayList<Task> tasks = (ArrayList<Task>) checklist.getTaskItems();
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
 
             initUI();

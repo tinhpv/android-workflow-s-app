@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
@@ -43,6 +44,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     @Override
     public void finishedSaveContent() {
 
+    }
+
+    @Override
+    public void finishedGetTaskDetail(Task task) {
+        // do nothing huh?
     }
 
     @Override

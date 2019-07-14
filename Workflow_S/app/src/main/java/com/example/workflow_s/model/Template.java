@@ -28,6 +28,8 @@ public class Template {
     private Integer organizationId;
     @SerializedName("category")
     private String category;
+    @SerializedName("dueTime")
+    private String dueTime;
     @SerializedName("taskItemViewModels")
     private List<Task> taskItemList;
 
@@ -43,6 +45,7 @@ public class Template {
         this.category = category;
     }
 
+
     public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category, List<Task> taskItemViewModels) {
         this.id = id;
         this.userId = userId;
@@ -53,6 +56,27 @@ public class Template {
         this.organizationId = organizationId;
         this.category = category;
         this.taskItemList = taskItemViewModels;
+    }
+
+    public Template(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, String category, String dueTime, List<Task> taskItemList) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.category = category;
+        this.dueTime = dueTime;
+        this.taskItemList = taskItemList;
+    }
+
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(String dueTime) {
+        this.dueTime = dueTime;
     }
 
     public Integer getId() {

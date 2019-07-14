@@ -1,10 +1,6 @@
 package com.example.workflow_s.ui.task.dialog.time_setting;
 
-import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.TaskMember;
-import com.example.workflow_s.ui.task.dialog.assignment.AssigningDialogContract;
-
-import java.util.ArrayList;
+import com.example.workflow_s.model.Checklist;
 
 /**
  * Workflow_S
@@ -16,13 +12,13 @@ import java.util.ArrayList;
 public interface TimeSettingContract {
 
     interface TimeSettingPresenter {
-        void setDueTime(int taskId, String datetime);
-        void getFirstTask(int checklistId);
+        void setDueTime(int checklistId, String datetime);
+        void getChecklistInfo(int checklistId);
     }
 
     interface TimeSettingView {
         void finishSetDueTime();
-        void finishedGetFirstTask(Task task);
+        void finishedGetChecklist(Checklist checklist);
     }
 
 
@@ -33,13 +29,13 @@ public interface TimeSettingContract {
             void onFailure(Throwable t);
         }
 
-        interface OnFinishedGetTaskListener {
-            void onFinishedGetTask(Task task);
+        interface OnFinishedGetChecklistInfoListener {
+            void onFinishedGetChecklistInfo(Checklist checklist);
             void onFailure(Throwable t);
         }
 
 
-        void setTime(int taskId, String dateTime, OnFinishedSetTimeListener onFinishedListener);
-        void getTask(int checklistId, OnFinishedGetTaskListener listener);
+        void getChecklistInfo(int checklistId, OnFinishedGetChecklistInfoListener listener);
+        void setTime(int checklistId, String dateTime, OnFinishedSetTimeListener onFinishedListener);
     }
 }

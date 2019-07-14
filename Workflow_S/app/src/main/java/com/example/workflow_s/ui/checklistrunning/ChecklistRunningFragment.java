@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,11 @@ import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Workflow_S
@@ -92,15 +98,26 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
             Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
             checklistNameEditText.startAnimation(shakeAnimation);
         } else {
-            // fixme - hardcode
+            // fixed - hardcode
             mRunningPresenter.getTemplateObject(String.valueOf(templateId), templateUserId, orgId);
         }
+    }
+
+    private String getTimeToRunChecklist() {
+        Date oldDate = new Date(); // oldDate == current time
+        final long hoursInMillis = 60L * 60L * 1000L;
+        Date newDate = new Date(oldDate.getTime() +
+                (24L * hoursInMillis)); // Adds 2 hours
+
+        SimpleDateFormat sm = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        return sm.format(newDate);
     }
 
     @Override
     public void finishGetTemplateObject(Template template) {
         if (null != template) {
             template.setName(checklistName);
+            template.setDueTime(getTimeToRunChecklist());
             mRunningPresenter.runChecklist(userId, template);
         }
     }

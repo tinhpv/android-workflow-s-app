@@ -77,6 +77,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         checklistProgressViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
         checklistProgressViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
         List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
+
         if (checklistMembers != null) {
             int numberMember = checklistMembers.size();
             checklistProgressViewHolder.mMemberNumber.setText(String.valueOf(numberMember));
@@ -96,6 +97,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     private String getDueTimeOfChecklist(int index) {
         String time = "not set";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         if (mChecklists.get(index).getDueTime() != null) {
             String dateSelected = mChecklists.get(index).getDueTime().split("T")[0];
             String timeSelected = mChecklists.get(index).getDueTime().split("T")[1];
@@ -154,6 +156,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         private TextView mChecklistName, mChecklistProgress, mMemberNumber, mTemplateName, mDueTime;
         private LinearLayout item;
         private ProgressBar progressBar;
+
         public ChecklistProgressViewHolder(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.item_checklist_progress);

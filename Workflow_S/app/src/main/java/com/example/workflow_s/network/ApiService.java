@@ -2,6 +2,7 @@ package com.example.workflow_s.network;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Comment;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.TaskMember;
@@ -32,7 +33,6 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-
     @GET("api/Checklists/checklistprogress/{organizationId}")
     Call<List<Checklist>> getAllRunningChecklists(@Path("organizationId") String organizationId);
 
@@ -55,7 +55,8 @@ public interface ApiService {
                                          @Path("phone") String phoneNumber);
 
     @POST("/api/Users/verifycode/{userid}/{code}")
-    Call<String> submitVerifyCode(@Path("userid") String userId, @Path("code") String verifyCode);
+    Call<String> submitVerifyCode(@Path("userid") String userId,
+                                  @Path("code") String verifyCode);
 
     @GET("/api/Users/getverifycode/{id}")
     Call<ResponseBody> getVerifyCode(@Path("id") String userId);
@@ -106,11 +107,16 @@ public interface ApiService {
     Call<List<UserOrganization>> getListUserOrganization(@Path("userId") String userId);
 
     @POST("/api/TaskMembers/assign")
-    Call<ResponseBody> assignMember(@Body TaskMember taskMember);
+    Call<TaskMember> assignTaskMember(@Body TaskMember taskMember);
+
+    @POST("/api/ChecklistMembers/member")
+    Call<ChecklistMember> assignChecklistMember(@Body ChecklistMember checklistMember);
 
     @DELETE("/api/TaskMembers/delete/{memberId}")
-    Call<ResponseBody> unassignMember(@Path("memberId") int memberId);
+    Call<ResponseBody> unassignTaskMember(@Path("memberId") int memberId);
 
+    @DELETE("/api/ChecklistMembers/delete/{memberid}")
+    Call<ResponseBody> unassignChecklistMember(@Path("memberid") int memberId);
 
     @GET("/api/TaskMembers/taskmember/{taskId}")
     Call<List<TaskMember>> getAllTaskMember(@Path("taskId") int taskId);
@@ -121,6 +127,9 @@ public interface ApiService {
 
     @GET("/api/TaskItems/getfirsttask/{checklistId}")
     Call<Task> getFirstTaskFromChecklist(@Path("checklistId") int checklistId);
+
+    @GET("/api/TaskItems/gettaskitem/{taskitemId}")
+    Call<Task> getTaskById(@Path("taskitemId") int taskId);
 
     @PUT("/api/Checklists/done/{checklistid}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId);
@@ -139,4 +148,10 @@ public interface ApiService {
     Call<ResponseBody> updateDeviceToken(@Path("userid") String userId, @Path("devicetoken") String deviceToken);
 
 
+
+    @GET("/api/Checklists/getchecklistmobile/{checklistid}")
+    Call<Checklist> getChecklistById(@Path("checklistid") int checklistId);
+
+    @PUT("/api/Checklists/duetime/{checklistid}/{datetime}")
+    Call<ResponseBody> setChecklistDueTime(@Path("checklistid") int checklistId, @Path("datetime") String datetime);
 }

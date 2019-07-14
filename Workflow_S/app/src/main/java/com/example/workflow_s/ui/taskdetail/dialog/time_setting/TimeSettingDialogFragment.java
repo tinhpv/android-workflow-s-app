@@ -1,14 +1,12 @@
-package com.example.workflow_s.ui.task.dialog.time_setting;
+package com.example.workflow_s.ui.taskdetail.dialog.time_setting;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -23,8 +21,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.Date;
-
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
@@ -32,6 +28,7 @@ import com.example.workflow_s.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -47,15 +44,17 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
     private TextView dateTextView, timeTextView;
     private Button saveButton,cancelButton;
     private ImageButton setDateButton, setTimeButton;
+
+
     private String previousDueTime, dateSelected, timeSelected;
-    private int checklistId;
+    private int taskId;
 
     TimeSettingContract.TimeSettingPresenter mPresenter;
 
-    public static TimeSettingDialogFragment newInstance(int checklistId) {
+    public static TimeSettingDialogFragment newInstance(int taskId) {
         TimeSettingDialogFragment frag = new TimeSettingDialogFragment();
         Bundle args = new Bundle();
-        args.putInt("checklistId", checklistId);
+        args.putInt("taskId", taskId);
         frag.setArguments(args);
         return frag;
     }
@@ -73,22 +72,32 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
         getData();
     }
 
+//    @Override
+//    public void finishedGetChecklist(Checklist checklist) {
+//        if (null != checklist) {
+//            previousDueTime = checklist.getDueTime();
+//            dateSelected = previousDueTime.split("T")[0];
+//            timeSelected = previousDueTime.split("T")[1];
+//            bindUI();
+//        }
+//    }
+
+    private void getData() {
+        taskId = getArguments().getInt("taskId");
+        mPresenter = new TimeSettingPresenterImpl(this, new TimeSettingInteractor());
+        mPresenter.getTaskInfo(taskId);
+    }
+
+
     @Override
-    public void finishedGetChecklist(Checklist checklist) {
-        if (null != checklist) {
-            previousDueTime = checklist.getDueTime();
+    public void finishedGetTask(Task task) {
+        if (null != task) {
+            previousDueTime = task.getDueTime();
             dateSelected = previousDueTime.split("T")[0];
             timeSelected = previousDueTime.split("T")[1];
             bindUI();
         }
     }
-
-    private void getData() {
-        checklistId = getArguments().getInt("checklistId");
-        mPresenter = new TimeSettingPresenterImpl(this, new TimeSettingInteractor());
-        mPresenter.getChecklistInfo(checklistId);
-    }
-
 
     private void bindUI() {
         dateTextView = view.findViewById(R.id.tv_date);
@@ -143,7 +152,7 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
     private void handleSaveTime() {
         if (isValueDateTime()) {
             String datetime = dateSelected + " " + timeSelected;
-            mPresenter.setDueTime(checklistId, datetime);
+            mPresenter.setDueTime(taskId, datetime);
         } else {
             Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
             dateTextView.startAnimation(shakeAnimation);
