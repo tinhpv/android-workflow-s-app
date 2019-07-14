@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingContract;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPresenter,
-                TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener, TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener {
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -31,6 +34,11 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     }
 
     @Override
+    public void getTask(int taskId) {
+        mGetTaskDetailDataInteractor.getTaskById(taskId, this);
+    }
+
+    @Override
     public void updateTaskDetail(List<ContentDetail> detailList) {
         mGetTaskDetailDataInteractor.saveDetail(detailList, this);
     }
@@ -43,6 +51,11 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     @Override
     public void onFinishedSave() {
         mTaskDetailView.finishedSaveContent();
+    }
+
+    @Override
+    public void onFinishedGetTask(Task task) {
+        mTaskDetailView.finishedGetTaskDetail(task);
     }
 
     @Override

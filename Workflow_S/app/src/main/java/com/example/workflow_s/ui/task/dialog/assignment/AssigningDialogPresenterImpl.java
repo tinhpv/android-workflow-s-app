@@ -56,8 +56,8 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void onFinishedAssigning() {
-        mDialogView.finishedAssignMember();
+    public void onFinishedAssigning(ChecklistMember member) {
+        mDialogView.finishedAssignMember(member);
     }
 
 

@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
@@ -63,14 +64,15 @@ import java.util.List;
 public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
         View.OnClickListener, FirebaseUtils.UploadImageListener {
 
-    private final int REQUEST_CAMERA=1, REQUEST_GALLERY =2;
+    private final int REQUEST_CAMERA = 1, REQUEST_GALLERY = 2;
 
     private View view;
     private int taskId, checklistId;
-    private String taskName, currentPhotoPath;;
+    private String taskName, currentPhotoPath, taskStatus;
     private LinearLayout mContainerLayout;
     private Button buttonCompleteTask, buttonSaveContent;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
+    private Task currentTask;
     private Dialog myDialog;
     private Button btnCamera,btnGallery;
 
@@ -136,11 +138,11 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         initData();
     }
 
+
     public void initData() {
         totalImagesNumberToUpload = 0;
-
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
-        mPresenter.loadDetails(taskId);
+        mPresenter.getTask(taskId);
     }
 
     private void getTaskIdFromParentFragment() {
@@ -154,6 +156,24 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
         isChanged = false;
         imageDataEncoded = new HashMap<String, String>();
+    }
+
+    @Override
+    public void finishedGetTaskDetail(Task task) {
+        if (null != task) {
+            currentTask = task;
+            taskStatus = currentTask.getTaskStatus();
+            updateButtonLayout(taskStatus);
+            mPresenter.loadDetails(taskId);
+        }
+    }
+
+    private void updateButtonLayout(String taskStatus) {
+        if (taskStatus.equals(getString(R.string.task_done))) {
+            buttonCompleteTask.setText("Reactive");
+        } else if (taskStatus.equals(getString(R.string.task_running))) {
+            buttonCompleteTask.setText("Complete");
+        }
     }
 
     @Override
@@ -404,7 +424,9 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_complete_task:
+                taskStatus = getString(R.string.task_done);
                 handleSaveContentDetail();
+                updateButtonLayout(taskStatus);
                 break;
             case R.id.bt_save_content:
                 handleSaveContentDetail();

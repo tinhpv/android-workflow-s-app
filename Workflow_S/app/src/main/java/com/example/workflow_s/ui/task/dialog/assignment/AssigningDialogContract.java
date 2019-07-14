@@ -26,7 +26,7 @@ public interface AssigningDialogContract {
 
     interface AssigningDialogView {
         void finishedGetMember(List<User> userList);
-        void finishedAssignMember();
+        void finishedAssignMember(ChecklistMember member);
         void finishedUnassignMember();
         void finishedGetChecklistInfoById(Checklist checklist);
     }
@@ -44,7 +44,7 @@ public interface AssigningDialogContract {
         }
 
         interface OnFinishedAssignMemberListener {
-            void onFinishedAssigning();
+            void onFinishedAssigning(ChecklistMember member);
             void onFailure(Throwable t);
         }
 

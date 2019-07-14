@@ -47,15 +47,15 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
     @Override
     public void assignChecklistMember(ChecklistMember checklistMember, final OnFinishedAssignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.assignChecklistMember(checklistMember);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<ChecklistMember> call = service.assignChecklistMember(checklistMember);
+        call.enqueue(new Callback<ChecklistMember>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedAssigning();
+            public void onResponse(Call<ChecklistMember> call, Response<ChecklistMember> response) {
+                listener.onFinishedAssigning(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ChecklistMember> call, Throwable t) {
                 listener.onFailure(t);
             }
         });

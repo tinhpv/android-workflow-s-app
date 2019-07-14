@@ -129,24 +129,24 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     @Override
-    public void finishedAssignMember() {
-        updateUsersToDisplay(true);
+    public void finishedAssignMember(ChecklistMember member) {
+        updateUsersToDisplay(true, member);
     }
 
     @Override
     public void finishedUnassignMember() {
-        updateUsersToDisplay(false);
+        updateUsersToDisplay(false, null);
     }
 
 
-    private void updateUsersToDisplay(boolean isAssigned) {
+    private void updateUsersToDisplay(boolean isAssigned, ChecklistMember member) {
         if (isAssigned) {
             // remove user who was assigned out of mUnassignedUserList
             // add user to the taskMemberList
             for (User user : mUnassignedUserList) {
                 if (user.getEmail().equals(userEmailToAssign)) {
                     mUnassignedUserList.remove(user);
-                    mChecklistMembers.add(new ChecklistMember(null, checklistId, user.getId()));
+                    mChecklistMembers.add(member);
                     userEmailForAssigning.setText("");
                     break;
                 }

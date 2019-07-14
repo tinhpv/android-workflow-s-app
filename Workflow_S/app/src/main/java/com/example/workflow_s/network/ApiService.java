@@ -108,7 +108,7 @@ public interface ApiService {
     Call<TaskMember> assignTaskMember(@Body TaskMember taskMember);
 
     @POST("/api/ChecklistMembers/member")
-    Call<ResponseBody> assignChecklistMember(@Body ChecklistMember checklistMember);
+    Call<ChecklistMember> assignChecklistMember(@Body ChecklistMember checklistMember);
 
     @DELETE("/api/TaskMembers/delete/{memberId}")
     Call<ResponseBody> unassignTaskMember(@Path("memberId") int memberId);
