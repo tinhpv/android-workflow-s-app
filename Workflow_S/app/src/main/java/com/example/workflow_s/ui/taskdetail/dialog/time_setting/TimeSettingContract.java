@@ -1,6 +1,6 @@
 package com.example.workflow_s.ui.taskdetail.dialog.time_setting;
 
-import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.Task;
 
 /**
  * Workflow_S
@@ -12,13 +12,13 @@ import com.example.workflow_s.model.Checklist;
 public interface TimeSettingContract {
 
     interface TimeSettingPresenter {
-        void setDueTime(int checklistId, String datetime);
-        void getChecklistInfo(int checklistId);
+        void setDueTime(int taskId, String datetime);
+        void getTaskInfo(int taskId);
     }
 
     interface TimeSettingView {
         void finishSetDueTime();
-        void finishedGetChecklist(Checklist checklist);
+        void finishedGetTask(Task task);
     }
 
 
@@ -29,13 +29,13 @@ public interface TimeSettingContract {
             void onFailure(Throwable t);
         }
 
-        interface OnFinishedGetChecklistInfoListener {
-            void onFinishedGetChecklistInfo(Checklist checklist);
+        interface OnFinishedGetTaskInfoListener {
+            void onFinishedGetTaskInfo(Task task);
             void onFailure(Throwable t);
         }
 
 
-        void getChecklistInfo(int checklistId, OnFinishedGetChecklistInfoListener listener);
-        void setTime(int checklistId, String dateTime, OnFinishedSetTimeListener onFinishedListener);
+        void getTaskInfo(int taskId, OnFinishedGetTaskInfoListener listener);
+        void setTime(int taskId, String dateTime, OnFinishedSetTimeListener onFinishedListener);
     }
 }

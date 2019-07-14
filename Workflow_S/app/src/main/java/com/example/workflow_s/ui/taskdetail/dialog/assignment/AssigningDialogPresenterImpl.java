@@ -16,7 +16,6 @@ import java.util.List;
  * Copyright © 2019 TinhPV. All rights reserved
  **/
 
-
 public class AssigningDialogPresenterImpl implements AssigningDialogContract.AssigningDialogPresenter,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedGetMembersListener,
         AssigningDialogContract.GetDataAssignInteractor.OnFinishedAssignMemberListener,
@@ -73,8 +72,8 @@ public class AssigningDialogPresenterImpl implements AssigningDialogContract.Ass
     }
 
     @Override
-    public void onFinishedUnassigning() {
-        mDialogView.finishedUnassignMember();
+    public void onFinishedUnassigning(int memberId) {
+        mDialogView.finishedUnassignMember(memberId);
     }
 
     @Override

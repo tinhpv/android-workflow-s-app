@@ -29,7 +29,7 @@ public interface AssigningDialogContract {
     interface AssigningDialogView {
         void finishedGetMember(List<User> userList);
         void finishedAssignMember(TaskMember taskMember);
-        void finishedUnassignMember();
+        void finishedUnassignMember(int memberId);
         void finishedGetChecklistInfoById(Checklist checklist);
         void finishedGetTaskMember(List<TaskMember> taskMemberList);
     }
@@ -52,7 +52,7 @@ public interface AssigningDialogContract {
         }
 
         interface OnFinishedUnassignMemberListener {
-            void onFinishedUnassigning();
+            void onFinishedUnassigning(int memberId);
             void onFailure(Throwable t);
         }
 

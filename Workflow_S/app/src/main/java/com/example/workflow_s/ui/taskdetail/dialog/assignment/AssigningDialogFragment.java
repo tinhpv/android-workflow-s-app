@@ -144,10 +144,14 @@ public class AssigningDialogFragment extends DialogFragment
 
 
     @Override
-    public void finishedUnassignMember() {
+    public void finishedUnassignMember(int memberId) {
         for (TaskMember taskMember : mTaskMembers) {
-
-        }
+            if (taskMember.getId() == memberId) {
+                mTaskMembers.remove(taskMember);
+                mAdapter.setTaskMembers(mTaskMembers);
+                break;
+            } // end if
+        } // end for
     }
 
 
@@ -247,13 +251,11 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onEvent(String userId, boolean doAssign) {
-
+    public void onEvent(String userId, Integer taskMemberId, boolean doAssign) {
         for (ChecklistMember member : mChecklistMembers) {
             if (member.getUserId().equals(userId)) {
                 if (!doAssign) {
-
-                    mDialogPresenter.unassignUser(member.getId());
+                    mDialogPresenter.unassignUser(taskMemberId);
                 } else {
                     TaskMember tmpMember = new TaskMember(null, taskId, member.getUserId());
                     mDialogPresenter.assignUser(tmpMember);
@@ -261,6 +263,5 @@ public class AssigningDialogFragment extends DialogFragment
                 break;
             } // end if
         } // end for
-
     }
 }

@@ -35,11 +35,11 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.ui.notification.NotificationFragment;
-import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
+import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.FirebaseUtils;
@@ -89,9 +89,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 return true;
 
             case R.id.action_task_set_time:
-//                TimeSettingDialogFragment settingDialogFragment
-//                        = TimeSettingDialogFragment.newInstance(checklistId);
-//                settingDialogFragment.show(fm, "fragment_set_time");
+                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(taskId);
+                settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

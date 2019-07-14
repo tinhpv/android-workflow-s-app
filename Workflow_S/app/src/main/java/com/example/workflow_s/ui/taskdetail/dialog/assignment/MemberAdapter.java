@@ -33,7 +33,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
     EventListener listener;
 
     public interface EventListener {
-        void onEvent(String userId, boolean doAssign);
+        void onEvent(String userId, Integer taskMemberId, boolean doAssign);
     }
 
     private List<User> mUserList;
@@ -102,9 +102,18 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         return false;
     }
 
+    private Integer taskMemberId(String userId) {
+        for (TaskMember member : mTaskMembers) {
+            if (member.getUserId().equals(userId)) {
+                return member.getId();
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MemberViewHolder memberViewHolder, final int i) {
-        User user = getUser(mChecklistMembers.get(i).getUserId());
+        final User user = getUser(mChecklistMembers.get(i).getUserId());
 
         memberViewHolder.mMemberName.setText(user.getName());
         memberViewHolder.mEmail.setText(user.getEmail());
@@ -123,7 +132,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
                 public void onClick(View v) {
                     // DONE - HANDLE UNASSIGN USER HERE
                     //int index = mRecyclerView.getChildLayoutPosition(v);
-                    listener.onEvent(mChecklistMembers.get(i).getUserId(), false);
+                    String userId = mChecklistMembers.get(i).getUserId();
+                    int taskMemberId = taskMemberId(userId);
+                    listener.onEvent(userId, taskMemberId, false);
                 }
             });
         } else {
@@ -134,10 +145,10 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
                 public void onClick(View v) {
                     // DONE - HANDLE UNASSIGN USER HERE
                     //int index = mRecyclerView.getChildLayoutPosition(v);
-                    listener.onEvent(mChecklistMembers.get(i).getUserId(), true);
+                    listener.onEvent(mChecklistMembers.get(i).getUserId(), null, true);
                 }
             });
-        }
+        } // end if
 
     }
 
@@ -149,7 +160,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         }
         return mChecklistMembers.size();
     }
-
 
 
     public class MemberViewHolder extends RecyclerView.ViewHolder {

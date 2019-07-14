@@ -79,13 +79,14 @@ public class AssigningDialogInteractor implements AssigningDialogContract.GetDat
     }
 
     @Override
-    public void unassignTaskMember(int memberId, final OnFinishedUnassignMemberListener listener) {
+    public void unassignTaskMember(final int memberId, final OnFinishedUnassignMemberListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<ResponseBody> call = service.unassignTaskMember(memberId);
         call.enqueue(new Callback<ResponseBody>() {
+
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedUnassigning();
+                listener.onFinishedUnassigning(memberId);
             }
 
             @Override
