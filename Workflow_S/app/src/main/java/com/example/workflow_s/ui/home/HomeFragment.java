@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.menu_home, menu);
+       // getActivity().setTitle("Home");
     }
 
     @Override

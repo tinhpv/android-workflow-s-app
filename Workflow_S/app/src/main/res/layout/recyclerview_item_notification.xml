@@ -27,29 +27,12 @@
         android:layout_marginLeft="14dp"
         android:layout_toRightOf="@id/img_user_avatar_notification"
         android:fontFamily="@font/avenir_light"
-        android:lines="2"
-        android:maxLines="2"
+        android:lines="3"
+        android:maxLines="3"
         android:textColor="@color/colorPrimaryText"
         android:text="Tinh had just run 3 checlists in Coding in..."
         android:textSize="16sp"
         android:textStyle="bold" />
-
-
-
-    <!--time label next on the right-->
-    <TextView
-        android:id="@+id/tv_time_notification"
-        android:layout_width="70dp"
-        android:layout_height="20dp"
-        android:layout_below="@id/tv_notification"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:fontFamily="@font/avenir_heavy"
-        android:gravity="center"
-        android:text="May 28 at 3:46pm"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="8sp" />
 
 
 </RelativeLayout>

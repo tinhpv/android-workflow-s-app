@@ -60,7 +60,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private String checklistDueTime, checklistFirstTaskId;
 
     private ProgressBar mTaskProgressBar;
-    private int totalTask, doneTask;
+    private int totalTask, doneTask, location;
 
     LottieAnimationView mAnimationView;
 
@@ -75,6 +75,20 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         menu.clear();
         inflater.inflate(R.menu.menu_task_detail, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        switch (location) {
+            case 1:
+                getActivity().setTitle("Home");
+                break;
+            case 2:
+                getActivity().setTitle("Active checklist");
+                break;
+        }
+        super.onDestroyView();
     }
 
     @Override
@@ -128,7 +142,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
-
+        location = arguments.getInt("location");
         // USER's DATA
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
@@ -246,4 +260,5 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private void handleCompleteChecklist() {
         switchOnLoading();
     }
+
 }

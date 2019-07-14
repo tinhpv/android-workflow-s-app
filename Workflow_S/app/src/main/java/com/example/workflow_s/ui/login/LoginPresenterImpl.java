@@ -15,7 +15,8 @@ import com.example.workflow_s.model.UserOrganization;
 
 public class LoginPresenterImpl implements LoginContract.LoginPresenter,
         LoginContract.GetLoginDataInteractor.OnFinishedSaveUserListener,
-        LoginContract.GetLoginDataInteractor.OnFinishedGetOrganizationListener{
+        LoginContract.GetLoginDataInteractor.OnFinishedGetOrganizationListener,
+        LoginContract.GetLoginDataInteractor.OnFinisedUpdateTokeListener{
 
     private final static String TAG = "LoginPresenterImpl";
 
@@ -51,6 +52,11 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
         mLoginView = null;
     }
 
+    @Override
+    public void updateToken(String userId, String deviceToken) {
+        mGetLoginDataInteractor.updateDeviceToken(userId, deviceToken, this);
+    }
+
     // API Callback
     @Override
     public void onFinished(User user) {
@@ -60,6 +66,11 @@ public class LoginPresenterImpl implements LoginContract.LoginPresenter,
     @Override
     public void onFinished(UserOrganization currentOrganization) {
         mLoginView.onFinishedGetOrg(currentOrganization);
+    }
+
+    @Override
+    public void onFinished() {
+
     }
 
     @Override

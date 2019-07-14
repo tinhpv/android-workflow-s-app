@@ -75,7 +75,7 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
         if (!onChangeButtonStatus) {
             phoneNum = mPhoneNumberEdt.getText().toString();
             onChangeButtonStatus = true;
-            mPresenter.updatePhone(userId, phoneNum, token);
+            mPresenter.updatePhone(userId, phoneNum);
         } else {
             mPresenter.submitVerifyCode(userId, verifyCode);
         }
@@ -97,5 +97,6 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

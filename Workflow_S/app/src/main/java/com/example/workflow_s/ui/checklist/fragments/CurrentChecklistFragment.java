@@ -80,8 +80,13 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_current_checklists, container, false);
-
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getActivity().setTitle("Home");
     }
 
 

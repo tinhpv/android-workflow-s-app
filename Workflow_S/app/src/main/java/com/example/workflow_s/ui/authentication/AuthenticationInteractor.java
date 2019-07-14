@@ -18,11 +18,10 @@ import retrofit2.Response;
 public class AuthenticationInteractor implements AuthenticationContract.ManipAuthenticationInteractor {
 
 
-    // FIXME - HARDCODE HERE FOR TESTING ONLY
     @Override
-    public void updatePhone(String userId, String phoneNum, String deviceToken, final OnFinishedUpdatePhoneListener listener) {
+    public void updatePhone(String userId, String phoneNum, final OnFinishedUpdatePhoneListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.updatePhoneNumber(userId, phoneNum, deviceToken);
+        Call<ResponseBody> call = service.updatePhoneNumber(userId, phoneNum);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -36,11 +35,10 @@ public class AuthenticationInteractor implements AuthenticationContract.ManipAut
         });
     }
 
-    // FIXME - HARDCODE HERE FOR TESTING ONLY
     @Override
     public void submitVerifyCode(String userId, String code, final OnFinishedSubmitCodeListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<String> call = service.submitVerifyCode("107757857762956968267", code);
+        Call<String> call = service.submitVerifyCode(userId, code);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -56,11 +54,10 @@ public class AuthenticationInteractor implements AuthenticationContract.ManipAut
     }
 
 
-    // FIXME - HARDCODE HERE FOR TESTING ONLY
     @Override
     public void getVerifyCode(String userId, final OnFinishedGetVerifyCodeListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.getVerifyCode("107757857762956968267");
+        Call<ResponseBody> call = service.getVerifyCode(userId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

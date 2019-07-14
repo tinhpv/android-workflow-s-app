@@ -6,7 +6,8 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp">
+    android:layout_marginRight="20dp"
+    android:id="@+id/item_today_activity">
 
     <TextView
         android:id="@+id/tv_today_activity_name"

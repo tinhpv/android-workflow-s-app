@@ -18,6 +18,8 @@ public interface LoginContract {
         void getCurrentOrganization(String userId);
         void checkRoleUser(String userRole);
         void onDestroy();
+
+        void updateToken(String userId, String deviceToken);
     }
 
     interface LoginView {
@@ -39,11 +41,17 @@ public interface LoginContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinisedUpdateTokeListener {
+            void onFinished();
+            void onFailure(Throwable t);
+        }
+
         void getCurrentOrganization(String userId,
                                     OnFinishedGetOrganizationListener onFinishedListener);
 
         void saveUserToDB(User user,
                           LoginContract.GetLoginDataInteractor.OnFinishedSaveUserListener onFinishedListener);
 
+        void updateDeviceToken(String userId, String deviceToken, OnFinisedUpdateTokeListener listener);
     }
 }

@@ -62,6 +62,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 String checklistId = String.valueOf(mChecklists.get(index).getId());
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
+                args.putInt("location", 1);
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args);
             }
         });

@@ -6,6 +6,7 @@ import com.example.workflow_s.model.UserOrganization;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +51,24 @@ public class LoginInteractor implements LoginContract.GetLoginDataInteractor {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 onFinishedListener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void updateDeviceToken(String userId, String deviceToken, final OnFinisedUpdateTokeListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.updateDeviceToken(userId, deviceToken);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinished();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
             }
         });
     }
