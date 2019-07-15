@@ -140,6 +140,15 @@ public interface ApiService {
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
+    @PUT("/api/Checklists/done/{checklistid}/{status}")
+    Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId,
+                                         @Path("status") String status);
+
+    @DELETE("/api/Checklists/delete/{checklistid}/{userId}")
+    Call<ResponseBody> deleteChecklist(@Path("checklistid") int checklistId,
+                                       @Path("userId") String userId);
+
+
     @GET("/api/Comments/mobilenotification/{organizationId}/{userId}")
     Call<List<Comment>> getCommentNotification(@Path("organizationId") String orgId, @Path("userId") String userId);
 

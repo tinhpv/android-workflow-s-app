@@ -150,7 +150,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -252,8 +251,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         }
     }
 
+    @Override
+    public void finishChangeChecklistStatus() {
+
+    }
+
     private void handleCompleteChecklist() {
         switchOnLoading();
+        mPresenter.changeChecklistStatus(checklistId, getString(R.string.checklist_done));
     }
 
 }

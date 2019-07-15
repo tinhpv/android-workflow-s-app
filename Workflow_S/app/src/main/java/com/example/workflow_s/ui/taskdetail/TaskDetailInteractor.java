@@ -16,6 +16,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDataInteractor{
+    @Override
+    public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
+
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.completeTask(taskId, taskStatus);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedChangeTaskStatus();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void saveDetail(List<ContentDetail> list, final OnFinishedSaveContentListener saveContentListener) {

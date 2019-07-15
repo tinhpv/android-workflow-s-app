@@ -50,6 +50,11 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
 
     private ChecklistRunningContract.ChecklistRunningPresenter mRunningPresenter;
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+    }
 
     @Nullable
     @Override

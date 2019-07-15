@@ -58,6 +58,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     }
 
     @Override
+    public void finishedCompleteTask() {
+        // do nothings huh?
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         super.onCreateOptionsMenu(menu, inflater);

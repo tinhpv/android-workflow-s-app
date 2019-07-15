@@ -422,11 +422,23 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     }
 
     @Override
+    public void finishedCompleteTask() {
+        Toast.makeText(getContext(), "Change task status successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_complete_task:
-                taskStatus = getString(R.string.task_done);
-                handleSaveContentDetail();
+                if (taskStatus.equals(getString(R.string.task_done))) {
+                    taskStatus = getString(R.string.task_running);
+                    mPresenter.completeTask(taskId, getString(R.string.task_running));
+                } else {
+                    taskStatus = getString(R.string.task_done);
+                    handleSaveContentDetail();
+                    mPresenter.completeTask(taskId, getString(R.string.task_done));
+                }
+
                 updateButtonLayout(taskStatus);
                 break;
             case R.id.bt_save_content:
@@ -451,7 +463,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public void onDestroyView() {
         super.onDestroyView();
         switch (location) {
-            case  1:
+            case 1:
                 getActivity().setTitle("Home");
                 break;
             case 2:

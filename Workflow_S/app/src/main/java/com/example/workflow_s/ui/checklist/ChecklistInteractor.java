@@ -13,6 +13,7 @@ import com.example.workflow_s.network.ApiService;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +42,24 @@ public class ChecklistInteractor implements ChecklistContract.GetChecklistsDataI
                 onFinishedListener.onFailure(t);
             }
         });
+    }
+
+    @Override
+    public void deleteChecklist(int checklistId, String userId, final OnFinishedDeleteChecklistListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.deleteChecklist(checklistId, userId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedDeleteChecklist();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+
     }
 
     @Override

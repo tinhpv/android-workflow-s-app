@@ -12,7 +12,7 @@ import java.util.List;
 public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPresenter,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener,
-            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener {
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener, TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedChangeTaskStatusListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -38,6 +38,8 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
         mGetTaskDetailDataInteractor.getTaskById(taskId, this);
     }
 
+
+
     @Override
     public void updateTaskDetail(List<ContentDetail> detailList) {
         mGetTaskDetailDataInteractor.saveDetail(detailList, this);
@@ -56,6 +58,16 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     @Override
     public void onFinishedGetTask(Task task) {
         mTaskDetailView.finishedGetTaskDetail(task);
+    }
+
+    @Override
+    public void completeTask(int taskId, String taskStatus) {
+        mGetTaskDetailDataInteractor.completeTask(taskId, taskStatus, this);
+    }
+
+    @Override
+    public void onFinishedChangeTaskStatus() {
+        mTaskDetailView.finishedCompleteTask();
     }
 
     @Override

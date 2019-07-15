@@ -13,11 +13,13 @@ import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
+import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogAdapter;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
 
@@ -30,6 +32,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentChecklistAdapter.CurrentChecklistViewHolder> {
+
+    EventListener listener;
+
+    public interface EventListener {
+        void onEvent(int deletedChecklistId);
+    }
+
+    public CurrentChecklistAdapter(EventListener listener) {
+        this.listener = listener;
+    }
+
+    public CurrentChecklistAdapter() {}
 
     //datasource for recyclerview
     private List<Checklist> mChecklists;
@@ -160,7 +174,10 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         }
     };
 
-
+    void deleteItem(int position) {
+        Checklist checklist = mChecklists.get(position);
+        listener.onEvent(checklist.getId());
+    }
 
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {
@@ -180,8 +197,6 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
             mDueTime = itemView.findViewById(R.id.tv_due_time_checklist);
         }
     }
-
-    public CurrentChecklistAdapter() {}
 
     public void setChecklists(List<Checklist> checklists) {
         mChecklists = checklists;
