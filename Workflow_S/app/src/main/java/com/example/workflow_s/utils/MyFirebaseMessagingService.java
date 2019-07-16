@@ -1,5 +1,6 @@
 package com.example.workflow_s.utils;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,11 +14,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.workflow_s.R;
-import com.example.workflow_s.ui.main.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
 
 public class MyFirebaseMessagingService  extends FirebaseMessagingService {
     @Override
@@ -43,12 +42,10 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         Log.i("Notification", "Receive");
-        Map<String, String> data = remoteMessage.getData();
-        for (String key : data.keySet()){
-            String value =data.get(key);
-            Log.d("message_notification", "Key: " + key + " Value: " + value);
-        }
         sendNotification(remoteMessage.getNotification().getBody());
+//        Intent intent = new Intent(Constant.FIREBASE_MSG);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
 
 
 
@@ -109,9 +106,11 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
      */
 
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+        //Log.i("sendNoti", "send");
+        Intent intent = new Intent(Constant.FIREBASE_MSG);
         intent.putExtra("body", messageBody);
         intent.putExtra("flag_notify", "notify");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         //intent.addFlags(Intent.FLAG_FROM_BACKGROUND);
 

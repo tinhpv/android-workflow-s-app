@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.notification;
 import android.util.Log;
 
 import com.example.workflow_s.model.Comment;
+import com.example.workflow_s.model.Notification;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class NotificationPresenterImpl implements NotificationContract.Notificat
     }
 
     @Override
-    public void onFinishedGetComment(List<Comment> comments) {
+    public void onFinishedGetComment(List<Notification> comments) {
         mView.finishedLoadComment(comments);
     }
 

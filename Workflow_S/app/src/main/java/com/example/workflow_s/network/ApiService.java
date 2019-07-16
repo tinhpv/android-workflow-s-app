@@ -4,6 +4,7 @@ import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.ContentDetail;
+import com.example.workflow_s.model.Notification;
 import com.example.workflow_s.model.Organization;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.Template;
@@ -141,7 +142,7 @@ public interface ApiService {
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
     @GET("/api/Comments/mobilenotification/{organizationId}/{userId}")
-    Call<List<Comment>> getCommentNotification(@Path("organizationId") String orgId, @Path("userId") String userId);
+    Call<List<Notification>> getCommentNotification(@Path("organizationId") String orgId, @Path("userId") String userId);
 
     //@Headers("Content-Type: application/json")
     @PUT("/api/Users/updatedevicetoken/{userid}/{devicetoken}")

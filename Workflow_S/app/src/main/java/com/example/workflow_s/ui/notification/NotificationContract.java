@@ -1,6 +1,6 @@
 package com.example.workflow_s.ui.notification;
 
-import com.example.workflow_s.model.Comment;
+import com.example.workflow_s.model.Notification;
 
 import java.util.List;
 
@@ -14,13 +14,13 @@ public interface NotificationContract {
 
     //view
     interface NotificationView {
-        void finishedLoadComment(List<Comment> comments);
+        void finishedLoadComment(List<Notification> comments);
     }
 
     //model
     interface GetNotificationDataContract {
         interface OnFinishedGetCommentListener {
-            void onFinishedGetComment(List<Comment> comments);
+            void onFinishedGetComment(List<Notification> comments);
             void onFailure(Throwable t);
         }
 

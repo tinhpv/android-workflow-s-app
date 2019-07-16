@@ -148,12 +148,12 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private void getTaskIdFromParentFragment() {
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
-        taskName = arguments.getString("taskName");
+        //taskName = arguments.getString("taskName");
         location = arguments.getInt("location_activity");
         checklistId = arguments.getInt("checklistId");
 
 
-        getActivity().setTitle(taskName);
+        getActivity().setTitle("Task Detail");
 
         isChanged = false;
         imageDataEncoded = new HashMap<String, String>();
