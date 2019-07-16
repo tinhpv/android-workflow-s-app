@@ -41,7 +41,6 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         this.listener = listener;
     }
 
-    public CurrentChecklistAdapter() {}
 
     //datasource for recyclerview
     private List<Checklist> mChecklists;
@@ -173,7 +172,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         }
     };
 
-    void deleteItem(int position) {
+    public void deleteItem(int position) {
         Checklist checklist = mChecklists.get(position);
         listener.onEvent(checklist.getId());
     }

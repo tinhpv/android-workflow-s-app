@@ -9,10 +9,14 @@ import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingContr
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MultipartBody;
+
 public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPresenter,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskDetailListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener,
-            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener, TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedChangeTaskStatusListener {
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedChangeTaskStatusListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedUploadImageListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -66,8 +70,18 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     }
 
     @Override
+    public void uploadImage(int contentId, int orderContent, MultipartBody.Part photo) {
+        mGetTaskDetailDataInteractor.uploadImage(contentId, orderContent, photo,this);
+    }
+
+    @Override
     public void onFinishedChangeTaskStatus() {
         mTaskDetailView.finishedCompleteTask();
+    }
+
+    @Override
+    public void onFinishedUploadImage(int orderContent) {
+        mTaskDetailView.finishedUploadImage(orderContent);
     }
 
     @Override

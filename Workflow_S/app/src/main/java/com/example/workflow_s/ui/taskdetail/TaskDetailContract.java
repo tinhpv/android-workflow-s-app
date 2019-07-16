@@ -7,6 +7,8 @@ import com.example.workflow_s.ui.task.TaskContract;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MultipartBody;
+
 public interface  TaskDetailContract {
 
     //view
@@ -15,6 +17,7 @@ public interface  TaskDetailContract {
         void finishedSaveContent();
         void finishedGetTaskDetail(Task task);
         void finishedCompleteTask();
+        void finishedUploadImage(int orderContent);
     }
 
     //presenter
@@ -23,11 +26,13 @@ public interface  TaskDetailContract {
         void loadDetails(int taskId);
         void getTask(int taskId);
         void completeTask(int taskId, String taskStatus);
+        void uploadImage(int contentId, int orderContent, MultipartBody.Part photo);
         void updateTaskDetail(List<ContentDetail> detailList);
     }
 
     //model
     interface GetTaskDetailDataInteractor {
+
         interface OnFinishedGetTaskDetailListener {
             void onFinishedGetTaskDetail (ArrayList<ContentDetail> taskDetailArrayList);
             void onFailure(Throwable t);
@@ -49,7 +54,13 @@ public interface  TaskDetailContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedUploadImageListener {
+            void onFinishedUploadImage(int orderContent);
+            void onFailure(Throwable t);
+        }
+
         void getTaskById(int taskId, OnFinishedGetTaskListener listener);
+        void uploadImage(int contentId, int orderContent, MultipartBody.Part photo, OnFinishedUploadImageListener listener);
         void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void getContentDetail(int taskId, OnFinishedGetTaskDetailListener onFinishedListener);
         void saveDetail(List<ContentDetail> list, OnFinishedSaveContentListener saveContentListener);

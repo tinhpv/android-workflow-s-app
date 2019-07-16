@@ -230,6 +230,4 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             prepareShowingCategoryDialog();
         }
     }
-
-
 }

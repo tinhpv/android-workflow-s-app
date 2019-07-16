@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 import com.example.workflow_s.R;
@@ -124,15 +125,22 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
 
 
     boolean isValueDateTime() {
-        Date oldDate = DateUtils.parseDate(previousDueTime.split("T")[0]);
+
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        dateFormat.format(date);
+
+        Date currentDate = DateUtils.parseDate(dateFormat.format(date).split(" ")[0]);
         Date newDateSelected = DateUtils.parseDate(dateSelected);
 
-        if (oldDate.after(newDateSelected)) {
+        if (currentDate.after(newDateSelected)) {
             return false;
-        } else if (oldDate.equals(newDateSelected)) {
-            Date oldTime = DateUtils.parseTime(previousDueTime.split("T")[1]);
+        } else if (currentDate.equals(newDateSelected)) {
+
+            Date currentTime = DateUtils.parseTime(dateFormat.format(date).split(" ")[1]);
             Date newTimeSelected = DateUtils.parseTime(timeSelected);
-            if (oldTime.after(newTimeSelected)) {
+            if (currentTime.after(newTimeSelected)) {
                 return false;
             }
         }

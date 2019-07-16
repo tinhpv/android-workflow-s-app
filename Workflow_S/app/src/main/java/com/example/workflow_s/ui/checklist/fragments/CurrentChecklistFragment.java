@@ -170,9 +170,21 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         mCurrentChecklistAdapter = new CurrentChecklistAdapter(this);
         checklistRecyclerView.setAdapter(mCurrentChecklistAdapter);
 
-        ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new SwipeToDeleteCallBack(mCurrentChecklistAdapter));
-        itemTouchHelper.attachToRecyclerView(checklistRecyclerView);
+        SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                mCurrentChecklistAdapter.deleteItem(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
+        itemTouchhelper.attachToRecyclerView(checklistRecyclerView);
+
+
+//        ItemTouchHelper itemTouchHelper = new
+//                ItemTouchHelper(new SwipeToDeleteCallBack(mCurrentChecklistAdapter));
+//        itemTouchHelper.attachToRecyclerView(checklistRecyclerView);
     }
 
 
@@ -299,6 +311,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCurrentChecklistAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });

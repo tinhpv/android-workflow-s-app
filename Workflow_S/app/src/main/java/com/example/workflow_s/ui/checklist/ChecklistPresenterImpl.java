@@ -88,7 +88,11 @@ ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener{
 
     @Override
     public void onFinishedDeleteChecklist() {
-        mChecklistView.finishDeleteChecklist();
+        if (mChecklistView != null) {
+            mChecklistView.finishDeleteChecklist();
+        } else {
+            mAllChecklistView.finishDeleteChecklist();
+        }
     }
 
     @Override

@@ -16,7 +16,8 @@ import java.util.ArrayList;
 
 public class HomePresenterImpl implements HomeContract.HomePresenter,
         HomeContract.GetHomeDataInteractor.OnFinishedGetRunningChecklistsListener,
-        HomeContract.GetHomeDataInteractor.OnFinishedGetDueTasksListener {
+        HomeContract.GetHomeDataInteractor.OnFinishedGetDueTasksListener,
+        HomeContract.GetHomeDataInteractor.OnFinishedDeleteChecklistListener {
 
 
     private static final String TAG = "HOME_PRESENTER";
@@ -64,4 +65,18 @@ public class HomePresenterImpl implements HomeContract.HomePresenter,
         mGetHomeDataInteractor.getAllDueTasks(orgId,userId, this);
     }
 
+    @Override
+    public void deleteChecklist(int checklistId, String userId) {
+        mGetHomeDataInteractor.deleteChecklist(checklistId, userId, this);
+    }
+
+    @Override
+    public void onFinishedDeleteChecklist() {
+        mHomeView.finishDeleteChecklist();
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+
+    }
 }

@@ -1,12 +1,16 @@
 package com.example.workflow_s.ui.home;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +29,7 @@ import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
+import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
@@ -45,7 +50,7 @@ import java.util.List;
  **/
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView {
+public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView, ChecklistProgressAdapter.EventListener {
 
     View view;
     private Button btnTemplate, btnChecklist, btnActivity, btnViewAllChecklist, btnViewAllActivities;
@@ -189,8 +194,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         checklistProgressLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         checklistProgressRecyclerView.setLayoutManager(checklistProgressLayoutManager);
 
-        mChecklistProgressAdapter = new ChecklistProgressAdapter();
+        mChecklistProgressAdapter = new ChecklistProgressAdapter(this);
         checklistProgressRecyclerView.setAdapter(mChecklistProgressAdapter);
+
+        SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                mChecklistProgressAdapter.deleteItem(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
+        itemTouchhelper.attachToRecyclerView(checklistProgressRecyclerView);
     }
 
     private void makeDashboardButtonLookGood() {
@@ -263,5 +279,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         mTaskShimmerFrameLayout.stopShimmerAnimation();
         mTaskShimmerFrameLayout.setVisibility(View.INVISIBLE);
         mTaskDataStatusMessage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void finishDeleteChecklist() {
+        mPresenter.loadRunningChecklists(orgId);
+    }
+
+    @Override
+    public void onEvent(int deletedChecklistId, int position) {
+        handleShowConfirmDialog(deletedChecklistId);
+    }
+
+    private void handleShowConfirmDialog(final int deletedChecklistId) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                mPresenter.deleteChecklist(deletedChecklistId, userId);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mChecklistProgressAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
     }
 }

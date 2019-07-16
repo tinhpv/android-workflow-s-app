@@ -37,6 +37,12 @@ import java.util.concurrent.TimeUnit;
 
 public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProgressAdapter.ChecklistProgressViewHolder> {
 
+    EventListener listener;
+
+    public interface EventListener {
+        void onEvent(int deletedChecklistId, int position);
+    }
+
     // Constants
     private final int MAX_ITEM_NUMBER = 4;
 
@@ -44,7 +50,8 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     private List<Checklist> mChecklists;
     private RecyclerView mRecyclerView;
 
-    public ChecklistProgressAdapter() {
+    public ChecklistProgressAdapter(EventListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -92,6 +99,11 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             checklistProgressViewHolder.progressBar.setProgress(progress, true);
         }
 
+    }
+
+    public void deleteItem(int position) {
+        Checklist checklist = mChecklists.get(position);
+        listener.onEvent(checklist.getId(), position);
     }
 
     private String getDueTimeOfChecklist(int index) {
