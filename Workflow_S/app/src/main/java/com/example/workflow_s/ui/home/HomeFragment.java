@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_notif:
-                CommonUtils.replaceFragments(getContext(), NotificationFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), NotificationFragment.class, null, false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -132,23 +132,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_activity:
-                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, true);
                 getActivity().setTitle("Activity");
                 break;
             case R.id.btn_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
                 getActivity().setTitle("Active checklist");
                 break;
             case R.id.btn_template:
-                CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null, true);
                 getActivity().setTitle("Template");
                 break;
             case R.id.bt_view_all_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
                 getActivity().setTitle("Active checklist");
                 break;
             case R.id.bt_view_all_task:
-                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null);
+                CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, true);
                 getActivity().setTitle("Activity");
                 break;
         } // end switch

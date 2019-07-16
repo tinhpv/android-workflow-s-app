@@ -74,7 +74,7 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateViewHolder> {
                 args.putString("templateDescription", templateDescription);
                 args.putString("templateUserId", templateUserId);
 
-                CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskFragment.class, args, true);
             }
         });
 

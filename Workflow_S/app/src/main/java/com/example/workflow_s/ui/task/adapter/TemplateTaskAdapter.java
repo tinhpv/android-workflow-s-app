@@ -72,7 +72,7 @@ public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapte
                 Bundle args = new Bundle();
                 args.putString("taskId", String.valueOf(mTemplateTaskList.get(index).getId()));
                 args.putString("taskName", mTemplateTaskList.get(index).getName());
-                CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskDetailFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), TemplateTaskDetailFragment.class, args, true);
             }
         });
 

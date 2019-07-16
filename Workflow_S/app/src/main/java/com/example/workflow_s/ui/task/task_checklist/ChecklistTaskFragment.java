@@ -253,7 +253,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     @Override
     public void finishChangeChecklistStatus() {
-
+        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
 
     private void handleCompleteChecklist() {

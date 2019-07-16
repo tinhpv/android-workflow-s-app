@@ -157,13 +157,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     @Override
     public void navigateToCodeVerifyActivity() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        if (token == null) {
-            Log.i("Token", "Token is null");
-        } else {
-            Log.i("Token", token);
-        }
-        mLoginPresenter.updateToken(currentUser.getId(), token);
         switchOffLoading();
         Intent intent = new Intent(this, AuthenticationActivity.class);
         startActivity(intent);
@@ -181,12 +174,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         currentUser.setRole(user.getRole());
         currentUser.setToken(user.getToken());
         saveCurrentUserToPreference(currentUser);
+        String token = FirebaseInstanceId.getInstance().getToken();
+        mLoginPresenter.updateToken(currentUser.getId(), token);
         mLoginPresenter.getCurrentOrganization(currentUser.getId());
     }
 
     @Override
     public void onFinishedGetOrg(UserOrganization org) {
-
         if (org != null) {
             Organization tmpOrg = new Organization(org.getOrganizationId(), org.getOrganizationName());
             saveCurrentOrganizationToPreference(tmpOrg);
@@ -195,7 +189,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
             Intent intent = new Intent(this, OopsActivity.class);
             startActivity(intent);
         }
-
     }
 
 

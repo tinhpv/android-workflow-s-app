@@ -53,7 +53,7 @@ public class SettingFragment extends Fragment {
         mLibrariy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonUtils.replaceFragments(v.getContext(), LibraryFragment.class, null);
+                CommonUtils.replaceFragments(v.getContext(), LibraryFragment.class, null, true);
             }
         });
 
@@ -61,7 +61,7 @@ public class SettingFragment extends Fragment {
         mAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommonUtils.replaceFragments(v.getContext(), AboutFragment.class, null);
+                CommonUtils.replaceFragments(v.getContext(), AboutFragment.class, null, true);
             }
         });
 

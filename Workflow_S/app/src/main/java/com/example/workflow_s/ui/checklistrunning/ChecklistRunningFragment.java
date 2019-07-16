@@ -132,6 +132,6 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
         Bundle args = new Bundle();
         args.putString("checklistId", String.valueOf(checklist.getId()));
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-        CommonUtils.replaceFragments(getContext(), ChecklistTaskFragment.class, args);
+        CommonUtils.replaceFragments(getContext(), ChecklistTaskFragment.class, args, true);
     }
 }
