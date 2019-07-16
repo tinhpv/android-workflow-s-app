@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.taskdetail;
 
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.ui.task.TaskContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public interface  TaskDetailContract {
         void setDataToView(ArrayList<ContentDetail> datasource);
         void finishedSaveContent();
         void finishedGetTaskDetail(Task task);
+        void finishedCompleteTask();
     }
 
     //presenter
@@ -20,6 +22,7 @@ public interface  TaskDetailContract {
         void onDestroy();
         void loadDetails(int taskId);
         void getTask(int taskId);
+        void completeTask(int taskId, String taskStatus);
         void updateTaskDetail(List<ContentDetail> detailList);
     }
 
@@ -41,7 +44,13 @@ public interface  TaskDetailContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedChangeTaskStatusListener {
+            void onFinishedChangeTaskStatus();
+            void onFailure(Throwable t);
+        }
+
         void getTaskById(int taskId, OnFinishedGetTaskListener listener);
+        void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void getContentDetail(int taskId, OnFinishedGetTaskDetailListener onFinishedListener);
         void saveDetail(List<ContentDetail> list, OnFinishedSaveContentListener saveContentListener);
     }

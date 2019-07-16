@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
                 TaskContract.GetTaskDataInteractor.OnFinishedGetTasksListener,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeTaskStatusListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedLoadChecklistDataListener {
+        TaskContract.GetTaskDataInteractor.OnFinishedLoadChecklistDataListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener {
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -50,6 +51,11 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     }
 
     @Override
+    public void changeChecklistStatus(int checklistId, String status) {
+        mGetTaskDataInteractor.completeChecklist(checklistId, status, this);
+    }
+
+    @Override
     public void onFinishedGetTasks(ArrayList<Task> taskArrayList) {
         mTemplateView.setDataToTaskRecyclerView(taskArrayList);
     }
@@ -62,6 +68,11 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     @Override
     public void onFinishedGetChecklistData(Checklist checklist) {
         mTaskView.finishGetChecklist(checklist);
+    }
+
+    @Override
+    public void onFinishedChangeChecklistStatus() {
+        mTaskView.finishChangeChecklistStatus();
     }
 
     @Override

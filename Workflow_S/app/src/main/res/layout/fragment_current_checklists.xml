@@ -13,14 +13,13 @@
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp"
         android:text="Education"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:textAllCaps="false"
         android:fontFamily="@font/avenir_black"
         android:textColor="@android:color/white"
         android:drawableRight="@mipmap/down_button_white_ic"
         android:drawablePadding="12dp"
         android:background="@drawable/button_radius_dark" />
-
 
 
     <RelativeLayout

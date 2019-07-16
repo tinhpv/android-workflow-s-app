@@ -65,7 +65,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
                 args.putString("taskId", String.valueOf(mTasks.get(index).getId()));
                 args.putString("taskName", mTasks.get(index).getName());
                 args.putInt("location_activity", 1);
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, false);
             }
         });
         return viewHolder;

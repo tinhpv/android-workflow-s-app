@@ -94,7 +94,6 @@ public class AuthenticationActivity extends AppCompatActivity implements Authent
 
     @Override
     public void onFinishedSubmitVerifyCode() {
-
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

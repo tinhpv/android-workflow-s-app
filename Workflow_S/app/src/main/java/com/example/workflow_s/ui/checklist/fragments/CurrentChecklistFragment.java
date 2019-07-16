@@ -1,6 +1,9 @@
 package com.example.workflow_s.ui.checklist.fragments;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +12,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,13 +32,16 @@ import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
+import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView, ChecklistDialogFragment.DataBackContract, View.OnClickListener {
+public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView,
+        ChecklistDialogFragment.DataBackContract,
+        View.OnClickListener, CurrentChecklistAdapter.EventListener {
 
     private static final String NAME_ARG = "CurrentChecklist";
 
@@ -160,9 +167,14 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         checklistLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         checklistRecyclerView.setLayoutManager(checklistLayoutManager);
 
-        mCurrentChecklistAdapter = new CurrentChecklistAdapter();
+        mCurrentChecklistAdapter = new CurrentChecklistAdapter(this);
         checklistRecyclerView.setAdapter(mCurrentChecklistAdapter);
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallBack(mCurrentChecklistAdapter));
+        itemTouchHelper.attachToRecyclerView(checklistRecyclerView);
     }
+
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
@@ -239,6 +251,11 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         categorizeTemplate(tmpTemplate);
     }
 
+    @Override
+    public void finishDeleteChecklist() {
+        mPresenter.loadAllChecklist(orgId);
+    }
+
     private void categorizeTemplate(Template template) {
         if (template == null) {
             selectedTemplate = "All";
@@ -255,6 +272,36 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
             } //end for
             mCurrentChecklistAdapter.setChecklists(myTemplateChecklist);
         }
+    }
+
+    @Override
+    public void onEvent(int deletedChecklistId) {
+        handleShowConfirmDialog(deletedChecklistId);
+    }
+
+    private void handleShowConfirmDialog(final int deletedChecklistId) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                mPresenter.deleteChecklist(deletedChecklistId, userId);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 //

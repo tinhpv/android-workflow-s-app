@@ -48,4 +48,9 @@
     <string name="task_running">Running</string>
     <string name="task_unavailable">Unavailable</string>
 
+    <!--checklist status value-->
+    <string name="checklist_done">Done</string>
+    <string name="checklist_running">Running</string>
+
+
 </resources>

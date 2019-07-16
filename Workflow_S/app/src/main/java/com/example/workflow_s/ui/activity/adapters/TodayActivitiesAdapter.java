@@ -53,7 +53,7 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
                 Bundle args = new Bundle();
                 args.putString("checklistId", String.valueOf(mTasks.get(index).getId()));
                 args.putString("taskName", mTasks.get(index).getName());
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
             }
         });
         return viewHolder;

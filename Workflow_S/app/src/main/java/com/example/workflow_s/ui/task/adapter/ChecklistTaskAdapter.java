@@ -109,7 +109,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 args.putInt("location_activity", 2);
                 args.putInt("checklistId", checklistId);
 
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
 
 //                int index = mRecyclerView.getChildLayoutPosition(v);
 //                List<TaskMember> listMember = mTaskList.get(index).getTaskMemberList();

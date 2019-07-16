@@ -14,11 +14,13 @@ public interface TaskContract {
         void loadChecklistData(int orgId, int checklistId);
         void loadTasks(int checklistId);
         void changeTaskStatus(int taskId, String taskStatus);
+        void changeChecklistStatus(int checklistId, String status);
     }
 
     interface TaskView {
         void finishGetChecklist(Checklist checklist);
         void finishedChangeTaskStatus();
+        void finishChangeChecklistStatus();
     }
 
     interface TemplateView {
@@ -38,6 +40,11 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedChangeChecklistStatusListener {
+            void onFinishedChangeChecklistStatus();
+            void onFailure(Throwable t);
+        }
+
         interface OnFinishedLoadChecklistDataListener {
             void onFinishedGetChecklistData(Checklist checklist);
             void onFailure(Throwable t);
@@ -45,6 +52,7 @@ public interface TaskContract {
 
         void getAllTasks(int checklistId, OnFinishedGetTasksListener onFinishedLIstener);
         void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
+        void completeChecklist(int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);
         void getChecklistData(int orgId, int checklistId, OnFinishedLoadChecklistDataListener listener);
 
     }

@@ -18,7 +18,8 @@ import java.util.ArrayList;
 public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresenter,
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetChecklistListener,
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetFirstTaskFormChecklistListener,
-            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetTemplateDataListener{
+            ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetTemplateDataListener,
+ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener{
 
     private static final String TAG = "CHECKLISTS_PRESENTER";
     private ChecklistContract.ChecklistView mChecklistView;
@@ -58,6 +59,11 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
     }
 
     @Override
+    public void deleteChecklist(int checklistId, String userId) {
+        mChecklistDataInteractor.deleteChecklist(checklistId, userId, this);
+    }
+
+    @Override
     public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
         if (mChecklistView != null) {
             mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
@@ -78,6 +84,11 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
         } else {
             mAllChecklistView.finishGetTemplates(templateList);
         }
+    }
+
+    @Override
+    public void onFinishedDeleteChecklist() {
+        mChecklistView.finishDeleteChecklist();
     }
 
     @Override

@@ -232,43 +232,40 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
 
                     case "text":
+                        TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
+                        description.setText(detail.getText());
+                        mContainerLayout.addView(description);
+                        break;
+                    case "edit-text":
+                        TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
+                        label.setText(detail.getLabel());
+                        mContainerLayout.addView(label);
+                        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
+                        userEditText.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        if (detail.getLabel() == null) {
-                            TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
-                            description.setText(detail.getText());
-                            mContainerLayout.addView(description);
-
-                        } else { // will be the edit text
-                            TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
-                            label.setText(detail.getLabel());
-                            mContainerLayout.addView(label);
-                            EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
-                            userEditText.addTextChangedListener(new TextWatcher() {
-                                @Override
-                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                                }
-
-                                @Override
-                                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                    isChanged = true;
-                                }
-
-                                @Override
-                                public void afterTextChanged(Editable s) {
-
-                                }
-                            });
-
-                            String tmpEdtTag = "edit_text_detail_" + orderContent;
-                            userEditText.setTag(tmpEdtTag);
-
-                            if (detail.getText() != null) {
-                                userEditText.setText(detail.getText());
                             }
 
-                            mContainerLayout.addView(userEditText);
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                isChanged = true;
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+
+                        String tmpEdtTag = "edit_text_detail_" + orderContent;
+                        userEditText.setTag(tmpEdtTag);
+
+                        if (detail.getText() != null) {
+                            userEditText.setText(detail.getText());
                         }
+
+                        mContainerLayout.addView(userEditText);
                         break;
                 } // end switch
             } // end for
@@ -376,8 +373,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 switch (detail.getType()) {
                     case "img":
 
-                        if (detail.getLabel() != null) {
-
+                        if (detail.getLabel() != null && (totalImagesNumberToUpload != 0)) {
                             String tmpImageTag = "img_task_detail_" + orderContent;
                             String uriImageString = imageDataEncoded.get(tmpImageTag);
                             Uri imageURI = Uri.parse(uriImageString);
@@ -390,12 +386,12 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                                 e.printStackTrace();
                             }
 
-
                         }
+
                         break;
 
 
-                    case "text":
+                    case "edit-text":
 
                         if (detail.getLabel() != null) {
                             String tmpEdtTag = "edit_text_detail_" + orderContent;
@@ -422,11 +418,23 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     }
 
     @Override
+    public void finishedCompleteTask() {
+        Toast.makeText(getContext(), "Change task status successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_complete_task:
-                taskStatus = getString(R.string.task_done);
-                handleSaveContentDetail();
+                if (taskStatus.equals(getString(R.string.task_done))) {
+                    taskStatus = getString(R.string.task_running);
+                    mPresenter.completeTask(taskId, getString(R.string.task_running));
+                } else {
+                    taskStatus = getString(R.string.task_done);
+                    handleSaveContentDetail();
+                    mPresenter.completeTask(taskId, getString(R.string.task_done));
+                }
+
                 updateButtonLayout(taskStatus);
                 break;
             case R.id.bt_save_content:
@@ -451,7 +459,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public void onDestroyView() {
         super.onDestroyView();
         switch (location) {
-            case  1:
+            case 1:
                 getActivity().setTitle("Home");
                 break;
             case 2:

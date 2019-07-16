@@ -22,7 +22,7 @@ import java.util.Date;
 
 public class CommonUtils {
 
-    public static void replaceFragments(Context fragmentContext, Class fragmentClass, Bundle args) {
+    public static void replaceFragments(Context fragmentContext, Class fragmentClass, Bundle args, boolean isAddToBackStack) {
 
         Fragment fragment = null;
         try {
@@ -40,17 +40,16 @@ public class CommonUtils {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
 
-        transaction
-                .add(R.id.flContent, fragment,fragment.getClass().getName().toString())
-                .addToBackStack(null)
-                .commit();
-
-
-//        fragmentManager
-//                .beginTransaction()
-//                .add(R.id.flContent, fragment)
-//                .addToBackStack(null)
-//                .commit();
+        if (isAddToBackStack) {
+            transaction
+                    .replace(R.id.flContent, fragment,fragment.getClass().getName().toString())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            transaction
+                    .replace(R.id.flContent, fragment,fragment.getClass().getName().toString())
+                    .commit();
+        }
 
     }
 

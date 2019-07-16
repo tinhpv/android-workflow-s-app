@@ -128,7 +128,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
             args.putInt("templateId", templateId);
             args.putString("templateName", templateName);
             args.putString("templateUserId", templateUserId);
-            CommonUtils.replaceFragments(getActivity(), ChecklistRunningFragment.class, args);
+            CommonUtils.replaceFragments(getActivity(), ChecklistRunningFragment.class, args, false);
         } // end if
     }
 
