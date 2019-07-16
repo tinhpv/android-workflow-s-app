@@ -54,7 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     Bundle args = new Bundle();
                     args.putString("checklistId", String.valueOf(mComments.get(index).getChecklistId()));
                     args.putInt("location", 1);
-                    CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args);
+                    CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args, true);
                 } else {
                     Bundle args = new Bundle();
 
@@ -63,7 +63,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     args.putInt("location_activity", 1);
                     //args.putInt("checklistId", mComments.get(index).getChecklistId());
 
-                    CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
+                    CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
                 }
 
             }

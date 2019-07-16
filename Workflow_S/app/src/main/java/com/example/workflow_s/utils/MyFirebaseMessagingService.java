@@ -43,6 +43,7 @@ public class MyFirebaseMessagingService  extends FirebaseMessagingService {
         // Check if message contains a data payload.
         Log.i("Notification", "Receive");
         sendNotification(remoteMessage.getNotification().getBody());
+        SharedPreferenceUtils.saveNotificationChange(getApplicationContext(), 1);
 //        Intent intent = new Intent(Constant.FIREBASE_MSG);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

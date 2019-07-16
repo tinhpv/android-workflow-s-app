@@ -56,4 +56,12 @@ public class SharedPreferenceUtils {
         editor.clear();
         editor.commit();
     }
+
+    public static void saveNotificationChange(Context context, int flag) {
+        SharedPreferences prefs = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(context.getString(R.string.notify), flag);
+        editor.commit();
+    }
+
 }

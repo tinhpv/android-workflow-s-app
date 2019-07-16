@@ -59,6 +59,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private ProgressBar mTaskProgressBar;
     private int totalTask, doneTask, location;
+    private List<ChecklistMember> checklistMembers;
 
     LottieAnimationView mAnimationView;
 
@@ -142,6 +143,8 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
         location = arguments.getInt("location");
+        checklistMembers = new ArrayList<>();
+        checklistMembers = (ArrayList<ChecklistMember>) arguments.getSerializable("listMember");
         // USER's DATA
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
@@ -163,7 +166,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             doneTask = checklist.getDoneTask();
             ArrayList<Task> tasks = (ArrayList<Task>) checklist.getTaskItems();
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
-
+            mChecklistChecklistTaskAdapter.setChecklistMembers((ArrayList<ChecklistMember>) checklistMembers);
             initUI();
         }
     }

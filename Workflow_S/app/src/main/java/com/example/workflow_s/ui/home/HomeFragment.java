@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private String userId, orgId;
     private ArrayList<Checklist> checklists;
+    private int change;
 
 
     @Override
@@ -74,7 +75,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflater.inflate(R.menu.menu_home, menu);
+        if (change == 1) {
+            inflater.inflate(R.menu.menu_new_noti, menu);
+        } else {
+            inflater.inflate(R.menu.menu_home, menu);
+        }
        // getActivity().setTitle("Home");
     }
 
@@ -82,6 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_notif:
+                SharedPreferenceUtils.saveNotificationChange(getContext(), 0);
                 CommonUtils.replaceFragments(getContext(), NotificationFragment.class, null, false);
                 return true;
             default:
@@ -162,6 +168,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
         mPresenter.loadRunningChecklists(orgId);
         mPresenter.loadDueTasks(orgId, userId);
+
+        //get notification change
+        change = SharedPreferenceUtils.retrieveDataInt(getContext(), getString(R.string.notify));
     }
 
     private void setupTaskRV() {
