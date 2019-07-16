@@ -13,6 +13,7 @@ import android.widget.Toolbar;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Comment;
+import com.example.workflow_s.model.Notification;
 import com.example.workflow_s.ui.notification.adapter.NotificationAdapter;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
@@ -26,7 +27,7 @@ public class NotificationFragment extends Fragment implements NotificationContra
     private RecyclerView.LayoutManager notificationLayoutManager;
 
     private NotificationContract.NotificationPresenter mPresenter;
-    private List<Comment> commentList;
+    private List<Notification> commentList;
 
     @Nullable
     @Override
@@ -60,7 +61,7 @@ public class NotificationFragment extends Fragment implements NotificationContra
 
 
     @Override
-    public void finishedLoadComment(List<Comment> comments) {
+    public void finishedLoadComment(List<Notification> comments) {
         mNotificationAdapter.setComments(comments);
     }
 }

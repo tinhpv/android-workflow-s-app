@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,18 +76,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         //super.onNewIntent(intent);
-        if (intent.hasExtra("flag_notify")) {
-            String notify = intent.getStringExtra("flag_notify");
-            if (notify != null) {
+        setIntent(intent);
+        if (null != intent.getExtras() ){
+            for (String key : intent.getExtras().keySet()) {
+                String value = intent.getExtras().getString(key);
+                Log.d("Notification", "Key: " + key + " Value: " + value);
+            }
+            //String notify = intent.getStringExtra("flag_notify");
+                //Log.i("intent", "go to this");
                 NotificationFragment notificationFragment = new NotificationFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .add(R.id.flContent, notificationFragment)
                         .commit();
-            } else {
-                setupDefaultFragment();
-            }
+
         } else {
             setupDefaultFragment();
         }

@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.notification;
 
 import com.example.workflow_s.model.Comment;
+import com.example.workflow_s.model.Notification;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -15,16 +16,16 @@ public class NotificationInteractor implements NotificationContract.GetNotificat
     @Override
     public void loadCommentNotification(String orgId, String userId, final OnFinishedGetCommentListener onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<List<Comment>> call = service.getCommentNotification(orgId, userId);
+        Call<List<Notification>> call = service.getCommentNotification(orgId, userId);
 
-        call.enqueue(new Callback<List<Comment>>() {
+        call.enqueue(new Callback<List<Notification>>() {
             @Override
-            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
                 onFinishedListener.onFinishedGetComment(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<Comment>> call, Throwable t) {
+            public void onFailure(Call<List<Notification>> call, Throwable t) {
                 onFinishedListener.onFailure(t);
             }
         });

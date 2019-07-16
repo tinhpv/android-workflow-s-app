@@ -57,7 +57,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
                 args.putString("checklistId", String.valueOf(mChecklists.get(index).getId()));
-                args.putInt("location", 2);
+                args.putInt("location", 1);
                 CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args);
             }
         });
