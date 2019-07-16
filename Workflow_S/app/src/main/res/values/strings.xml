@@ -34,6 +34,7 @@
     <string name="pref_orgId">orgId</string>
     <string name="pref_orgName">orgName</string>
     <string name="order">order</string>
+    <string name="notify">notify</string>
 
 
     <!--content response type-->

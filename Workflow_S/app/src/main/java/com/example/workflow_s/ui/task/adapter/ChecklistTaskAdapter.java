@@ -39,11 +39,14 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     private RecyclerView mRecyclerView;
     private ArrayList<Task> mTaskList;
     private Dialog errorDialog;
+    private ArrayList<ChecklistMember> mChecklistMembers;
     private int checklistId;
+    private String userId;
 
     public void setChecklistId(int checklistId) {
         this.checklistId = checklistId;
     }
+
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -82,6 +85,11 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         notifyDataSetChanged();
     }
 
+    public void setChecklistMembers(ArrayList<ChecklistMember> checklistMembers) {
+        mChecklistMembers = checklistMembers;
+    }
+
+
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
@@ -96,7 +104,19 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         errorDialog.setContentView(R.layout.dialog_error_task);
         errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        //task item click
+        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.cancel();
+            }
+        });
+
+        userId = SharedPreferenceUtils.retrieveData(viewGroup.getContext(), viewGroup.getContext().getString(R.string.pref_userId));
+
+
+                //task item click
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,38 +129,20 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 args.putInt("location_activity", 2);
                 args.putInt("checklistId", checklistId);
 
-                CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
+                boolean flag = false;
 
-//                int index = mRecyclerView.getChildLayoutPosition(v);
-//                List<TaskMember> listMember = mTaskList.get(index).getTaskMemberList();
-//                String userId = SharedPreferenceUtils.retrieveData(v.getContext(),v.getContext().getString(R.string.pref_userId));
-//                boolean flag = false;
-//                if (!listMember.isEmpty()) {
-//                    for (int j = 0; j < listMember.size(); j++) {
-//                        if (listMember.get(j).getUserId().equals(userId)) {
-//                            flag = true;
-//                            break;
-//                        }
-//                    }
-//
-//                    if (flag) {
-//                        Bundle args = new Bundle();
-//                        args.putString("taskId", String.valueOf(mTaskList.get(i).getId()));
-//                        args.putString("taskName", mTaskList.get(i).getName());
-//                        CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args);
-//
-//                    } else {
-//                        Log.i("No Assign", "no assign");
-//                        errorDialog.show();
-//                        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
-//                        btnOk.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                errorDialog.cancel();
-//                            }
-//                        });
-//                    } // end if
-//                } // end if
+                for (ChecklistMember checklistMember : mChecklistMembers) {
+                    if (checklistMember.getUserId().equals(userId)) {
+                        flag = true;
+                    }
+                }
+
+                if (flag) {
+                    CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
+                } else {
+                    errorDialog.show();
+                }
+
             }
         });
         return viewHolder;

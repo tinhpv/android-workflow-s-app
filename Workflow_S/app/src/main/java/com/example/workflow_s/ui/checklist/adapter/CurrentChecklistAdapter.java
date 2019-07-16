@@ -13,13 +13,11 @@ import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
-import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogAdapter;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
 
@@ -71,7 +69,8 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
                 int index = mRecyclerView.getChildLayoutPosition(v);
                 Bundle args = new Bundle();
                 args.putString("checklistId", String.valueOf(mChecklists.get(index).getId()));
-                args.putInt("location", 1);
+                args.putInt("location", 2);
+                args.putSerializable("listMember", mChecklists.get(index).getChecklistMembers());
                 CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args, true);
             }
         });
