@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.home;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.base.MvpView;
+import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public interface HomeContract {
         void onDestroy();
         void loadRunningChecklists(String orgId);
         void loadDueTasks(String orgId, String userId);
+        void deleteChecklist(int checklistId, String userId);
     }
 
     interface HomeView  {
@@ -26,6 +28,7 @@ public interface HomeContract {
         void setDataToTasksRecyclerView(ArrayList<Task> datasource);
         void onFailGetChecklist();
         void onFailGetTask();
+        void finishDeleteChecklist();
     }
 
     interface GetHomeDataInteractor {
@@ -40,6 +43,12 @@ public interface HomeContract {
             void onFailureGetTasks(Throwable t);
         }
 
+        interface OnFinishedDeleteChecklistListener {
+            void onFinishedDeleteChecklist();
+            void onFailure(Throwable t);
+        }
+
+        void deleteChecklist(int checklistId, String userId, OnFinishedDeleteChecklistListener listener);
         void getAllRunningChecklists(String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
         void getAllDueTasks(String orgId, String userId, OnFinishedGetDueTasksListener onFinishedListener);
 

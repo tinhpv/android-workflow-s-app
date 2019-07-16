@@ -1,6 +1,9 @@
 package com.example.workflow_s.ui.checklist.fragments;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +12,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,13 +30,18 @@ import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
 import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
+import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllChecklistFragment extends Fragment implements ChecklistContract.AllChecklistView, ChecklistDialogFragment.DataBackContract, View.OnClickListener {
+public class AllChecklistFragment extends Fragment implements ChecklistContract.AllChecklistView,
+        ChecklistDialogFragment.DataBackContract,
+        View.OnClickListener,
+        CurrentChecklistAdapter.EventListener {
+
 
     private static final String NAME_ARG = "AllChecklist";
 
@@ -145,8 +154,19 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         checklistLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         checklistRecyclerView.setLayoutManager(checklistLayoutManager);
 
-        mCurrentChecklistAdapter = new CurrentChecklistAdapter();
+        mCurrentChecklistAdapter = new CurrentChecklistAdapter(this);
         checklistRecyclerView.setAdapter(mCurrentChecklistAdapter);
+
+        SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                mCurrentChecklistAdapter.deleteItem(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
+        itemTouchhelper.attachToRecyclerView(checklistRecyclerView);
     }
 
     @Override
@@ -187,6 +207,11 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     }
 
     @Override
+    public void finishDeleteChecklist() {
+        mPresenter.loadAllChecklist(orgId);
+    }
+
+    @Override
     public void onFinishSelectTemplate(String template) {
         templateButton.setText(template);
         Template tmpTemplate = null;
@@ -217,5 +242,37 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
 
         }
 
+    }
+
+    @Override
+    public void onEvent(int deletedChecklistId) {
+        handleShowConfirmDialog(deletedChecklistId);
+    }
+
+    private void handleShowConfirmDialog(final int deletedChecklistId) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                String userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+                mPresenter.deleteChecklist(deletedChecklistId, userId);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentChecklistAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
     }
 }

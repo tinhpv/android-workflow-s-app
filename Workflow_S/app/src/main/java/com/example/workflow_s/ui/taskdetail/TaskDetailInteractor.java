@@ -6,6 +6,7 @@ import com.example.workflow_s.model.Task;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,6 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDataInteractor{
+
+    @Override
+    public void uploadImage(int contentId, final int orderContent, MultipartBody.Part photo, final OnFinishedUploadImageListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.uploadImage(contentId, orderContent, photo);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedUploadImage(orderContent);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+
+    }
+
     @Override
     public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
 

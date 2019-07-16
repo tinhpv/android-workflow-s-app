@@ -37,6 +37,7 @@ public interface ChecklistContract {
     interface AllChecklistView {
         void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource);
         void finishGetTemplates(List<Template> templateList);
+        void finishDeleteChecklist();
     }
 
     //model

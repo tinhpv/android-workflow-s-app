@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.taskdetail.checklist;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -40,7 +41,9 @@ import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
+import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
+import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.FirebaseUtils;
@@ -54,6 +57,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-30
@@ -62,7 +69,7 @@ import java.util.List;
 
 
 public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
-        View.OnClickListener, FirebaseUtils.UploadImageListener {
+        View.OnClickListener, FirebaseUtils.UploadImageListener, ImageDialogFragment.ClickEventListener {
 
     private final int REQUEST_CAMERA = 1, REQUEST_GALLERY = 2;
 
@@ -224,7 +231,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                                 public void onClick(View v) {
                                     //shared preferences
                                     SharedPreferenceUtils.saveCurrentOrder(getContext(),orderContent);
-                                    showDialog();
+                                    prepareShowingCategoryDialog();
                                 }
                             });
                         } // end if
@@ -236,6 +243,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                         description.setText(detail.getText());
                         mContainerLayout.addView(description);
                         break;
+
                     case "edit-text":
                         TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
                         label.setText(detail.getLabel());
@@ -272,32 +280,47 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
-    public void showDialog() {
-        myDialog = new Dialog(getContext());
-        myDialog.setContentView(R.layout.dialog_upload_picture);
-        myDialog.setTitle("Choose Image");
+//    public void showDialog() {
+//        myDialog = new Dialog(getContext());
+//        myDialog.setContentView(R.layout.dialog_upload_picture);
+//        myDialog.setTitle("Choose Image");
+//
+//        btnCamera = myDialog.findViewById(R.id.btnCamera);
+//        btnGallery = myDialog.findViewById(R.id.btnGallery);
+//        btnGallery.setEnabled(true);
+//        btnCamera.setEnabled(true);
+//
+//        btnGallery.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dispatchGetPictureFromGalleryIntent();
+//            }
+//
+//        });
+//
+//        btnCamera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dispatchTakePictureIntent();
+//            }
+//        });
+//
+//        myDialog.show();
+//    }
 
-        btnCamera = myDialog.findViewById(R.id.btnCamera);
-        btnGallery = myDialog.findViewById(R.id.btnGallery);
-        btnGallery.setEnabled(true);
-        btnCamera.setEnabled(true);
+    private void prepareShowingCategoryDialog() {
+        ImageDialogFragment imageDialogFragment = ImageDialogFragment.newInstance();
+        imageDialogFragment.setTargetFragment(this, 0);
+        imageDialogFragment.show(getActivity().getSupportFragmentManager(), "image_dialog");
+    }
 
-        btnGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchGetPictureFromGalleryIntent();
-            }
-
-        });
-
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
-
-        myDialog.show();
+    @Override
+    public void onFinishedChooseImagePickingMethod(boolean doUseCamera) {
+        if (doUseCamera) {
+            dispatchTakePictureIntent();
+        } else {
+            dispatchGetPictureFromGalleryIntent();
+        }
     }
 
     private void dispatchGetPictureFromGalleryIntent() {
@@ -313,7 +336,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             File photoFile = null;
             try {
                 photoFile = ImageUtils.createImageFile();
-                currentPhotoPath = photoFile.getAbsolutePath();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -326,6 +348,23 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 startActivityForResult(takePictureIntent, REQUEST_CAMERA);
             }
         }
+    }
+
+    public static String getPath(Context context, Uri uri ) {
+        String result = null;
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query( uri, proj, null, null, null );
+        if(cursor != null){
+            if ( cursor.moveToFirst( ) ) {
+                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
+                result = cursor.getString( column_index );
+            }
+            cursor.close( );
+        }
+        if(result == null) {
+            result = "Not found";
+        }
+        return result;
     }
 
     @Override
@@ -343,14 +382,16 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 Uri imageURI = data.getData();
                 imageToShow.setImageURI(imageURI);
                 totalImagesNumberToUpload++;
-                imageDataEncoded.put(tmpImageTag, imageURI.toString());
-                //FirebaseUtils.uploadImageToStorage(imageURI, tmpImageTag,this);
+                String picturePath = getPath( getActivity( ).getApplicationContext( ), imageURI);
+                imageDataEncoded.put(tmpImageTag, picturePath);
+//                FirebaseUtils.uploadImageToStorage(imageURI, tmpImageTag,this);
 
             } else if(requestCode == REQUEST_GALLERY) {
                 Uri pickedImage = data.getData();
                 imageToShow.setImageURI(pickedImage);
                 totalImagesNumberToUpload++;
-                imageDataEncoded.put(tmpImageTag, pickedImage.toString());
+                String picturePath = getPath( getActivity( ).getApplicationContext( ), pickedImage );
+                imageDataEncoded.put(tmpImageTag, picturePath);
                 //FirebaseUtils.uploadImageToStorage(pickedImage, tmpImageTag,this);
 
             } // end if
@@ -372,27 +413,16 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 int orderContent = detail.getOrderContent();
                 switch (detail.getType()) {
                     case "img":
-
                         if (detail.getLabel() != null && (totalImagesNumberToUpload != 0)) {
                             String tmpImageTag = "img_task_detail_" + orderContent;
-                            String uriImageString = imageDataEncoded.get(tmpImageTag);
-                            Uri imageURI = Uri.parse(uriImageString);
-
-                            try {
-                                Bitmap fullBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageURI);
-                                byte[] imageByteArray = ImageUtils.getByteArrayOf(fullBitmap);
-                                FirebaseUtils.uploadImageToStorage(imageByteArray, orderContent, this);
-                             } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                            String imagePath = imageDataEncoded.get(tmpImageTag);
+                            File file = new File(imagePath);
+                            handleUploadImage(file, detail.getId(), orderContent);
+                            detail.setImageSrc(file.getName());
                         }
-
                         break;
 
-
                     case "edit-text":
-
                         if (detail.getLabel() != null) {
                             String tmpEdtTag = "edit_text_detail_" + orderContent;
                             EditText editText = mContainerLayout.findViewWithTag(tmpEdtTag);
@@ -401,12 +431,10 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                                 detail.setText(textToGet);
                             }
                         }
-
                         break;
                 } // end switch
             } // end for
 
-            // update DB
             if (totalImagesNumberToUpload == 0) {
                 mPresenter.updateTaskDetail(mContentDetailArrayList);
             }
@@ -415,6 +443,24 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         } // end if
 
 
+    }
+
+    private void handleUploadImage(File file, int contentId, int orderContent) {
+        try {
+            RequestBody photoContent = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part photo = MultipartBody.Part.createFormData("image", file.getName(), photoContent);
+            mPresenter.uploadImage(contentId, orderContent, photo);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void finishedUploadImage(int orderContent) {
+        totalImagesNumberToUpload--;
+        if (totalImagesNumberToUpload == 0) {
+            mPresenter.updateTaskDetail(mContentDetailArrayList);
+        }
     }
 
     @Override
@@ -467,4 +513,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 break;
         }
     }
+
+
 }

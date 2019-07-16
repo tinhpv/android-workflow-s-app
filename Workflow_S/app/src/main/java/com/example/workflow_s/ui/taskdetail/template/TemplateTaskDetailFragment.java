@@ -42,6 +42,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
     private TaskDetailContract.TaskDetailPresenter mPresenter;
 
     @Override
+    public void finishedUploadImage(int orderContent) {
+        // do nothings
+    }
+
+    @Override
     public void finishedSaveContent() {
 
     }
