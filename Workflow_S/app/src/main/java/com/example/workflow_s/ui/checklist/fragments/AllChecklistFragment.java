@@ -25,6 +25,7 @@ import android.widget.EditText;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 import com.example.workflow_s.ui.checklist.ChecklistInteractor;
@@ -58,7 +59,10 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     private List<Template> templateList;
     private String selectedTemplate;
 
-    private String orgId;
+    private List<ChecklistMember> checklistMembers;
+
+
+    private String orgId, userId;
 
     public AllChecklistFragment() {}
 
@@ -144,6 +148,7 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
         mPresenter.loadAllChecklist(orgId);
         mPresenter.requestTemplateData(orgId);
     }
@@ -172,11 +177,34 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
 //        listSearch = new ArrayList<>();
-           checklists = new ArrayList<>();
-        if (datasource != null) {
-            checklists = datasource;
-            mCurrentChecklistAdapter.setChecklists(datasource);
-        }
+          // checklists = new ArrayList<>();
+//        if (datasource != null) {
+//            checklists = datasource;
+//            mCurrentChecklistAdapter.setChecklists(datasource);
+//        }
+
+        if (null != datasource) {
+            checklists = new ArrayList<>();
+            for (Checklist checklist : datasource) {
+                if (!checklist.getUserId().equals(userId)) {
+                //    checklists.add(checklist);
+                    boolean flag = true;
+                    checklistMembers = new ArrayList<>();
+                    checklistMembers = checklist.getChecklistMembers();
+                    if (checklistMembers != null) {
+                        for (ChecklistMember member : checklistMembers) {
+                            if (member.getUserId().equals(userId)) {
+                                flag = false;
+                            }
+                        }
+                        if (flag) {
+                            checklists.add(checklist);
+                        }
+                    }
+                }  // end if
+            } // end for
+            mCurrentChecklistAdapter.setChecklists(checklists);
+        } // end if null
 
     }
 
