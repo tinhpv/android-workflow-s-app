@@ -38,8 +38,8 @@ public class SettingFragment extends Fragment {
                 intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
 
                 //for Android 5-7
-                intent.putExtra("app_package", v.getContext().getPackageName());
-                intent.putExtra("app_uid", v.getContext().getApplicationInfo().uid);
+//                intent.putExtra("app_package", v.getContext().getPackageName());
+//                intent.putExtra("app_uid", v.getContext().getApplicationInfo().uid);
 
 
                 // for Android 8 and above
