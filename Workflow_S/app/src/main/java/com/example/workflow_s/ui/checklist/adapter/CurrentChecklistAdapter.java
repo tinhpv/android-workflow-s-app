@@ -85,7 +85,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
         List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
         if (checklistMembers != null) {
-            int numberMember = checklistMembers.size();
+            int numberMember = checklistMembers.size() + 1;
             currentChecklistViewHolder.mMemberNumber.setText(String.valueOf(numberMember));
         }
         int doneTask = mChecklists.get(i).getDoneTask();

@@ -87,7 +87,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
 
         if (checklistMembers != null) {
-            int numberMember = checklistMembers.size();
+            int numberMember = checklistMembers.size() + 1;
             checklistProgressViewHolder.mMemberNumber.setText(String.valueOf(numberMember));
         }
         int doneTask = mChecklists.get(i).getDoneTask();
