@@ -63,6 +63,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 Bundle args = new Bundle();
                 args.putString("checklistId", checklistId);
                 args.putInt("location", 1);
+                args.putSerializable("listMember", mChecklists.get(index).getChecklistMembers());
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskFragment.class, args, true);
             }
         });
