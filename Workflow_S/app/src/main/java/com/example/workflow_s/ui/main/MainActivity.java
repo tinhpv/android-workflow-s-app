@@ -27,7 +27,7 @@ import com.example.workflow_s.ui.home.HomeFragment;
 import com.example.workflow_s.ui.login.LoginActivity;
 import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.organization.OrganizationFragment;
-import com.example.workflow_s.ui.setting.SettingFragment;
+import com.example.workflow_s.ui.setting.fragment.SettingFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

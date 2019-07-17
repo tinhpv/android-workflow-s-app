@@ -1,17 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/avenir_light"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:text="About us"
-        android:layout_marginTop="10dp"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="THREE-IDIOTS TEAM"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimaryText"
+            android:fontFamily="@font/avenir_black"
+            android:paddingHorizontal="20dp"
+            android:lineSpacingMultiplier="1.35"
+            android:layout_marginTop="20dp"/>
+
+
+        <!--team member-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <!--Tinh Phan-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/team_vutinhphan"
+                    app:civ_border_color="@color/colorPrimaryText"
+                    android:layout_marginLeft="18dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tinh Phan"
+                    android:layout_gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:fontFamily="@font/avenir_medium"
+                    android:paddingHorizontal="20dp"
+                    android:lineSpacingMultiplier="1.35"
+                    android:layout_marginTop="20dp"/>
+
+            </LinearLayout>
+
+
+            <!--Phat Lam-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/team_phatlam"
+                    app:civ_border_color="@color/colorPrimaryText"
+                    android:layout_marginLeft="18dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phat Lam"
+                    android:layout_gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:fontFamily="@font/avenir_medium"
+                    android:paddingHorizontal="20dp"
+                    android:lineSpacingMultiplier="1.35"
+                    android:layout_marginTop="20dp"/>
+
+
+
+            </LinearLayout>
+
+
+            <!--Tien Nguyen-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:civ_border_width="1dp"
+                    android:src="@drawable/team_tiennguyen"
+                    app:civ_border_color="@color/colorPrimaryText"
+                    android:layout_marginLeft="18dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tien Nguyen"
+                    android:layout_gravity="center"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:fontFamily="@font/avenir_medium"
+                    android:paddingHorizontal="20dp"
+                    android:lineSpacingMultiplier="1.35"
+                    android:layout_marginTop="20dp"/>
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Managing multiple tasks, people, workflow management is easy to get cumbersome. Considering the need of a solution for managing stuff in a corporation, we provide a solution for workflow management to scale up the productivity of business."
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimaryText"
+            android:fontFamily="@font/avenir_light"
+            android:paddingHorizontal="20dp"
+            android:lineSpacingMultiplier="1.35"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This is where Workflow S! comes in"
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimaryText"
+            android:fontFamily="@font/avenir_black"
+            android:paddingHorizontal="20dp"
+            android:lineSpacingMultiplier="1.35"
+            android:layout_marginTop="20dp"/>
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:civ_border_width="1dp"
+            android:layout_gravity="center"
+            android:src="@drawable/workflows"
+            app:civ_border_color="@android:color/white"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We want to simplify the process management. Hence the character 'S' simply stands for 'SIMPLIFICATION'. That's simply it! "
+            android:layout_gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimaryText"
+            android:fontFamily="@font/avenir_light"
+            android:paddingHorizontal="20dp"
+            android:lineSpacingMultiplier="1.35"
+            android:layout_marginTop="20dp"/>
+
+
+
+    </LinearLayout>
+</ScrollView>
+

@@ -1,6 +1,5 @@
 package com.example.workflow_s.ui.taskdetail.checklist;
 
-import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -8,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.core.content.FileProvider;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,7 +35,6 @@ import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFra
 import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
 import com.example.workflow_s.utils.Constant;
-import com.example.workflow_s.utils.FirebaseUtils;
 import com.example.workflow_s.utils.ImageUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.squareup.picasso.Picasso;
@@ -57,20 +55,18 @@ import okhttp3.RequestBody;
 
 
 public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
-        View.OnClickListener, FirebaseUtils.UploadImageListener, ImageDialogFragment.ClickEventListener {
+        View.OnClickListener, ImageDialogFragment.ClickEventListener {
 
 
     private View view;
     private int taskId, checklistId;
-    private String taskName, currentPhotoPath, taskStatus;
+    private String currentPhotoPath, taskStatus;
     private LinearLayout mContainerLayout;
     private Button buttonCompleteTask, buttonSaveContent;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
     private Task currentTask;
-    private Dialog myDialog;
-    private Button btnCamera,btnGallery;
 
-    private ArrayList<ContentDetail> mContentDetailArrayList, mChecklistMembers;
+    private ArrayList<ContentDetail> mContentDetailArrayList;
     private HashMap<String, String> imageDataEncoded;
     private Boolean isChanged;
     private int totalImagesNumberToUpload, location;
@@ -169,6 +165,106 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
+
+    private void setupImageView(ContentDetail detail, final int orderOfContent) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
+        if (detail.getLabel() == null) {
+            ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image,
+                                                             mContainerLayout,
+                                                            false);
+
+            Glide.with(this)
+                    .load(Constant.IMG_BASE_URL + detail.getImageSrc())
+                    .into(imgView);
+
+            mContainerLayout.addView(imgView);
+
+        } else {  // image from user
+
+            // setup label above "upload" button
+            TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label,
+                                                         mContainerLayout,
+                                                        false);
+            label.setText(detail.getLabel());
+
+            // setup hidden "imageView" for setting right after picking an image
+            String tmpImageTag = "img_task_detail_" + orderOfContent;
+            ImageView tmpImg = (ImageView) inflater.inflate(R.layout.taskdetail_image,
+                                                            mContainerLayout,
+                                                            false);
+            tmpImg.setTag(tmpImageTag);
+
+            tmpImg.setVisibility(View.GONE);
+
+            // if the image has been set before...
+            if (!detail.getImageSrc().isEmpty()) {
+                tmpImg.setVisibility(View.VISIBLE);
+                Picasso.with(getActivity())
+                        .load(detail.getImageSrc())
+                        .into(tmpImg);
+            }
+
+            mContainerLayout.addView(tmpImg);
+
+            // button to upload image
+            Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button,
+                                                            mContainerLayout,
+                                                            false);
+            mContainerLayout.addView(label);
+            mContainerLayout.addView(uploadButton);
+
+            uploadButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //shared preferences
+                    SharedPreferenceUtils.saveCurrentOrder(getContext(), orderOfContent);
+                    prepareShowingCategoryDialog();
+                }
+            });
+        } // end if
+    }
+
+    private void setupEditText(ContentDetail detail, int orderOfContent) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
+        // the label above edit-text
+        TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label,
+                                                     mContainerLayout,
+                                                    false);
+
+        label.setText(detail.getLabel());
+        mContainerLayout.addView(label);
+
+        // ... and the edit text here
+        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
+        userEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isChanged = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        String tmpEdtTag = "edit_text_detail_" + orderOfContent;
+        userEditText.setTag(tmpEdtTag);
+
+        if (detail.getText() != null) {
+            userEditText.setText(detail.getText());
+        }
+
+        mContainerLayout.addView(userEditText);
+    }
+
     @Override
     public void setDataToView(ArrayList<ContentDetail> datasource) {
         if (datasource != null) {
@@ -177,91 +273,26 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
             for (ContentDetail detail : datasource) {
 
+                // the order number of detail
                 final int orderContent = detail.getOrderContent();
+
                 switch (detail.getType()) {
                     case "img":
-//                    if (detail.getLabel().isEmpty()) { // image from admin
-                        if (detail.getLabel() == null) {
-                            ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
-                            Glide.with(this).load(Constant.IMG_BASE_URL + detail.getImageSrc()).into(imgView);
-                            mContainerLayout.addView(imgView);
-                        } else {
-
-                            // image from user
-                            TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
-                            label.setText(detail.getLabel());
-
-                            String tmpImageTag = "img_task_detail_" + orderContent;
-                            ImageView tmpImg = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
-                            tmpImg.setTag(tmpImageTag);
-
-                            tmpImg.setVisibility(View.VISIBLE);
-                            ImageUtils.setPicToImageView(tmpImg, "/storage/emulated/0/DCIM/Camera/IMG_20190717_212922.jpg");
-
-//                            tmpImg.setVisibility(View.GONE);
-
-                            if (!detail.getImageSrc().isEmpty()) {
-                                tmpImg.setVisibility(View.VISIBLE);
-                                Picasso.with(getActivity())
-                                        .load(detail.getImageSrc())
-                                        .into(tmpImg);
-                            }
-
-                            mContainerLayout.addView(tmpImg);
-
-                            // button to upload image
-                            Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button, mContainerLayout, false);
-                            mContainerLayout.addView(label);
-                            mContainerLayout.addView(uploadButton);
-
-                            uploadButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //shared preferences
-                                    SharedPreferenceUtils.saveCurrentOrder(getContext(),orderContent);
-                                    prepareShowingCategoryDialog();
-                                }
-                            });
-                        } // end if
+                        setupImageView(detail, orderContent);
                         break;
 
 
                     case "text":
-                        TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview, mContainerLayout, false);
+                        TextView description = (TextView) inflater.inflate(R.layout.taskdetail_textview,
+                                mContainerLayout,
+                                false);
+
                         description.setText(detail.getText());
                         mContainerLayout.addView(description);
                         break;
 
                     case "edit-text":
-                        TextView label = (TextView) inflater.inflate(R.layout.taskdetail_label, mContainerLayout, false);
-                        label.setText(detail.getLabel());
-                        mContainerLayout.addView(label);
-                        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
-                        userEditText.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                isChanged = true;
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-
-                            }
-                        });
-
-                        String tmpEdtTag = "edit_text_detail_" + orderContent;
-                        userEditText.setTag(tmpEdtTag);
-
-                        if (detail.getText() != null) {
-                            userEditText.setText(detail.getText());
-                        }
-
-                        mContainerLayout.addView(userEditText);
+                        setupEditText(detail, orderContent);
                         break;
                 } // end switch
             } // end for
@@ -389,17 +420,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
-    @Override
-    public void onFinishedUploadToFirebase(Uri downloadImageURL, int orderContent) {
-        if (null != downloadImageURL) {
-            totalImagesNumberToUpload--;
-            mContentDetailArrayList.get(orderContent - 1).setImageSrc(downloadImageURL.toString());
-        }
-
-        if (totalImagesNumberToUpload == 0) {
-            mPresenter.updateTaskDetail(mContentDetailArrayList);
-        } // end if
-    }
 
     @Override
     public void onDestroyView() {

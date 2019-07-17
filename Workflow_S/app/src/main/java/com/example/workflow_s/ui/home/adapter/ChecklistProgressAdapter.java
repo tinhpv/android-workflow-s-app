@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.checklist.adapter;
+package com.example.workflow_s.ui.home.adapter;
 
 import android.content.Context;
 import android.graphics.Color;

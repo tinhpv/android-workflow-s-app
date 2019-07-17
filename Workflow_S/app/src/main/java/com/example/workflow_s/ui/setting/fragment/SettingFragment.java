@@ -1,4 +1,4 @@
-package com.example.workflow_s.ui.setting;
+package com.example.workflow_s.ui.setting.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
-import com.example.workflow_s.ui.setting.fragment.AboutFragment;
-import com.example.workflow_s.ui.setting.fragment.LibraryFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
 public class SettingFragment extends Fragment {
