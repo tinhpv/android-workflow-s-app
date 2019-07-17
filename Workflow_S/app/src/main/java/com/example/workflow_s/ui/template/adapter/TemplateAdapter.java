@@ -2,8 +2,8 @@ package com.example.workflow_s.ui.template.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.Filter;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Template;
-import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.ui.task.task_template.TemplateTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 

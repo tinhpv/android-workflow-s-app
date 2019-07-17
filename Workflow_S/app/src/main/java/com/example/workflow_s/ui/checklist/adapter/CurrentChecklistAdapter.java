@@ -1,11 +1,12 @@
 package com.example.workflow_s.ui.checklist.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,9 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         void onEvent(int deletedChecklistId);
     }
 
-    public CurrentChecklistAdapter(EventListener listener) {
+    public CurrentChecklistAdapter(EventListener listener, Context context) {
         this.listener = listener;
+        this.mContext = context;
     }
 
 
@@ -46,6 +48,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     private List<Checklist> mChecklists;
     private List<Checklist> mChecklistsFull;
     private RecyclerView mRecyclerView;
+    private Context mContext;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -83,6 +86,11 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         currentChecklistViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
         currentChecklistViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
         currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
+        if (getDueTimeOfChecklist(i).equals("expired")) {
+            currentChecklistViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_red));
+            currentChecklistViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));
+        }
+
         List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
         if (checklistMembers != null) {
             int numberMember = checklistMembers.size() + 1;

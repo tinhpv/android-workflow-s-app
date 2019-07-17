@@ -31,7 +31,7 @@
             android:textSize="18sp"
             android:fontFamily="@font/avenir_black"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"
             android:id="@+id/rv_template_category"
             android:scrollbars="vertical"
@@ -40,7 +40,7 @@
             android:layout_below="@+id/tv_action"
             android:layout_marginBottom="20dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -62,7 +62,7 @@
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/avenir_heavy"
                 android:padding="17dp"
-                android:text="Student Registration Process"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="24sp" />
@@ -78,19 +78,19 @@
                 android:fontFamily="@font/avenir_light"
                 android:justificationMode="inter_word"
                 android:lineSpacingMultiplier="1.25"
-                android:text="@string/description_task_demo"
+                android:text=""
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="15sp" />
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_checklist_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_task_description"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:nestedScrollingEnabled="false"></android.support.v7.widget.RecyclerView>
+                android:nestedScrollingEnabled="false"></androidx.recyclerview.widget.RecyclerView>
 
         </RelativeLayout>
     </ScrollView>
@@ -126,7 +126,7 @@
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

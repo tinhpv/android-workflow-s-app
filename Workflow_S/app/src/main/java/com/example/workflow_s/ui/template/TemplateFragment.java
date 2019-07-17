@@ -1,15 +1,14 @@
 package com.example.workflow_s.ui.template;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -98,16 +97,6 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
         });
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     private void prepareShowingCategoryDialog() {
         Bundle bundle = new Bundle();
@@ -179,7 +168,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
             mAdapter.setTemplateList(templateList);
         } // end if
 
-        //
+
         listSearch = new ArrayList<>();
         for (Template item : templateList) {
             listSearch.add(item.getName());

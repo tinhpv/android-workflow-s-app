@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_checklist_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,20 +16,20 @@
         android:background="@color/colorPrimaryDark"
         app:tabTextAppearance="@style/TabText">
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_current"
             android:text="Current"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />
 
-        <android.support.design.widget.TabItem
+        <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_all"
             android:text="All"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
+    </com.google.android.material.tabs.TabLayout>
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_checklist_pager"
         android:background="#fafafa"
         android:layout_width="match_parent"

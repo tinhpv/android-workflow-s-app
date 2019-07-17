@@ -2,6 +2,8 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-07-10
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  **/
 
 
-public class ChecklistMember {
+public class ChecklistMember implements Serializable {
 
     @SerializedName("id")
     private Integer id;

@@ -2,16 +2,12 @@ package com.example.workflow_s.utils;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.workflow_s.R;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Workflow_S
@@ -38,7 +34,7 @@ public class CommonUtils {
         FragmentManager fragmentManager = ((FragmentActivity)fragmentContext).getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+//        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
 
         if (isAddToBackStack) {
             transaction

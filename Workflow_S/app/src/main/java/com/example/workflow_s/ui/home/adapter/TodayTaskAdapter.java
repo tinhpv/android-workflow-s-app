@@ -2,20 +2,18 @@ package com.example.workflow_s.ui.home.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
-import com.example.workflow_s.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -119,7 +117,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
     public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView, mTextViewTime;
-        private RelativeLayout item;
+        private LinearLayout item;
 
 
         public TodayTaskViewHolder(@NonNull View itemView) {

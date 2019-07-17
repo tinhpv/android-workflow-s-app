@@ -1,21 +1,14 @@
 package com.example.workflow_s.ui.taskdetail.checklist;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.FileProvider;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,15 +29,12 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
-import com.example.workflow_s.ui.template.dialog_fragment.TemplateDialogFragment;
-import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.FirebaseUtils;
 import com.example.workflow_s.utils.ImageUtils;
@@ -52,10 +42,8 @@ import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -71,7 +59,6 @@ import okhttp3.RequestBody;
 public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
         View.OnClickListener, FirebaseUtils.UploadImageListener, ImageDialogFragment.ClickEventListener {
 
-    private final int REQUEST_CAMERA = 1, REQUEST_GALLERY = 2;
 
     private View view;
     private int taskId, checklistId;
@@ -155,10 +142,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private void getTaskIdFromParentFragment() {
         Bundle arguments = getArguments();
         taskId = Integer.parseInt(arguments.getString("taskId"));
-        //taskName = arguments.getString("taskName");
         location = arguments.getInt("location_activity");
         checklistId = arguments.getInt("checklistId");
-
 
         getActivity().setTitle("Task Detail");
 
@@ -210,7 +195,10 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                             ImageView tmpImg = (ImageView) inflater.inflate(R.layout.taskdetail_image, mContainerLayout, false);
                             tmpImg.setTag(tmpImageTag);
 
-                            tmpImg.setVisibility(View.GONE);
+                            tmpImg.setVisibility(View.VISIBLE);
+                            ImageUtils.setPicToImageView(tmpImg, "/storage/emulated/0/DCIM/Camera/IMG_20190717_212922.jpg");
+
+//                            tmpImg.setVisibility(View.GONE);
 
                             if (!detail.getImageSrc().isEmpty()) {
                                 tmpImg.setVisibility(View.VISIBLE);
@@ -280,33 +268,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
-//    public void showDialog() {
-//        myDialog = new Dialog(getContext());
-//        myDialog.setContentView(R.layout.dialog_upload_picture);
-//        myDialog.setTitle("Choose Image");
-//
-//        btnCamera = myDialog.findViewById(R.id.btnCamera);
-//        btnGallery = myDialog.findViewById(R.id.btnGallery);
-//        btnGallery.setEnabled(true);
-//        btnCamera.setEnabled(true);
-//
-//        btnGallery.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dispatchGetPictureFromGalleryIntent();
-//            }
-//
-//        });
-//
-//        btnCamera.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dispatchTakePictureIntent();
-//            }
-//        });
-//
-//        myDialog.show();
-//    }
 
     private void prepareShowingCategoryDialog() {
         ImageDialogFragment imageDialogFragment = ImageDialogFragment.newInstance();
@@ -314,89 +275,30 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         imageDialogFragment.show(getActivity().getSupportFragmentManager(), "image_dialog");
     }
 
-    @Override
-    public void onFinishedChooseImagePickingMethod(boolean doUseCamera) {
-        if (doUseCamera) {
-            dispatchTakePictureIntent();
-        } else {
-            dispatchGetPictureFromGalleryIntent();
-        }
-    }
-
-    private void dispatchGetPictureFromGalleryIntent() {
-        Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intentGallery.setType("image/*");
-        startActivityForResult(intentGallery, REQUEST_GALLERY);
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-
-            File photoFile = null;
-            try {
-                photoFile = ImageUtils.createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(),
-                        "com.example.workflow_s",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_CAMERA);
-            }
-        }
-    }
-
-    public static String getPath(Context context, Uri uri ) {
-        String result = null;
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver().query( uri, proj, null, null, null );
-        if(cursor != null){
-            if ( cursor.moveToFirst( ) ) {
-                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
-                result = cursor.getString( column_index );
-            }
-            cursor.close( );
-        }
-        if(result == null) {
-            result = "Not found";
-        }
-        return result;
-    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        int order =  SharedPreferenceUtils.retrieveDataInt(getContext(),getContext().getString(R.string.order));
+    public void onFinishedPickingImages(String imagePath, Uri imageData) {
+        int order =  SharedPreferenceUtils.retrieveDataInt(getContext(), getString(R.string.order));
 
-        if(resultCode == Activity.RESULT_OK) {
-            String tmpImageTag = "img_task_detail_" + order;
-            ImageView imageToShow = mContainerLayout.findViewWithTag(tmpImageTag);
-            imageToShow.setVisibility(View.VISIBLE);
-            isChanged = true;
+        String tmpImageTag = "img_task_detail_" + order;
+        ImageView imageToShow = mContainerLayout.findViewWithTag(tmpImageTag);
+        imageToShow.setVisibility(View.VISIBLE);
 
-            if (requestCode == REQUEST_CAMERA) {
-                Uri imageURI = data.getData();
-                imageToShow.setImageURI(imageURI);
-                totalImagesNumberToUpload++;
-                String picturePath = getPath( getActivity( ).getApplicationContext( ), imageURI);
-                imageDataEncoded.put(tmpImageTag, picturePath);
-//                FirebaseUtils.uploadImageToStorage(imageURI, tmpImageTag,this);
-
-            } else if(requestCode == REQUEST_GALLERY) {
-                Uri pickedImage = data.getData();
-                imageToShow.setImageURI(pickedImage);
-                totalImagesNumberToUpload++;
-                String picturePath = getPath( getActivity( ).getApplicationContext( ), pickedImage );
-                imageDataEncoded.put(tmpImageTag, picturePath);
-                //FirebaseUtils.uploadImageToStorage(pickedImage, tmpImageTag,this);
-
-            } // end if
+        isChanged = true;
+        if (imagePath != null) {
+            currentPhotoPath = imagePath;
+            ImageUtils.setPicToImageView(imageToShow, currentPhotoPath);
+            totalImagesNumberToUpload++;
+            imageDataEncoded.put(tmpImageTag, currentPhotoPath);
+        } else if (imageData != null) {
+            imageToShow.setImageURI(imageData);
+            totalImagesNumberToUpload++;
+            String picturePath = ImageUtils.getPath(getActivity().getApplicationContext(), imageData);
+            Log.d("VUTINH", "onFinishedPickingImages: " + picturePath);
+            imageDataEncoded.put(tmpImageTag, picturePath);
         }
     }
+
 
     @Override
     public void finishedSaveContent() {
@@ -441,8 +343,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
 
         } // end if
-
-
     }
 
     private void handleUploadImage(File file, int contentId, int orderContent) {
