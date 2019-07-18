@@ -1,12 +1,13 @@
-package com.example.workflow_s.ui.checklist.adapter;
+package com.example.workflow_s.ui.home.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
-import com.example.workflow_s.ui.checklist.viewholder.ChecklistProgressViewHolder;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 
@@ -49,9 +49,11 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     // DataSource for RecyclerView
     private List<Checklist> mChecklists;
     private RecyclerView mRecyclerView;
+    private Context mContext;
 
-    public ChecklistProgressAdapter(EventListener listener) {
+    public ChecklistProgressAdapter(EventListener listener, Context context) {
         this.listener = listener;
+        this.mContext = context;
     }
 
     @NonNull
@@ -83,7 +85,15 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         checklistProgressViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
         checklistProgressViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
         checklistProgressViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
-        checklistProgressViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
+
+        String dueTime = getDueTimeOfChecklist(i);
+        checklistProgressViewHolder.mDueTime.setText(dueTime);
+        if (dueTime.equals("expired")) {
+            checklistProgressViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_red));
+            checklistProgressViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));
+        }
+
+
         List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
 
         if (checklistMembers != null) {

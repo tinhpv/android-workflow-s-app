@@ -39,7 +39,7 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_organization"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:nestedScrollingEnabled="false"
             android:background="@color/backgroundColor">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
 </LinearLayout>

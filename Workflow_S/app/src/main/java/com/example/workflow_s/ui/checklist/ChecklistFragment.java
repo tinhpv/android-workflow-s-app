@@ -1,32 +1,21 @@
 package com.example.workflow_s.ui.checklist;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import com.example.workflow_s.R;
-import com.example.workflow_s.model.Checklist;
-import com.example.workflow_s.ui.checklist.adapter.AccomplishedChecklistAdapter;
 import com.example.workflow_s.ui.checklist.adapter.ChecklistPagerAdapter;
-import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
-import com.example.workflow_s.ui.organization.adapter.OrganizationMemberAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Workflow_S

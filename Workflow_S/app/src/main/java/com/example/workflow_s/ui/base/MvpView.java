@@ -1,6 +1,6 @@
 package com.example.workflow_s.ui.base;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 public interface MvpView {
 

@@ -1,16 +1,15 @@
 package com.example.workflow_s.ui.home;
 
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,10 +24,9 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
-import com.example.workflow_s.ui.checklist.adapter.ChecklistProgressAdapter;
+import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.notification.NotificationFragment;
@@ -36,8 +34,6 @@ import com.example.workflow_s.ui.template.TemplateFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.common.internal.service.Common;
-import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -74,6 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -194,7 +191,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         checklistProgressLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         checklistProgressRecyclerView.setLayoutManager(checklistProgressLayoutManager);
 
-        mChecklistProgressAdapter = new ChecklistProgressAdapter(this);
+        mChecklistProgressAdapter = new ChecklistProgressAdapter(this, getContext());
         checklistProgressRecyclerView.setAdapter(mChecklistProgressAdapter);
 
         SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {

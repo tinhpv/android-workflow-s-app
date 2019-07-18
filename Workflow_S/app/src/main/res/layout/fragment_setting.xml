@@ -5,58 +5,49 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tv_switch_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/tv_switch_notification"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/avenir_light"
-            android:text="Notification"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:drawableLeft="@mipmap/setting_icon_small"
-            android:drawablePadding="20dp"
-            android:paddingLeft="20dp"
-            android:background="@drawable/background_item_white_radius"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"/>
-
-    </RelativeLayout>
-
+        android:fontFamily="@font/avenir_light"
+        android:text="Notification"
+        android:textSize="20sp"
+        android:drawableLeft="@mipmap/notif_ic_dark"
+        android:drawablePadding="30dp"
+        android:background="@drawable/background_item_white_radius"
+        android:layout_marginTop="40dp"
+        android:layout_marginHorizontal="30dp"
+        android:paddingHorizontal="40dp"/>
 
     <TextView
         android:id="@+id/tv_third_libraries"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/avenir_light"
         android:text="Third-party libraries"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:drawableLeft="@mipmap/setting_icon_small"
+        android:textSize="20sp"
+        android:drawableLeft="@mipmap/third_party_ic"
         android:drawablePadding="20dp"
-        android:paddingLeft="20dp"
         android:background="@drawable/background_item_white_radius"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:paddingHorizontal="40dp"/>
 
     <TextView
         android:id="@+id/tv_about"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/avenir_light"
         android:text="About"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:drawableLeft="@mipmap/setting_icon_small"
+        android:textSize="20sp"
+        android:drawableLeft="@mipmap/about_ic"
         android:drawablePadding="20dp"
-        android:paddingLeft="20dp"
         android:background="@drawable/background_item_white_radius"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:paddingHorizontal="40dp"/>
+
+
+
 
 </LinearLayout>

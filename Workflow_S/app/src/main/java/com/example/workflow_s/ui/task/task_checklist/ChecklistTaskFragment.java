@@ -3,13 +3,13 @@ package com.example.workflow_s.ui.task.task_checklist;
 import android.animation.Animator;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +35,9 @@ import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.workflow_s.R.mipmap.checkmark_ic_white;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-30
@@ -55,7 +58,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
-    private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId;
+    private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId, checklistStatus;
 
     private ProgressBar mTaskProgressBar;
     private int totalTask, doneTask, location;
@@ -160,6 +163,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     public void finishGetChecklist(Checklist checklist) {
         if (null != checklist) {
             checklistName = checklist.getName();
+            checklistStatus = checklist.getTemplateStatus();
             checklistDescription = checklist.getDescription();
             checklistUserId = checklist.getUserId();
             totalTask = checklist.getTotalTask();
@@ -204,8 +208,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
             }
         });
-    }
+        if (checklistStatus.equals(getString(R.string.checklist_done))) {
+            completeChecklistButton.setText("Completed");
+            completeChecklistButton.setBackground(getResources().getDrawable(R.drawable.button_radius_green));
+            completeChecklistButton.setCompoundDrawables(getResources().getDrawable(R.mipmap.checkmark_ic_white), null, null, null);
+            completeChecklistButton.setEnabled(false);
+        }
 
+    }
 
     private void switchOnLoading() {
         mAnimationView.setVisibility(View.VISIBLE);
@@ -254,9 +264,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void finishChangeChecklistStatus() {
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        completeChecklistButton.setText("Completed");
+        completeChecklistButton.setBackground(getResources().getDrawable(R.drawable.button_radius_green));
+        completeChecklistButton.setCompoundDrawablesWithIntrinsicBounds(checkmark_ic_white, 0, 0, 0);
+        completeChecklistButton.setEnabled(false);
     }
 
     private void handleCompleteChecklist() {

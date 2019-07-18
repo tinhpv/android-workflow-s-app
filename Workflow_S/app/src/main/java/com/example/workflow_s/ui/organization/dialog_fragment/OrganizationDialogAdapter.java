@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.workflow_s.R;
 
-import java.util.EventListener;
 import java.util.List;
 
 public class OrganizationDialogAdapter extends RecyclerView.Adapter<OrganizationDialogAdapter.OrganizationDialogViewHolder> {
