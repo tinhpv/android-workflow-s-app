@@ -1,6 +1,9 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
 import android.animation.Animator;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -25,6 +28,7 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
@@ -50,7 +54,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private static final String TAG = "TASK_FRAGMENT";
 
     View view;
-    private Button completeChecklistButton;
+    private Button completeChecklistButton, reactiveChecklistButton;
     private TextView mChecklistDescription, mChecklistName;
     private RecyclerView checklistTaskRecyclerView;
     private ChecklistTaskAdapter mChecklistChecklistTaskAdapter;
@@ -63,6 +67,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private ProgressBar mTaskProgressBar;
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
+    private ArrayList<Task> tasks;
 
     LottieAnimationView mAnimationView;
 
@@ -127,6 +132,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
         completeChecklistButton.setOnClickListener(this);
+
+        reactiveChecklistButton = view.findViewById(R.id.bt_reactive);
+        reactiveChecklistButton.setOnClickListener(this);
         setupTaskRV();
         initData();
     }
@@ -134,7 +142,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private void setupTaskRV() {
         checklistTaskRecyclerView = view.findViewById(R.id.rv_checklist_task);
         checklistTaskRecyclerView.setHasFixedSize(true);
-        taskLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        taskLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         checklistTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
         mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this);
@@ -148,6 +156,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         location = arguments.getInt("location");
         checklistMembers = new ArrayList<>();
         checklistMembers = (ArrayList<ChecklistMember>) arguments.getSerializable("listMember");
+
         // USER's DATA
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
@@ -168,7 +177,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             checklistUserId = checklist.getUserId();
             totalTask = checklist.getTotalTask();
             doneTask = checklist.getDoneTask();
-            ArrayList<Task> tasks = (ArrayList<Task>) checklist.getTaskItems();
+            tasks = (ArrayList<Task>) checklist.getTaskItems();
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
             mChecklistChecklistTaskAdapter.setChecklistMembers((ArrayList<ChecklistMember>) checklistMembers);
             initUI();
@@ -208,11 +217,13 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
             }
         });
+
         if (checklistStatus.equals(getString(R.string.checklist_done))) {
-            completeChecklistButton.setText("Completed");
-            completeChecklistButton.setBackground(getResources().getDrawable(R.drawable.button_radius_green));
-            completeChecklistButton.setCompoundDrawables(getResources().getDrawable(R.mipmap.checkmark_ic_white), null, null, null);
-            completeChecklistButton.setEnabled(false);
+            reactiveChecklistButton.setVisibility(View.VISIBLE);
+            completeChecklistButton.setVisibility(View.INVISIBLE);
+        } else {
+            reactiveChecklistButton.setVisibility(View.INVISIBLE);
+            completeChecklistButton.setVisibility(View.VISIBLE);
         }
 
     }
@@ -237,6 +248,52 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onEventCheckBox(Boolean isSelected, int taskId) {
+        if (userId.equals(checklistUserId)) {
+            handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+        } else {
+            mPresenter.getTaskMember(taskId, isSelected);
+        }
+    }
+
+    private boolean isChecklistMember() {
+        for (ChecklistMember member : checklistMembers) {
+            if (member.getUserId().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void finishedChangeTaskStatus() {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId) {
+
+        boolean isTaskMember = false;
+
+        for (TaskMember member : taskMemberList) {
+            if (userId.equals(member.getUserId())) {
+                isTaskMember = true;
+                break;
+            }
+        }
+
+        if (isTaskMember) {
+            handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+        } else {
+            showDialog("You're not assigned to this task, so you cannot complete it");
+            mChecklistChecklistTaskAdapter.setTaskList(tasks);
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
         if (isSelected) {
             doneTask++;
             mPresenter.changeTaskStatus(taskId, getString(R.string.task_done));
@@ -244,39 +301,69 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             doneTask--;
             mPresenter.changeTaskStatus(taskId, getString(R.string.task_running));
         }
+
         updateProgressBar();
 
         if (doneTask == totalTask) {
-            handleCompleteChecklist();
+            handleCompleteChecklist(getString(R.string.checklist_done));
+        } else if (checklistStatus.equals(getString(R.string.checklist_done))){
+            handleCompleteChecklist(getString(R.string.checklist_running));
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void finishedChangeTaskStatus() {
-//        updateProgressBar();
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_complete_checklist) {
-            handleCompleteChecklist();
+            if (isChecklistMember()) {
+                handleCompleteChecklist(getString(R.string.checklist_done));
+            } else {
+                showDialog("You're not assigned to this checklist, so you cannot complete it");
+            }
+
+        } else if (v.getId() == R.id.bt_reactive) {
+            // fixme - do something here
         }
+    }
+
+    private void handleCompleteChecklist(String status) {
+
+        if (status.equals(getString(R.string.checklist_running))) {
+            completeChecklistButton.setVisibility(View.VISIBLE);
+            reactiveChecklistButton.setVisibility(View.INVISIBLE);
+        } else {
+            switchOnLoading();
+            completeChecklistButton.setVisibility(View.INVISIBLE);
+            reactiveChecklistButton.setVisibility(View.VISIBLE);
+        }
+
+        mPresenter.changeChecklistStatus(checklistId, status);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void finishChangeChecklistStatus() {
-        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
-        completeChecklistButton.setText("Completed");
-        completeChecklistButton.setBackground(getResources().getDrawable(R.drawable.button_radius_green));
-        completeChecklistButton.setCompoundDrawablesWithIntrinsicBounds(checkmark_ic_white, 0, 0, 0);
-        completeChecklistButton.setEnabled(false);
+    public void finishChangeChecklistStatus(String status) {
+        checklistStatus = status;
+        //mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
 
-    private void handleCompleteChecklist() {
-        switchOnLoading();
-        mPresenter.changeChecklistStatus(checklistId, getString(R.string.checklist_done));
+    private void showDialog(String message) {
+        final Dialog errorDialog = new Dialog(getContext());
+        errorDialog.setContentView(R.layout.dialog_error_task);
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+        TextView tvErrorMessage = errorDialog.findViewById(R.id.tv_error_message);
+        tvErrorMessage.setText(message);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.cancel();
+            }
+        });
+
+        errorDialog.show();
     }
+
 
 }

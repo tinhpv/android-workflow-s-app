@@ -163,13 +163,10 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 } else {
                     taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
                 }
-
                 listener.onEventCheckBox(isChecked, mTaskList.get(taskViewHolder.getAdapterPosition()).getId());
-
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

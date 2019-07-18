@@ -107,21 +107,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/bt_complete_checklist"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Complete Checklist"
-            android:textSize="14sp"
-            android:paddingVertical="15dp"
-            android:paddingHorizontal="30dp"
-            android:layout_marginBottom="14dp"
-            android:drawableLeft="@mipmap/running_icon_white"
-            android:drawablePadding="15dp"
-            android:fontFamily="@font/avenir_black"
-            android:background="@drawable/button_radius_dark"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/bt_complete_checklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete Checklist"
+                android:textSize="14sp"
+                android:paddingVertical="15dp"
+                android:paddingHorizontal="30dp"
+                android:layout_marginBottom="14dp"
+                android:drawableLeft="@mipmap/running_icon_white"
+                android:drawablePadding="15dp"
+                android:fontFamily="@font/avenir_black"
+                android:background="@drawable/button_radius_dark"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/bt_reactive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Completed"
+                android:textSize="14sp"
+                android:paddingVertical="15dp"
+                android:paddingHorizontal="30dp"
+                android:layout_marginBottom="14dp"
+                android:drawableLeft="@mipmap/checkmark_ic_white"
+                android:drawablePadding="15dp"
+                android:fontFamily="@font/avenir_black"
+                android:background="@drawable/button_radius_green"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
 
     </LinearLayout>
 
