@@ -34,7 +34,7 @@
         android:id="@+id/animation_view"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        app:lottie_rawRes="@raw/stick_and_ball"
+        app:lottie_rawRes="@raw/new_loading"
         app:lottie_loop="true"
         android:layout_gravity="center"
         tools:ignore="MissingConstraints" />

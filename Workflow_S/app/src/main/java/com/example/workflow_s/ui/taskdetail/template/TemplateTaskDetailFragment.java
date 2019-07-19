@@ -19,12 +19,14 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.utils.Constant;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Workflow_S
@@ -43,6 +45,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
 
     @Override
     public void finishedUploadImage(int orderContent) {
+        // do nothings
+    }
+
+    @Override
+    public void finishGetTaskMember(List<TaskMember> memberList) {
         // do nothings
     }
 

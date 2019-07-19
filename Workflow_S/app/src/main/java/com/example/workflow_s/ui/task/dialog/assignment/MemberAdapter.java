@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.List;
 
@@ -34,15 +35,23 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
     }
 
     private List<User> mUserList;
+    private String checklistUserId;
     private RecyclerView mRecyclerView;
+    private Context mContext;
+
 
     public void setUserList(List<User> userList) {
         mUserList = userList;
         notifyDataSetChanged();
     }
 
-    public MemberAdapter(EventListener listener) {
+    public void setChecklistUserId(String checklistUserId) {
+        this.checklistUserId = checklistUserId;
+    }
+
+    public MemberAdapter(EventListener listener, Context context) {
         this.listener = listener;
+        this.mContext = context;
     }
 
     @Override
@@ -75,14 +84,23 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
             Glide.with(memberViewHolder.view.getContext()).load(profileUrlString).into(memberViewHolder.mAvatar);
         }
 
-        memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // DONE - HANDLE UNASSIGN USER HERE
-                //int index = mRecyclerView.getChildLayoutPosition(v);
-                listener.onEvent(mUserList.get(i).getId());
-            }
-        });
+
+        String userId = SharedPreferenceUtils.retrieveData(mContext, mContext.getString(R.string.pref_userId));
+        String id = mUserList.get(i).getId();
+        if (id.equals(checklistUserId) || id.equals(userId)) { // if this user is checklist's owner
+            memberViewHolder.btUnassign.setVisibility(View.GONE);
+        } else {
+            memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // DONE - HANDLE UNASSIGN USER HERE
+                    //int index = mRecyclerView.getChildLayoutPosition(v);
+                    listener.onEvent(mUserList.get(i).getId());
+                }
+            });
+        }
+
+
     }
 
 

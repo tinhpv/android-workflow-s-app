@@ -28,20 +28,24 @@ import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.ImageUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,15 +64,17 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     private View view;
     private int taskId, checklistId;
-    private String currentPhotoPath, taskStatus;
+    private String currentPhotoPath, taskStatus, checklistUserId;
     private LinearLayout mContainerLayout;
-    private Button buttonCompleteTask, buttonSaveContent;
+    private FloatingActionButton buttonCompleteTask, buttonSaveContent;
+    private TextView tvAlertMember;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
     private Task currentTask;
 
     private ArrayList<ContentDetail> mContentDetailArrayList;
+    private List<TaskMember> mTaskMemberList;
     private HashMap<String, String> imageDataEncoded;
-    private Boolean isChanged;
+    private Boolean isChanged, isTaskMember;
     private int totalImagesNumberToUpload, location;
 
     @Override
@@ -76,7 +82,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_task_assign:
-                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(taskId, checklistId);
+                AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(taskId, checklistId, checklistUserId, isTaskMember);
                 assigningDialogFragment.show(fm, "fragment_assign_");
                 return true;
 
@@ -84,6 +90,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(taskId);
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -117,9 +124,11 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mContainerLayout = view.findViewById(R.id.task_detail_layout);
+        tvAlertMember = view.findViewById(R.id.tv_alert_member);
         buttonCompleteTask = view.findViewById(R.id.bt_complete_task);
         buttonCompleteTask.setOnClickListener(this);
         buttonSaveContent = view.findViewById(R.id.bt_save_content);
@@ -132,7 +141,16 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public void initData() {
         totalImagesNumberToUpload = 0;
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
-        mPresenter.getTask(taskId);
+        mPresenter.getTaskMember(taskId);
+    }
+
+    @Override
+    public void finishGetTaskMember(List<TaskMember> memberList) {
+        if (memberList != null) {
+            mTaskMemberList = memberList;
+            isTaskMember = isTaskMember();
+            mPresenter.getTask(taskId);
+        }
     }
 
     private void getTaskIdFromParentFragment() {
@@ -140,11 +158,28 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         taskId = Integer.parseInt(arguments.getString("taskId"));
         location = arguments.getInt("location_activity");
         checklistId = arguments.getInt("checklistId");
+        checklistUserId = arguments.getString("checklistUserId");
 
         getActivity().setTitle("Task Detail");
 
         isChanged = false;
         imageDataEncoded = new HashMap<String, String>();
+    }
+
+    public boolean isTaskMember() {
+        String userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
+
+        if (userId.equals(checklistUserId)) {
+            return true;
+        }
+
+        for (TaskMember member : mTaskMemberList) {
+            if (member.getUserId().equals(userId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -153,15 +188,27 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             currentTask = task;
             taskStatus = currentTask.getTaskStatus();
             updateButtonLayout(taskStatus);
+            updateUIWithAuth(isTaskMember);
             mPresenter.loadDetails(taskId);
         }
     }
 
+    void updateUIWithAuth(boolean isMember) {
+        if (!isMember) {
+            tvAlertMember.setVisibility(View.VISIBLE);
+            buttonCompleteTask.hide();
+            buttonSaveContent.hide();
+        } else {
+            tvAlertMember.setVisibility(View.GONE);
+        }
+    }
+
     private void updateButtonLayout(String taskStatus) {
+        // FIXME - fix o day ne
         if (taskStatus.equals(getString(R.string.task_done))) {
-            buttonCompleteTask.setText("Reactive");
+//            buttonCompleteTask.setText("Reactive");
         } else if (taskStatus.equals(getString(R.string.task_running))) {
-            buttonCompleteTask.setText("Complete");
+//            buttonCompleteTask.setText("Complete");
         }
     }
 
@@ -170,9 +217,10 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         if (detail.getLabel() == null) {
+
             ImageView imgView = (ImageView) inflater.inflate(R.layout.taskdetail_image,
-                                                             mContainerLayout,
-                                                            false);
+                    mContainerLayout,
+                    false);
 
             Glide.with(this)
                     .load(Constant.IMG_BASE_URL + detail.getImageSrc())
@@ -206,22 +254,31 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             }
 
             mContainerLayout.addView(tmpImg);
-
-            // button to upload image
-            Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button,
-                                                            mContainerLayout,
-                                                            false);
             mContainerLayout.addView(label);
-            mContainerLayout.addView(uploadButton);
 
-            uploadButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //shared preferences
-                    SharedPreferenceUtils.saveCurrentOrder(getContext(), orderOfContent);
-                    prepareShowingCategoryDialog();
-                }
-            });
+            if (isTaskMember) {
+                // button to upload image
+                Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button,
+                        mContainerLayout,
+                        false);
+
+                mContainerLayout.addView(uploadButton);
+
+                uploadButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //shared preferences
+                        SharedPreferenceUtils.saveCurrentOrder(getContext(), orderOfContent);
+                        prepareShowingCategoryDialog();
+                    }
+                });
+            } else {
+                Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button_disable,
+                        mContainerLayout,
+                        false);
+                mContainerLayout.addView(uploadButton);
+            }
+
         } // end if
     }
 
@@ -237,36 +294,42 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         mContainerLayout.addView(label);
 
         // ... and the edit text here
-        EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
-        userEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (isTaskMember) {
+            EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
+            userEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    isChanged = true;
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            String tmpEdtTag = "edit_text_detail_" + orderOfContent;
+            userEditText.setTag(tmpEdtTag);
+
+            if (detail.getText() != null) {
+                userEditText.setText(detail.getText());
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                isChanged = true;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        String tmpEdtTag = "edit_text_detail_" + orderOfContent;
-        userEditText.setTag(tmpEdtTag);
-
-        if (detail.getText() != null) {
-            userEditText.setText(detail.getText());
+            mContainerLayout.addView(userEditText);
+        } else {
+            EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edittext_disable, mContainerLayout, false);
+            mContainerLayout.addView(userEditText);
         }
-
-        mContainerLayout.addView(userEditText);
     }
 
     @Override
     public void setDataToView(ArrayList<ContentDetail> datasource) {
+
         if (datasource != null) {
             mContentDetailArrayList = datasource;
             LayoutInflater inflater = LayoutInflater.from(getContext());

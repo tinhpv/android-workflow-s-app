@@ -98,11 +98,12 @@ public class AssigningDialogFragment extends DialogFragment
     private void setupRV() {
         userAssigningRecylerView = view.findViewById(R.id.rv_assign_user);
         userAssigningRecylerView.setHasFixedSize(true);
-        memberLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        memberLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         userAssigningRecylerView.setLayoutManager(memberLayoutManager);
 
-        mAdapter = new MemberAdapter(this);
+        mAdapter = new MemberAdapter(this, getContext());
         userAssigningRecylerView.setAdapter(mAdapter);
+        mAdapter.setChecklistUserId(checklistUserId);
     }
 
     private void requestData() {

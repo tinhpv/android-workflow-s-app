@@ -16,6 +16,7 @@ import com.example.workflow_s.R;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,17 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
     private ArrayList<TaskMember> mTaskMembers;
     private ArrayList<ChecklistMember> mChecklistMembers;
     private RecyclerView mRecyclerView;
+    private boolean isTaskMember;
+    private String checklistUserId;
+    private Context mContext;
+
+    public void setChecklistUserId(String checklistUserId) {
+        this.checklistUserId = checklistUserId;
+    }
+
+    public void setTaskMember(boolean taskMember) {
+        isTaskMember = taskMember;
+    }
 
     public void setUserList(List<User> userList) {
         mUserList = userList;
@@ -54,8 +66,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         mChecklistMembers = checklistMembers;
     }
 
-    public MemberAdapter(EventListener listener) {
+    public MemberAdapter(EventListener listener, Context context) {
         this.listener = listener;
+        this.mContext = context;
     }
 
     @Override
@@ -75,14 +88,6 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         return viewHolder;
     }
 
-    private boolean isChecklistMember(String userId) {
-        for (ChecklistMember member : mChecklistMembers) {
-            if (member.getUserId().equals(userId)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private User getUser(String userId) {
         for (User user : mUserList) {
@@ -124,31 +129,42 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
             Glide.with(memberViewHolder.view.getContext()).load(profileUrlString).into(memberViewHolder.mAvatar);
         }
 
-        if (isTaskMember(user.getId())) {
-            memberViewHolder.btAssign.setVisibility(View.INVISIBLE);
-            memberViewHolder.btUnassign.setVisibility(View.VISIBLE);
-            memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // DONE - HANDLE UNASSIGN USER HERE
-                    //int index = mRecyclerView.getChildLayoutPosition(v);
-                    String userId = mChecklistMembers.get(i).getUserId();
-                    int taskMemberId = taskMemberId(userId);
-                    listener.onEvent(userId, taskMemberId, false);
-                }
-            });
-        } else {
-            memberViewHolder.btAssign.setVisibility(View.VISIBLE);
+        String userId = SharedPreferenceUtils.retrieveData(mContext, mContext.getString(R.string.pref_userId));
+        if (isTaskMember) {
             memberViewHolder.btUnassign.setVisibility(View.INVISIBLE);
-            memberViewHolder.btAssign.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // DONE - HANDLE UNASSIGN USER HERE
-                    //int index = mRecyclerView.getChildLayoutPosition(v);
-                    listener.onEvent(mChecklistMembers.get(i).getUserId(), null, true);
+            memberViewHolder.btUnassign.setVisibility(View.INVISIBLE);
+
+        } else {
+            if (isTaskMember(user.getId())) {
+                memberViewHolder.btAssign.setVisibility(View.INVISIBLE);
+                if (!user.getId().equals(userId)) {
+                    memberViewHolder.btUnassign.setVisibility(View.VISIBLE);
+                    memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // DONE - HANDLE UNASSIGN USER HERE
+                            //int index = mRecyclerView.getChildLayoutPosition(v);
+                            String userId = mChecklistMembers.get(i).getUserId();
+                            int taskMemberId = taskMemberId(userId);
+                            listener.onEvent(userId, taskMemberId, false);
+                        }
+                    });
                 }
-            });
-        } // end if
+            } else {
+                memberViewHolder.btAssign.setVisibility(View.VISIBLE);
+                memberViewHolder.btUnassign.setVisibility(View.INVISIBLE);
+                memberViewHolder.btAssign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // DONE - HANDLE UNASSIGN USER HERE
+                        //int index = mRecyclerView.getChildLayoutPosition(v);
+                        listener.onEvent(mChecklistMembers.get(i).getUserId(), null, true);
+                    }
+                });
+            } // end if
+        }
+
+
 
     }
 
