@@ -35,7 +35,6 @@ import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
-import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.ImageUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -87,7 +86,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 return true;
 
             case R.id.action_task_set_time:
-                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(taskId);
+                TimeSettingDialogFragment settingDialogFragment = TimeSettingDialogFragment.newInstance(taskId, mTaskMemberList);
                 settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
 
@@ -133,24 +132,10 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         buttonCompleteTask.setOnClickListener(this);
         buttonSaveContent = view.findViewById(R.id.bt_save_content);
         buttonSaveContent.setOnClickListener(this);
+
+
         getTaskIdFromParentFragment();
         initData();
-    }
-
-
-    public void initData() {
-        totalImagesNumberToUpload = 0;
-        mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
-        mPresenter.getTaskMember(taskId);
-    }
-
-    @Override
-    public void finishGetTaskMember(List<TaskMember> memberList) {
-        if (memberList != null) {
-            mTaskMemberList = memberList;
-            isTaskMember = isTaskMember();
-            mPresenter.getTask(taskId);
-        }
     }
 
     private void getTaskIdFromParentFragment() {
@@ -166,7 +151,25 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         imageDataEncoded = new HashMap<String, String>();
     }
 
-    public boolean isTaskMember() {
+
+    public void initData() {
+        totalImagesNumberToUpload = 0;
+        mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
+        mPresenter.getTaskMember(taskId);
+    }
+
+    @Override
+    public void finishGetTaskMember(List<TaskMember> memberList) {
+        if (memberList != null) {
+            mTaskMemberList = memberList;
+            isTaskMember = checkIfCurrentUserIsTaskMember();
+            updateUIWithAuth(isTaskMember);
+            mPresenter.getTask(taskId);
+        }
+    }
+
+
+    public boolean checkIfCurrentUserIsTaskMember() {
         String userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
 
         if (userId.equals(checklistUserId)) {
@@ -188,7 +191,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             currentTask = task;
             taskStatus = currentTask.getTaskStatus();
             updateButtonLayout(taskStatus);
-            updateUIWithAuth(isTaskMember);
             mPresenter.loadDetails(taskId);
         }
     }
@@ -204,7 +206,18 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     }
 
     private void updateButtonLayout(String taskStatus) {
-        // FIXME - fix o day ne
+        // FIXME - fix o day neprivate void getTaskIdFromParentFragment() {
+        //        Bundle arguments = getArguments();
+        //        taskId = Integer.parseInt(arguments.getString("taskId"));
+        //        location = arguments.getInt("location_activity");
+        //        checklistId = arguments.getInt("checklistId");
+        //        checklistUserId = arguments.getString("checklistUserId");
+        //
+        //        getActivity().setTitle("Task Detail");
+        //
+        //        isChanged = false;
+        //        imageDataEncoded = new HashMap<String, String>();
+        //    }
         if (taskStatus.equals(getString(R.string.task_done))) {
 //            buttonCompleteTask.setText("Reactive");
         } else if (taskStatus.equals(getString(R.string.task_running))) {

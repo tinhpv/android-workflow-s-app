@@ -122,11 +122,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         try {
             mGoogleAccount = completedTask.getResult(ApiException.class);
             if (null != mGoogleAccount) {
-                //currentUser.setToken(token);
                 switchOnLoading();
                 initializeCurrentUser(mGoogleAccount);
                 mLoginPresenter.addUserToDB(currentUser);
             }
+
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code = " + e.getStatusCode());
         } // end try

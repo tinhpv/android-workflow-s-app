@@ -41,16 +41,11 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
     private ArrayList<TaskMember> mTaskMembers;
     private ArrayList<ChecklistMember> mChecklistMembers;
     private RecyclerView mRecyclerView;
-    private boolean isTaskMember;
     private String checklistUserId;
     private Context mContext;
 
     public void setChecklistUserId(String checklistUserId) {
         this.checklistUserId = checklistUserId;
-    }
-
-    public void setTaskMember(boolean taskMember) {
-        isTaskMember = taskMember;
     }
 
     public void setUserList(List<User> userList) {
@@ -118,23 +113,17 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
 
     @Override
     public void onBindViewHolder(@NonNull MemberViewHolder memberViewHolder, final int i) {
-        final User user = getUser(mChecklistMembers.get(i).getUserId());
-
-        memberViewHolder.mMemberName.setText(user.getName());
-        memberViewHolder.mEmail.setText(user.getEmail());
-        String profileUrlString = user.getAvatar();
-        if (profileUrlString ==  null) {
-            memberViewHolder.mAvatar.setImageDrawable(ContextCompat.getDrawable(memberViewHolder.view.getContext(), R.drawable.default_avatar));
-        } else {
-            Glide.with(memberViewHolder.view.getContext()).load(profileUrlString).into(memberViewHolder.mAvatar);
-        }
-
         String userId = SharedPreferenceUtils.retrieveData(mContext, mContext.getString(R.string.pref_userId));
-        if (isTaskMember) {
+        User user = null;
+        if (!userId.equals(checklistUserId)) {
+            /* user is not owner of this checklist
+            only show information about assigned user, not any buttons */
+            user = getUser(mTaskMembers.get(i).getUserId());
             memberViewHolder.btUnassign.setVisibility(View.INVISIBLE);
-            memberViewHolder.btUnassign.setVisibility(View.INVISIBLE);
+            memberViewHolder.btAssign.setVisibility(View.INVISIBLE);
 
         } else {
+            user = getUser(mChecklistMembers.get(i).getUserId());
             if (isTaskMember(user.getId())) {
                 memberViewHolder.btAssign.setVisibility(View.INVISIBLE);
                 if (!user.getId().equals(userId)) {
@@ -165,16 +154,32 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         }
 
 
+        memberViewHolder.mMemberName.setText(user.getName());
+        memberViewHolder.mEmail.setText(user.getEmail());
+        String profileUrlString = user.getAvatar();
+        if (profileUrlString ==  null) {
+            memberViewHolder.mAvatar.setImageDrawable(ContextCompat.getDrawable(memberViewHolder.view.getContext(), R.drawable.default_avatar));
+        } else {
+            Glide.with(memberViewHolder.view.getContext()).load(profileUrlString).into(memberViewHolder.mAvatar);
+        }
 
     }
 
 
     @Override
     public int getItemCount() {
-        if (null == mChecklistMembers) {
-            return 0;
+        String userId = SharedPreferenceUtils.retrieveData(mContext, mContext.getString(R.string.pref_userId));
+        if (!userId.equals(checklistUserId)) {
+            if (null == mTaskMembers) {
+                return 0;
+            }
+            return mTaskMembers.size();
+        } else {
+            if (null == mChecklistMembers) {
+                return 0;
+            }
+            return mChecklistMembers.size();
         }
-        return mChecklistMembers.size();
     }
 
 

@@ -106,23 +106,16 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.action_set_time:
-                if (!isChecklistMember()) {
-                    CommonUtils.showDialog(getContext(), "You're not a member of this checklist");
-                } else {
-                    TimeSettingDialogFragment settingDialogFragment
-                            = TimeSettingDialogFragment.newInstance(checklistId);
-                    settingDialogFragment.show(fm, "fragment_set_time");
-                }
+                TimeSettingDialogFragment settingDialogFragment
+                        = TimeSettingDialogFragment.newInstance(checklistId, checklistUserId, checklistMembers);
+                settingDialogFragment.show(fm, "fragment_set_time");
                 return true;
 
             case R.id.action_assign:
-                if (!isChecklistMember()) {
-                    CommonUtils.showDialog(getContext(), "You're not a member of this checklist");
-                } else {
-                    // convert List to ArrayList so that we can store it in Bundle
-                    AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(checklistUserId, checklistId);
-                    assigningDialogFragment.show(fm, "fragment_assign_user");
-                }
+                // convert List to ArrayList so that we can store it in Bundle
+                AssigningDialogFragment assigningDialogFragment
+                        = AssigningDialogFragment.newInstance(checklistUserId, checklistId);
+                assigningDialogFragment.show(fm, "fragment_assign_user");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -184,8 +177,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             totalTask = checklist.getTotalTask();
             doneTask = checklist.getDoneTask();
             tasks = (ArrayList<Task>) checklist.getTaskItems();
+
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
-            mChecklistChecklistTaskAdapter.setChecklistMembers((ArrayList<ChecklistMember>) checklistMembers);
+            mChecklistChecklistTaskAdapter.setChecklistMembers(checklistMembers);
 
             mChecklistChecklistTaskAdapter.setChecklistUserId(checklistUserId);
             initUI();
@@ -232,13 +226,13 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
         updateButtonAppearanceByStatus(checklistStatus);
         // invalidate data
-        if ((doneTask != totalTask) && (checklistStatus.equals(getString(R.string.checklist_done)))) {
-            handleCompleteChecklist(getResources().getString(R.string.checklist_running));
+        if ((doneTask != totalTask) && (checklistStatus.equals("Done"))) {
+            handleCompleteChecklist("Checklist");
         }
     }
 
     private void updateButtonAppearanceByStatus(String status) {
-        if (status.equals(getContext().getResources().getString(R.string.checklist_done))) { // done
+        if (status.equals("Done")) { // done
             completeChecklistButton.hide();
         } else { // running
             completeChecklistButton.show();
@@ -321,9 +315,9 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         updateProgressBar();
 
         if (doneTask == totalTask) {
-            handleCompleteChecklist(getString(R.string.checklist_done));
-        } else if (checklistStatus.equals(getString(R.string.checklist_done))){
-            handleCompleteChecklist(getString(R.string.checklist_running));
+            handleCompleteChecklist(getActivity().getString(R.string.checklist_done));
+        } else if (checklistStatus.equals(getActivity().getString(R.string.checklist_done))){
+            handleCompleteChecklist(getActivity().getString(R.string.checklist_running));
         }
     }
 
@@ -340,7 +334,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private void handleCompleteChecklist(String status) {
         updateButtonAppearanceByStatus(status);
-        if (status.equals(getString(R.string.checklist_done))) {
+        if (status.equals("Done")) {
             switchOnLoading();
         }
         mPresenter.changeChecklistStatus(checklistId, status);
@@ -352,7 +346,5 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         checklistStatus = status;
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
-
-
 
 }

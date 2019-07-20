@@ -49,6 +49,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         this.checklistUserId = checklistUserId;
     }
 
+
     public MemberAdapter(EventListener listener, Context context) {
         this.listener = listener;
         this.mContext = context;
@@ -86,21 +87,25 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
 
 
         String userId = SharedPreferenceUtils.retrieveData(mContext, mContext.getString(R.string.pref_userId));
-        String id = mUserList.get(i).getId();
-        if (id.equals(checklistUserId) || id.equals(userId)) { // if this user is checklist's owner
+        if (!userId.equals(checklistUserId)) {
             memberViewHolder.btUnassign.setVisibility(View.GONE);
+
         } else {
-            memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // DONE - HANDLE UNASSIGN USER HERE
-                    //int index = mRecyclerView.getChildLayoutPosition(v);
-                    listener.onEvent(mUserList.get(i).getId());
-                }
-            });
+            String id = mUserList.get(i).getId();
+            if (id.equals(checklistUserId) || id.equals(userId)) { // if this user is checklist's owner
+                memberViewHolder.btUnassign.setVisibility(View.GONE);
+            } else {
+                memberViewHolder.btUnassign.setVisibility(View.VISIBLE);
+                memberViewHolder.btUnassign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // DONE - HANDLE UNASSIGN USER HERE
+                        //int index = mRecyclerView.getChildLayoutPosition(v);
+                        listener.onEvent(mUserList.get(i).getId());
+                    }
+                });
+            }
         }
-
-
     }
 
 
