@@ -53,14 +53,17 @@ public class AssigningDialogFragment extends DialogFragment
     private ArrayList<TaskMember> mTaskMembers;
     private ArrayList<String> emailList;
     private String checklistUserId, userEmailToAssign, orgId;
+    private boolean isTaskMember;
     private int taskId, checklistId;
     AssigningDialogContract.AssigningDialogPresenter mDialogPresenter;
 
-    public static AssigningDialogFragment newInstance(int taskId, int checklistId) {
+    public static AssigningDialogFragment newInstance(int taskId, int checklistId, String checklistUserId, boolean isTaskMember) {
         AssigningDialogFragment frag = new AssigningDialogFragment();
         Bundle args = new Bundle();
         args.putInt("taskId", taskId);
         args.putInt("checklistId", checklistId);
+        args.putString("checklistUserId", checklistUserId);
+        args.putBoolean("taskMember", isTaskMember);
         frag.setArguments(args);
         return frag;
     }
@@ -87,6 +90,8 @@ public class AssigningDialogFragment extends DialogFragment
         Bundle args = getArguments();
         taskId = args.getInt("taskId");
         checklistId = args.getInt("checklistId");
+        checklistUserId = args.getString("checklistUserId");
+        isTaskMember = args.getBoolean("taskMember");
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
 
         setupRV();
@@ -96,11 +101,12 @@ public class AssigningDialogFragment extends DialogFragment
     private void setupRV() {
         userAssigningRecylerView = view.findViewById(R.id.rv_assign_user);
         userAssigningRecylerView.setHasFixedSize(true);
-        memberLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        memberLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         userAssigningRecylerView.setLayoutManager(memberLayoutManager);
 
-        mAdapter = new MemberAdapter(this);
+        mAdapter = new MemberAdapter(this, getContext());
         userAssigningRecylerView.setAdapter(mAdapter);
+        mAdapter.setChecklistUserId(checklistUserId);
     }
 
     private void requestData() {
@@ -116,16 +122,6 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     @Override
-    public void finishedGetTaskMember(List<TaskMember> taskMemberList) {
-        if (null != taskMemberList) {
-            mTaskMembers = (ArrayList<TaskMember>) taskMemberList;
-            mAdapter.setUserList(mUserList);
-            mAdapter.setChecklistMembers(mChecklistMembers);
-            mAdapter.setTaskMembers(mTaskMembers);
-        }
-    }
-
-    @Override
     public void finishedGetChecklistInfoById(Checklist checklist) {
         if (null != checklist) {
             this.mChecklistMembers = (ArrayList<ChecklistMember>) checklist.getChecklistMembers();
@@ -136,6 +132,22 @@ public class AssigningDialogFragment extends DialogFragment
 //            setupAutoCompleteTextView();
         } // endif
     }
+
+    @Override
+    public void finishedGetTaskMember(List<TaskMember> taskMemberList) {
+        if (null != taskMemberList) {
+            mTaskMembers = (ArrayList<TaskMember>) taskMemberList;
+            mAdapter.setUserList(mUserList);
+            mAdapter.setChecklistMembers(mChecklistMembers);
+
+            if (mTaskMembers.size() == 0) {
+                mTaskMembers.add(new TaskMember(null, taskId, checklistUserId));
+            }
+
+            mAdapter.setTaskMembers(mTaskMembers);
+        }
+    }
+
 
 
     @Override

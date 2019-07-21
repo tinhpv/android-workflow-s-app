@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.workflow_s.R;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
 
     private LoginContract.LoginPresenter mLoginPresenter;
 
+    FrameLayout darkBackground;
     LottieAnimationView mAnimationView;
 
     @Override
@@ -70,11 +72,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
     }
 
     private void setupLoadingAnimation() {
+        darkBackground = findViewById(R.id.frame);
         mAnimationView = findViewById(R.id.animation_view);
         mAnimationView.setVisibility(View.INVISIBLE);
     }
 
     private void switchOnLoading() {
+        darkBackground.setVisibility(View.VISIBLE);
         mAnimationView.setVisibility(View.VISIBLE);
         if (!mAnimationView.isAnimating()) {
             mAnimationView.playAnimation();
@@ -86,6 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
             mAnimationView.pauseAnimation();
             mAnimationView.cancelAnimation();
             mAnimationView.setVisibility(View.INVISIBLE);
+            darkBackground.setVisibility(View.GONE);
         }
     }
 
@@ -122,11 +127,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Lo
         try {
             mGoogleAccount = completedTask.getResult(ApiException.class);
             if (null != mGoogleAccount) {
-                //currentUser.setToken(token);
                 switchOnLoading();
                 initializeCurrentUser(mGoogleAccount);
                 mLoginPresenter.addUserToDB(currentUser);
             }
+
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code = " + e.getStatusCode());
         } // end try

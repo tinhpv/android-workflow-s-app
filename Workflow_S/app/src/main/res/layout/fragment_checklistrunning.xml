@@ -18,6 +18,25 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_light"
+        android:text="Checklist name*"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="17sp"/>
+
+
+    <EditText
+        android:id="@+id/edt_checklist_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:fontFamily="@font/avenir_heavy"
+        android:textColor="@color/colorPrimaryText"
+        android:layout_marginHorizontal="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Based on"
         android:fontFamily="@font/avenir_light"
         android:textSize="15sp"
@@ -38,24 +57,7 @@
         android:background="@drawable/background_item_white_radius" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/avenir_light"
-        android:text="Checklist name*"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:textSize="17sp"/>
 
-
-    <EditText
-        android:id="@+id/edt_checklist_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:fontFamily="@font/avenir_heavy"
-        android:textColor="@color/colorPrimaryText"
-        android:layout_marginHorizontal="20dp" />
 
 
 

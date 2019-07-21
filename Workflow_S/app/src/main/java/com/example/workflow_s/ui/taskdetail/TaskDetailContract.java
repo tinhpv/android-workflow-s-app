@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.taskdetail;
 
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.task.TaskContract;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public interface  TaskDetailContract {
         void finishedGetTaskDetail(Task task);
         void finishedCompleteTask();
         void finishedUploadImage(int orderContent);
+        void finishGetTaskMember(List<TaskMember> memberList);
     }
 
     //presenter
@@ -25,6 +27,7 @@ public interface  TaskDetailContract {
         void onDestroy();
         void loadDetails(int taskId);
         void getTask(int taskId);
+        void getTaskMember(int taskId);
         void completeTask(int taskId, String taskStatus);
         void uploadImage(int contentId, int orderContent, MultipartBody.Part photo);
         void updateTaskDetail(List<ContentDetail> detailList);
@@ -59,6 +62,12 @@ public interface  TaskDetailContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetTaskMemberListener {
+            void onFinishedGetTaskMembers(List<TaskMember> taskMemberList);
+            void onFailure(Throwable t);
+        }
+
+        void getTaskMember(int taskId, OnFinishedGetTaskMemberListener listener);
         void getTaskById(int taskId, OnFinishedGetTaskListener listener);
         void uploadImage(int contentId, int orderContent, MultipartBody.Part photo, OnFinishedUploadImageListener listener);
         void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);

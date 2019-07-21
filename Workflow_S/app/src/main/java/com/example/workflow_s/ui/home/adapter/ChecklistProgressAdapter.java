@@ -88,6 +88,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
 
         String dueTime = getDueTimeOfChecklist(i);
         checklistProgressViewHolder.mDueTime.setText(dueTime);
+
         if (dueTime.equals("expired")) {
             checklistProgressViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_red));
             checklistProgressViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));

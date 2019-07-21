@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingContract;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedSaveContentListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedChangeTaskStatusListener,
-            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedUploadImageListener {
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedUploadImageListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskMemberListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -38,11 +40,14 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     }
 
     @Override
+    public void getTaskMember(int taskId) {
+        mGetTaskDetailDataInteractor.getTaskMember(taskId, this);
+    }
+
+    @Override
     public void getTask(int taskId) {
         mGetTaskDetailDataInteractor.getTaskById(taskId, this);
     }
-
-
 
     @Override
     public void updateTaskDetail(List<ContentDetail> detailList) {
@@ -82,6 +87,11 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     @Override
     public void onFinishedUploadImage(int orderContent) {
         mTaskDetailView.finishedUploadImage(orderContent);
+    }
+
+    @Override
+    public void onFinishedGetTaskMembers(List<TaskMember> taskMemberList) {
+        mTaskDetailView.finishGetTaskMember(taskMemberList);
     }
 
     @Override

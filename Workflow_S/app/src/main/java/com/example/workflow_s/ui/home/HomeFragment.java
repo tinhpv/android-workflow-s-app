@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.home;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -132,6 +133,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void onResume() {
         super.onResume();
+        mChecklistShimmerFrameLayout.setVisibility(View.VISIBLE);
         mChecklistShimmerFrameLayout.startShimmerAnimation();
         mTaskShimmerFrameLayout.startShimmerAnimation();
     }
@@ -178,7 +180,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     private void setupTaskRV() {
         todayTaskRecyclerView = view.findViewById(R.id.rv_today_task);
         todayTaskRecyclerView.setHasFixedSize(true);
-        todayTaskLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        todayTaskLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         todayTaskRecyclerView.setLayoutManager(todayTaskLayoutManager);
 
         mTodayTaskAdapter = new TodayTaskAdapter();
@@ -188,7 +190,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     private void setupChecklistRV() {
         checklistProgressRecyclerView = view.findViewById(R.id.rv_checklist_progress);
         checklistProgressRecyclerView.setHasFixedSize(true);
-        checklistProgressLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        checklistProgressLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         checklistProgressRecyclerView.setLayoutManager(checklistProgressLayoutManager);
 
         mChecklistProgressAdapter = new ChecklistProgressAdapter(this, getContext());
@@ -227,7 +229,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         mChecklistShimmerFrameLayout.stopShimmerAnimation();
-        mChecklistShimmerFrameLayout.setVisibility(View.INVISIBLE);
+        mChecklistShimmerFrameLayout.setVisibility(View.GONE);
         if (datasource.size() == 0) {
             mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
         } else {

@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.task;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -14,6 +15,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
+
+    @Override
+    public void getTaskMember(final int taskId, final boolean isSelected, final OnFinishedGetTaskMemberListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<TaskMember>> call = service.getAllTaskMember(taskId);
+        call.enqueue(new Callback<List<TaskMember>>() {
+            @Override
+            public void onResponse(Call<List<TaskMember>> call, Response<List<TaskMember>> response) {
+                listener.onFinishedGetTaskMember(response.body(), isSelected, taskId);
+            }
+
+            @Override
+            public void onFailure(Call<List<TaskMember>> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+
+    }
 
     @Override
     public void getChecklistData(int orgId, int checklistId, final OnFinishedLoadChecklistDataListener listener) {
@@ -68,13 +87,13 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
     }
 
     @Override
-    public void completeChecklist(int checklistId, String taskStatus, final OnFinishedChangeChecklistStatusListener listener) {
+    public void completeChecklist(int checklistId, final String taskStatus, final OnFinishedChangeChecklistStatusListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<ResponseBody> call = service.completeChecklist(checklistId, taskStatus);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedChangeChecklistStatus();
+                listener.onFinishedChangeChecklistStatus(taskStatus);
             }
 
             @Override

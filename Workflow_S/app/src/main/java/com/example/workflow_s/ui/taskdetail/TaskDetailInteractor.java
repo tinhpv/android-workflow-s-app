@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.taskdetail;
 
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -17,6 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDataInteractor{
+
+
+    @Override
+    public void getTaskMember(int taskId, final OnFinishedGetTaskMemberListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<TaskMember>> call = service.getAllTaskMember(taskId);
+        call.enqueue(new Callback<List<TaskMember>>() {
+            @Override
+            public void onResponse(Call<List<TaskMember>> call, Response<List<TaskMember>> response) {
+                listener.onFinishedGetTaskMembers(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<TaskMember>> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void uploadImage(int contentId, final int orderContent, MultipartBody.Part photo, final OnFinishedUploadImageListener listener) {

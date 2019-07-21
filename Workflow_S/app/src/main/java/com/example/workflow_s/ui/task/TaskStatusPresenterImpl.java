@@ -4,14 +4,17 @@ import android.util.Log;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
                 TaskContract.GetTaskDataInteractor.OnFinishedGetTasksListener,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeTaskStatusListener,
         TaskContract.GetTaskDataInteractor.OnFinishedLoadChecklistDataListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener {
+        TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener {
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -33,6 +36,11 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     @Override
     public void loadChecklistData(int orgId, int checklistId) {
         mGetTaskDataInteractor.getChecklistData(orgId, checklistId, this);
+    }
+
+    @Override
+    public void getTaskMember(int taskId, boolean isSelected) {
+        mGetTaskDataInteractor.getTaskMember(taskId, isSelected,this);
     }
 
     @Override
@@ -71,8 +79,13 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     }
 
     @Override
-    public void onFinishedChangeChecklistStatus() {
-        mTaskView.finishChangeChecklistStatus();
+    public void onFinishedChangeChecklistStatus(String status) {
+        mTaskView.finishChangeChecklistStatus(status);
+    }
+
+    @Override
+    public void onFinishedGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId) {
+        mTaskView.finishGetTaskMember(taskMemberList, isSelected, taskId);
     }
 
     @Override
