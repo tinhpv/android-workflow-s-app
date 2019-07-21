@@ -2,9 +2,11 @@ package com.example.workflow_s.ui.task;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskContract {
 
@@ -12,6 +14,7 @@ public interface TaskContract {
     interface TaskPresenter {
         void onDestroy();
         void loadChecklistData(int orgId, int checklistId);
+        void getTaskMember(int taskId, boolean isSelected);
         void loadTasks(int checklistId);
         void changeTaskStatus(int taskId, String taskStatus);
         void changeChecklistStatus(int checklistId, String status);
@@ -20,7 +23,8 @@ public interface TaskContract {
     interface TaskView {
         void finishGetChecklist(Checklist checklist);
         void finishedChangeTaskStatus();
-        void finishChangeChecklistStatus();
+        void finishChangeChecklistStatus(String status);
+        void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
     }
 
     interface TemplateView {
@@ -41,7 +45,7 @@ public interface TaskContract {
         }
 
         interface OnFinishedChangeChecklistStatusListener {
-            void onFinishedChangeChecklistStatus();
+            void onFinishedChangeChecklistStatus(String status);
             void onFailure(Throwable t);
         }
 
@@ -50,6 +54,12 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetTaskMemberListener {
+            void onFinishedGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
+            void onFailure(Throwable t);
+        }
+
+        void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);
         void getAllTasks(int checklistId, OnFinishedGetTasksListener onFinishedLIstener);
         void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void completeChecklist(int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);

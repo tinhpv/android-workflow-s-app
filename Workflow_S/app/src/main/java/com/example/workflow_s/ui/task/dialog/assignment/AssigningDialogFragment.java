@@ -46,7 +46,7 @@ public class AssigningDialogFragment extends DialogFragment
 
     View view;
     private AutoCompleteTextView userEmailForAssigning;
-    private Button cancelButton, addUserButton;
+    private Button cancelButton, addUserButton, okButton;
 
     private RecyclerView userAssigningRecylerView;
     private MemberAdapter mAdapter;
@@ -82,7 +82,9 @@ public class AssigningDialogFragment extends DialogFragment
         addUserButton.setOnClickListener(this);
         cancelButton = view.findViewById(R.id.bt_cancel_add);
         cancelButton.setOnClickListener(this);
-
+        okButton = view.findViewById(R.id.bt_ok);
+        okButton.setOnClickListener(this);
+        userEmailForAssigning = view.findViewById(R.id.edt_user_email_for_assigning);
 
         // get args
         Bundle args = getArguments();
@@ -92,17 +94,28 @@ public class AssigningDialogFragment extends DialogFragment
         orgId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_orgId));
 
         setupRV();
+        initUI();
         requestData();
     }
 
     private void setupRV() {
         userAssigningRecylerView = view.findViewById(R.id.rv_assign_user);
         userAssigningRecylerView.setHasFixedSize(true);
-        memberLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        memberLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         userAssigningRecylerView.setLayoutManager(memberLayoutManager);
 
-        mAdapter = new MemberAdapter(this);
+        mAdapter = new MemberAdapter(this, getContext());
         userAssigningRecylerView.setAdapter(mAdapter);
+        mAdapter.setChecklistUserId(checklistUserId);
+    }
+
+    private void initUI() {
+        String userId = SharedPreferenceUtils.retrieveData(getContext(), getContext().getString(R.string.pref_userId));
+        if (!checklistUserId.equals(userId)) {
+            userEmailForAssigning.setVisibility(View.GONE);
+            addUserButton.setVisibility(View.GONE);
+            okButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void requestData() {
@@ -120,17 +133,14 @@ public class AssigningDialogFragment extends DialogFragment
     @Override
     public void finishedGetChecklistInfoById(Checklist checklist) {
         if (null != checklist) {
-            this.mChecklistMembers = (ArrayList<ChecklistMember>) checklist.getChecklistMembers();
+            this.mChecklistMembers = checklist.getChecklistMembers();
+
             getUnassignedUser();
             manipulateDataToDisplayOnRV();
             setupAutoCompleteTextView();
         } // endif
     }
 
-    @Override
-    public void finishedAssignMember(ChecklistMember member) {
-        updateUsersToDisplay(true, member);
-    }
 
     @Override
     public void finishedUnassignMember() {
@@ -140,16 +150,16 @@ public class AssigningDialogFragment extends DialogFragment
 
     private void updateUsersToDisplay(boolean isAssigned, ChecklistMember member) {
         if (isAssigned) {
-            // remove user who was assigned out of mUnassignedUserList
-            // add user to the taskMemberList
+
             for (User user : mUnassignedUserList) {
                 if (user.getEmail().equals(userEmailToAssign)) {
-                    mUnassignedUserList.remove(user);
-                    mChecklistMembers.add(member);
+                    mUnassignedUserList.remove(user); // remove user who was assigned out of mUnassignedUserList
+                    mChecklistMembers.add(member); // add user to the taskMemberList
                     userEmailForAssigning.setText("");
                     break;
                 }
             } // end for
+
         } else {
             // remove user from taskMemberList
             // add user to unAssignMemberList
@@ -180,6 +190,7 @@ public class AssigningDialogFragment extends DialogFragment
                 usersToDisplay.add(user);
             }
         } // end for
+
         mAdapter.setUserList(usersToDisplay);
     }
 
@@ -212,8 +223,6 @@ public class AssigningDialogFragment extends DialogFragment
     }
 
     private void setupAutoCompleteTextView() {
-        userEmailForAssigning = view.findViewById(R.id.edt_user_email_for_assigning);
-
         emailList = new ArrayList<>();
         for (User user : mUnassignedUserList) {
             emailList.add(user.getEmail());
@@ -239,6 +248,17 @@ public class AssigningDialogFragment extends DialogFragment
         }
     }
 
+    private void handleAssignUser(String userEmail) {
+        User user = findUser(userEmail);
+        ChecklistMember checklistMember = new ChecklistMember(null, checklistId, user.getId());
+        mDialogPresenter.assignUser(checklistMember);
+    }
+
+    @Override
+    public void finishedAssignMember(ChecklistMember member) {
+        updateUsersToDisplay(true, member);
+    }
+
     private User findUser(String email) {
         for (User user : mUnassignedUserList) {
             if (user.getEmail().equals(email)) {
@@ -246,12 +266,6 @@ public class AssigningDialogFragment extends DialogFragment
             }
         } // end for
         return null;
-    }
-
-    private void handleAssignUser(String userEmail) {
-        User user = findUser(userEmail);
-        ChecklistMember checklistMember = new ChecklistMember(null, checklistId, user.getId());
-        mDialogPresenter.assignUser(checklistMember);
     }
 
     @Override

@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="360dp"
+    android:layout_width="420dp"
     android:layout_height="wrap_content"
     android:paddingBottom="30dp"
     android:background="@drawable/dialog_background"
@@ -42,11 +42,11 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:text="OK"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textAllCaps="false"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@android:color/white"
             android:fontFamily="@font/avenir_heavy"
-            android:background="@drawable/button_radius_gray"
+            android:background="@drawable/button_radius_dark"
             android:layout_marginHorizontal="5dp"/>
 
     </LinearLayout>

@@ -82,11 +82,11 @@
             android:layout_width="80dp"
             android:layout_height="20dp"
             android:text="May 28 "
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
             android:textSize="12sp"
             android:fontFamily="@font/avenir_heavy"
             android:gravity="center"
-            android:background="@drawable/container_radius_yellow" />
+            android:background="@drawable/container_radius_green" />
     </LinearLayout>
 
 
@@ -95,15 +95,14 @@
         android:id="@+id/pb_checklist_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:background="#dadada"
+        style="@style/ChecklistProgressBar"
+        android:theme="@style/ChecklistProgressBar"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
         android:max="100"
         android:progress="50"
-        android:minHeight="2dp"
-        android:minWidth="400dp"/>
+        android:minWidth="400dp" />
 
 
 </LinearLayout>

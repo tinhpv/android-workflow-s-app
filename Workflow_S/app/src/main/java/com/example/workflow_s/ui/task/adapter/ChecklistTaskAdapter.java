@@ -26,6 +26,7 @@ import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdapter.TaskViewHolder> {
 
@@ -34,14 +35,21 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     private RecyclerView mRecyclerView;
     private ArrayList<Task> mTaskList;
     private Dialog errorDialog;
-    private ArrayList<ChecklistMember> mChecklistMembers;
+    private List<ChecklistMember> mChecklistMembers;
     private int checklistId;
-    private String userId;
+    private String userId, checklistUserId;
 
     public void setChecklistId(int checklistId) {
         this.checklistId = checklistId;
     }
 
+    public void setChecklistUserId(String checklistUserId) {
+        this.checklistUserId = checklistUserId;
+    }
+
+    public void setChecklistMembers(List<ChecklistMember> checklistMembers) {
+        mChecklistMembers = checklistMembers;
+    }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -80,9 +88,6 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         notifyDataSetChanged();
     }
 
-    public void setChecklistMembers(ArrayList<ChecklistMember> checklistMembers) {
-        mChecklistMembers = checklistMembers;
-    }
 
 
     @NonNull
@@ -98,16 +103,13 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         errorDialog = new Dialog(context);
         errorDialog.setContentView(R.layout.dialog_error_task);
         errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         Button btnOk = errorDialog.findViewById(R.id.btn_ok);
-
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 errorDialog.cancel();
             }
         });
-
         userId = SharedPreferenceUtils.retrieveData(viewGroup.getContext(), viewGroup.getContext().getString(R.string.pref_userId));
 
         //task item click
@@ -122,12 +124,15 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 args.putString("taskName", mTaskList.get(index).getName());
                 args.putInt("location_activity", 2);
                 args.putInt("checklistId", checklistId);
+                args.putString("checklistUserId", checklistUserId);
+
 
                 boolean flag = false;
 
                 for (ChecklistMember checklistMember : mChecklistMembers) {
                     if (checklistMember.getUserId().equals(userId)) {
                         flag = true;
+                        break;
                     }
                 }
 
@@ -148,6 +153,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     public void onBindViewHolder(@NonNull final TaskViewHolder taskViewHolder, int i) {
         taskViewHolder.mTextView.setText(mTaskList.get(i).getName());
 
+        taskViewHolder.mCheckBox.setTag(i);
         if (mTaskList.get(i).getTaskStatus().equals("Done")) {
             taskViewHolder.mCheckBox.setChecked(true);
             taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -163,13 +169,10 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 } else {
                     taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
                 }
-
-                listener.onEventCheckBox(isChecked, mTaskList.get(taskViewHolder.getAdapterPosition()).getId());
-
+                listener.onEventCheckBox(isChecked, mTaskList.get((Integer) taskViewHolder.mCheckBox.getTag()).getId());
             }
         });
     }
-
 
     @Override
     public int getItemCount() {

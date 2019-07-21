@@ -1,7 +1,14 @@
 package com.example.workflow_s.utils;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +24,26 @@ import com.example.workflow_s.R;
 
 
 public class CommonUtils {
+
+    public static void showDialog(Context context, String message) {
+        final Dialog errorDialog = new Dialog(context);
+        errorDialog.setContentView(R.layout.dialog_error_task);
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+        TextView tvErrorMessage = errorDialog.findViewById(R.id.tv_error_message);
+        tvErrorMessage.setText(message);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.cancel();
+            }
+        });
+
+        errorDialog.show();
+    }
+
 
     public static void replaceFragments(Context fragmentContext, Class fragmentClass, Bundle args, boolean isAddToBackStack) {
 

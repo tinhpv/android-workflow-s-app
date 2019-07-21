@@ -22,13 +22,19 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.utils.DateUtils;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 /**
@@ -42,19 +48,20 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
 
     View view;
     private TextView dateTextView, timeTextView;
-    private Button saveButton,cancelButton;
+    private Button saveButton,cancelButton, okButton;
     private ImageButton setDateButton, setTimeButton;
 
-
+    private List<TaskMember> mTaskMemberList;
     private String previousDueTime, dateSelected, timeSelected;
     private int taskId;
 
     TimeSettingContract.TimeSettingPresenter mPresenter;
 
-    public static TimeSettingDialogFragment newInstance(int taskId) {
+    public static TimeSettingDialogFragment newInstance(int taskId, List<TaskMember> taskMemberList) {
         TimeSettingDialogFragment frag = new TimeSettingDialogFragment();
         Bundle args = new Bundle();
         args.putInt("taskId", taskId);
+        args.putSerializable("taskMembers", (Serializable) taskMemberList);
         frag.setArguments(args);
         return frag;
     }
@@ -72,18 +79,10 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
         getData();
     }
 
-//    @Override
-//    public void finishedGetChecklist(Checklist checklist) {
-//        if (null != checklist) {
-//            previousDueTime = checklist.getDueTime();
-//            dateSelected = previousDueTime.split("T")[0];
-//            timeSelected = previousDueTime.split("T")[1];
-//            bindUI();
-//        }
-//    }
 
     private void getData() {
         taskId = getArguments().getInt("taskId");
+        mTaskMemberList = (List<TaskMember>) getArguments().getSerializable("taskMembers");
         mPresenter = new TimeSettingPresenterImpl(this, new TimeSettingInteractor());
         mPresenter.getTaskInfo(taskId);
     }
@@ -104,14 +103,43 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
         dateTextView.setText(dateSelected);
         timeTextView = view.findViewById(R.id.tv_time);
         timeTextView.setText(timeSelected);
+
+
         saveButton = view.findViewById(R.id.bt_save_time);
-        saveButton.setOnClickListener(this);
         cancelButton = view.findViewById(R.id.bt_cancel_save);
-        cancelButton.setOnClickListener(this);
+        okButton = view.findViewById(R.id.bt_ok);
         setDateButton = view.findViewById(R.id.bt_setdate);
-        setDateButton.setOnClickListener(this);
         setTimeButton = view.findViewById(R.id.bt_settime);
-        setTimeButton.setOnClickListener(this);
+
+        if (checkIfUserIsTaskMember()) {
+            saveButton.setVisibility(View.VISIBLE);
+            saveButton.setOnClickListener(this);
+            cancelButton.setVisibility(View.VISIBLE);
+            cancelButton.setOnClickListener(this);
+            okButton.setVisibility(View.GONE);
+            setTimeButton.setVisibility(View.VISIBLE);
+            setDateButton.setVisibility(View.VISIBLE);
+            setDateButton.setOnClickListener(this);
+            setTimeButton.setOnClickListener(this);
+        } else {
+            saveButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
+            okButton.setVisibility(View.VISIBLE);
+            okButton.setOnClickListener(this);
+            setTimeButton.setVisibility(View.GONE);
+            setDateButton.setVisibility(View.GONE);
+        }
+
+    }
+
+    private boolean checkIfUserIsTaskMember() {
+        String userId = SharedPreferenceUtils.retrieveData(getActivity(), getActivity().getString(R.string.pref_userId));
+        for (TaskMember member : mTaskMemberList) {
+            if (userId.equals(member.getUserId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -123,6 +151,9 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
             case R.id.bt_cancel_save:
                 dismiss();
                 break;
+            case R.id.bt_ok:
+                dismiss();
+                break;
             case R.id.bt_setdate:
                 handleSetDate();
                 break;
@@ -130,7 +161,6 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
                 handleSetTime();
         }
     }
-
 
     boolean isValueDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
