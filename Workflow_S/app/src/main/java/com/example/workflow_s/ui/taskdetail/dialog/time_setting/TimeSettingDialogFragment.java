@@ -162,7 +162,6 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
         }
     }
 
-
     boolean isValueDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
