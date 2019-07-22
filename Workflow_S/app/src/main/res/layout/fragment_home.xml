@@ -39,18 +39,18 @@
             android:gravity="center"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginHorizontal="20dp">
+            android:layout_marginHorizontal="15sp">
 
             <Button
                 android:id="@+id/btn_template"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@mipmap/template_rounded_ic"
-                android:text="@string/button_template"
-                android:drawablePadding="8dp"
+                android:drawablePadding="5dp"
                 android:fontFamily="@font/avenir_heavy"
+                android:text="@string/button_template"
                 android:textAllCaps="false"
-                android:textSize="18dp"/>
+                android:textSize="18dp" />
 
             <Button
                 android:id="@+id/btn_checklist"
@@ -59,7 +59,7 @@
                 android:drawableTop="@mipmap/checklist_rounded_ic"
                 android:fontFamily="@font/avenir_heavy"
                 android:text="@string/button_checklist"
-                android:drawablePadding="8dp"
+                android:drawablePadding="5dp"
                 android:textAllCaps="false"
                 android:textSize="18dp"/>
 
@@ -70,7 +70,7 @@
                 android:drawableTop="@mipmap/activity_rounded_ic"
                 android:text="@string/button_activity"
                 android:fontFamily="@font/avenir_heavy"
-                android:drawablePadding="8dp"
+                android:drawablePadding="5dp"
                 android:textAllCaps="false"
                 android:textSize="18dp"/>
 
