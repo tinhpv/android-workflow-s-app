@@ -10,6 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hi there!"
+            android:fontFamily="@font/avenir_heavy"
+            android:textSize="30dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginTop="15dp"
+            android:layout_marginHorizontal="18dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Let's get works done"
+            android:fontFamily="@font/avenir_light"
+            android:textSize="22dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginHorizontal="18dp"/>
+
 
         <!--Three main dashboard button-->
         <LinearLayout
@@ -18,38 +38,158 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="18dp"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="15sp">
 
             <Button
                 android:id="@+id/btn_template"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/template_icon"
-                android:layout_marginRight="8dp"
+                android:drawableTop="@mipmap/template_rounded_ic"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/avenir_heavy"
                 android:text="@string/button_template"
-                android:drawablePadding="8dp"
-                android:textSize="14dp"/>
+                android:textAllCaps="false"
+                android:textSize="18dp" />
 
             <Button
                 android:id="@+id/btn_checklist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/checklist_icon"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:drawableTop="@mipmap/checklist_rounded_ic"
+                android:fontFamily="@font/avenir_heavy"
                 android:text="@string/button_checklist"
-                android:drawablePadding="8dp"
-                android:textSize="14dp"/>
+                android:drawablePadding="5dp"
+                android:textAllCaps="false"
+                android:textSize="18dp"/>
 
             <Button
                 android:id="@+id/btn_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@mipmap/activity_icon"
-                android:layout_marginLeft="8dp"
+                android:drawableTop="@mipmap/activity_rounded_ic"
                 android:text="@string/button_activity"
-                android:drawablePadding="8dp"
-                android:textSize="14dp"/>
+                android:fontFamily="@font/avenir_heavy"
+                android:drawablePadding="5dp"
+                android:textAllCaps="false"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <!--checklist summary-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/container_radius_white_home">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Checklist Summary"
+                    android:fontFamily="@font/avenir_light"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorPrimaryText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/container_radius_light_blue">
+
+                        <TextView
+                            android:id="@+id/tv_completed_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Completed"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/container_radius_yellow_home">
+
+                        <TextView
+                            android:id="@+id/tv_progress_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="In-progress"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/container_radius_red_home">
+
+                        <TextView
+                            android:id="@+id/tv_overdue_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Overdue"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
         </LinearLayout>
 
         <!--Checklist progress section-->
@@ -69,9 +209,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My checklists"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/avenir_black"
+                    android:text="IN-PROGRESS CHECKLISTS"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/avenir_light"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1" />
@@ -123,21 +263,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="25dp"
                     android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/not_found_icon"/>
+                        android:src="@mipmap/nodata_task_checklsit_ic"/>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/data_na_message"
+                        android:text="@string/no_data_checklist_message"
                         android:gravity="center"
                         android:layout_marginVertical="18dp"
-                        android:fontFamily="@font/avenir_black"
-                        android:textSize="18sp"/>
+                        android:layout_marginHorizontal="70dp"
+                        android:fontFamily="@font/avenir_heavy"
+                        android:textColor="@color/gray"
+                        android:textSize="17dp"/>
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -171,9 +314,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Activities"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/avenir_black"
+                    android:text="TODAY TASKS"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/avenir_light"
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1" />
@@ -226,21 +369,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="22dp"
                     android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/not_found_icon"/>
+                        android:src="@mipmap/nodata_task_checklsit_ic"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/data_na_message"
+                        android:text="@string/no_data_task_message"
                         android:gravity="center"
                         android:layout_marginVertical="18dp"
-                        android:fontFamily="@font/avenir_black"
-                        android:textSize="18sp"/>
+                        android:layout_marginHorizontal="70dp"
+                        android:fontFamily="@font/avenir_heavy"
+                        android:textColor="@color/gray"
+                        android:textSize="17dp"/>
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
