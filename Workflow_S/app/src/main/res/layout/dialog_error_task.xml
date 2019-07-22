@@ -8,17 +8,20 @@
     android:background="@drawable/background_dialog_radius"
     android:id="@+id/dialog_error">
 
-    <TextView
-        android:padding="5dp"
-        android:fontFamily="@font/avenir_medium"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="Permission Alert!"
-        android:textColor="#fafafa"
-        android:background="@drawable/textview_dialog"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/container_alert_dialog_red">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/permission_warning_ic"
+            android:layout_gravity="center"
+            android:paddingVertical="22dp" />
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/tv_error_message"
@@ -29,7 +32,7 @@
         android:lines="3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/color_alert"
+        android:textColor="@color/colorPrimaryText"
         android:textSize="18sp"/>
 
     <Button
