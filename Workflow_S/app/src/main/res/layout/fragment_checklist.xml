@@ -11,9 +11,9 @@
         android:id="@+id/tab_checklist_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@color/unselectedItem"
-        android:background="@color/colorPrimaryDark"
+        app:tabSelectedTextColor="@color/colorPrimaryDark"
+        app:tabTextColor="@color/gray"
+        android:background="#FFFFFF"
         app:tabTextAppearance="@style/TabText">
 
         <com.google.android.material.tabs.TabItem

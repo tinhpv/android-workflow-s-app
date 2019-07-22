@@ -15,9 +15,10 @@
         android:drawableLeft="@mipmap/notif_ic_dark"
         android:drawablePadding="30dp"
         android:background="@drawable/background_item_white_radius"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginHorizontal="30dp"
-        android:paddingHorizontal="40dp"/>
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="16dp"/>
 
     <TextView
         android:id="@+id/tv_third_libraries"
@@ -28,6 +29,7 @@
         android:textSize="20sp"
         android:drawableLeft="@mipmap/third_party_ic"
         android:drawablePadding="20dp"
+        android:paddingVertical="16dp"
         android:background="@drawable/background_item_white_radius"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="30dp"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/avenir_light"
         android:text="About"
+        android:paddingVertical="16dp"
         android:textSize="20sp"
         android:drawableLeft="@mipmap/about_ic"
         android:drawablePadding="20dp"
