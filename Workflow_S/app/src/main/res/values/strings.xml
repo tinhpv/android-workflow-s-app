@@ -5,9 +5,9 @@
 
     <!--button title-->
     <string name="login_button">Login with Google</string>
-    <string name="button_template">Template</string>
-    <string name="button_checklist">Checklist</string>
-    <string name="button_activity">Activity</string>
+    <string name="button_template">template</string>
+    <string name="button_checklist">checklist</string>
+    <string name="button_activity">activity</string>
 
 
     <!--App Message-->
@@ -43,6 +43,8 @@
     <string name="description_task_demo">Student Registration Process is engineered to assist in welcoming a new student to an educational establishment and integrate them into the required systems and the community.</string>
     <string name="run_checklist">run checklist</string>
     <string name="data_na_message">NOTHING TO SHOW</string>
+    <string name="no_data_checklist_message">Your in-progress checklist will appear here.</string>
+    <string name="no_data_task_message">Your task that will be due today will appear here.</string>
 
     <!--task status value-->
     <string name="task_done">Done</string>

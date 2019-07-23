@@ -2,6 +2,7 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  **/
 
 
-public class Task {
+public class Task implements Serializable {
 
     @SerializedName("id")
     private Integer id;

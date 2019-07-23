@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
@@ -37,8 +39,13 @@ import com.example.workflow_s.utils.SharedPreferenceUtils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Workflow_S
@@ -57,6 +64,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     private TodayTaskAdapter mTodayTaskAdapter;
     private RecyclerView.LayoutManager checklistProgressLayoutManager, todayTaskLayoutManager;
 
+    private TextView tvCompletedChecklist, tvInProgressChecklist, tvOverdueChecklist;
+
     private HomeContract.HomePresenter mPresenter;
 
     private ShimmerFrameLayout mChecklistShimmerFrameLayout, mTaskShimmerFrameLayout;
@@ -64,7 +73,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     private String userId, orgId;
     private ArrayList<Checklist> checklists;
-    private int change;
+    private int change, completedChecklistNum, progressChecklistNum, overdueChecklistNum;
 
 
     @Override
@@ -103,7 +112,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        getActivity().setTitle("Home");
+        getActivity().setTitle("");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E9E9E9")));
         return view;
     }
 
@@ -115,10 +125,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         mCheckListDataStatusMessage = view.findViewById(R.id.checklist_data_notfound_message);
         mTaskDataStatusMessage = view.findViewById(R.id.task_data_notfound_message);
 
+        tvCompletedChecklist = view.findViewById(R.id.tv_completed_checklist_number);
+        tvInProgressChecklist = view.findViewById(R.id.tv_progress_checklist_number);
+        tvOverdueChecklist = view.findViewById(R.id.tv_overdue_checklist_number);
+
         makeDashboardButtonLookGood();
         setupChecklistRV();
         setupTaskRV();
         initData();
+
+
         String token = FirebaseInstanceId.getInstance().getToken();
         if (token == null) {
             Log.i("Token", "Token is null");
@@ -166,6 +182,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     }
 
     private void initData() {
+        completedChecklistNum = 0;
+        progressChecklistNum = 0;
+        overdueChecklistNum = 0;
+
         mPresenter = new HomePresenterImpl(this, new HomeInteractor());
 
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
@@ -226,6 +246,45 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         btnActivity.setBackgroundResource(0);
     }
 
+    private boolean isOverdue(Checklist checklist) {
+        String time = "not set";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String dateSelected = checklist.getDueTime().split("T")[0];
+        String timeSelected = checklist.getDueTime().split("T")[1];
+        Date currentTime = Calendar.getInstance().getTime();
+        String dueTime = dateSelected + " " + timeSelected;
+        try {
+            Date overdue = sdf.parse(dueTime);
+            long totalTime = overdue.getTime() - currentTime.getTime();
+            time = String.format("%dh",
+                    TimeUnit.MILLISECONDS.toHours(totalTime));
+            if (Integer.parseInt(time.split("h")[0]) < 0) {
+                return true;
+
+            } else if (Integer.parseInt(time.split("h")[0]) == 0){
+                time = String.format("%dm",
+                        TimeUnit.MILLISECONDS.toMinutes(totalTime));
+                if (Integer.parseInt(time.split("m")[0]) < 1) {
+                    return true;
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void countChecklistByType(Checklist checklist) {
+        if (checklist.getTemplateStatus().equals("Done")) {
+            completedChecklistNum++;
+        } else if (isOverdue(checklist)) {
+            overdueChecklistNum++;
+        } else {
+            progressChecklistNum++;
+        }
+    }
+
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         mChecklistShimmerFrameLayout.stopShimmerAnimation();
@@ -235,21 +294,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         } else {
             checklists = new ArrayList<>();
             for (Checklist checklist : datasource) {
+
                 if (checklist.getUserId().equals(userId)) {
                     checklists.add(checklist);
-                } else {
+                    countChecklistByType(checklist);
+
+                }
+
+                else {
                     List<ChecklistMember> listMember = checklist.getChecklistMembers();
                     if (listMember != null) {
 
                         for (ChecklistMember member : listMember) {
                             if (member.getUserId().equals(userId)) {
                                 checklists.add(checklist);
+                                countChecklistByType(checklist);
                             }
                         }
                     }
                 }
             }
             mChecklistProgressAdapter.setChecklists(checklists);
+
+            tvCompletedChecklist.setText(String.valueOf(completedChecklistNum));
+            tvOverdueChecklist.setText(String.valueOf(overdueChecklistNum));
+            tvInProgressChecklist.setText(String.valueOf(progressChecklistNum));
         }
 
     }

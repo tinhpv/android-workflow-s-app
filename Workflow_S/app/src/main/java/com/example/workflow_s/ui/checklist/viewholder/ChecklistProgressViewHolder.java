@@ -18,7 +18,6 @@ import com.example.workflow_s.R;
 public class ChecklistProgressViewHolder extends RecyclerView.ViewHolder {
     public View view;
     public TextView mChecklistName;
-    public TextView mChecklistTaskProgress;
     public TextView mTemplate;
     public ProgressBar mProgressChecklistBar;
 
@@ -26,7 +25,6 @@ public class ChecklistProgressViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         view = itemView;
         mChecklistName = itemView.findViewById(R.id.tv_checklist_name);
-        mChecklistTaskProgress = itemView.findViewById(R.id.tv_checklist_progress);
         mTemplate = itemView.findViewById(R.id.tv_template_name);
         mProgressChecklistBar = itemView.findViewById(R.id.pb_checklist_home);
     }

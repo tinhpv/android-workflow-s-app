@@ -6,7 +6,10 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentChecklistAdapter.CurrentChecklistViewHolder> {
 
@@ -62,13 +67,13 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
-        CurrentChecklistViewHolder viewHolder = new CurrentChecklistViewHolder(view);
+        final CurrentChecklistViewHolder viewHolder = new CurrentChecklistViewHolder(view);
 
         //checklist item click
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int index = mRecyclerView.getChildLayoutPosition(v);
+                int index = viewHolder.getAdapterPosition();
                 Bundle args = new Bundle();
                 args.putString("checklistId", String.valueOf(mChecklists.get(index).getId()));
                 args.putInt("location", 2);
@@ -83,27 +88,30 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     @Override
     public void onBindViewHolder(@NonNull CurrentChecklistViewHolder currentChecklistViewHolder, int i) {
         currentChecklistViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
-        currentChecklistViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
+        //currentChecklistViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
         currentChecklistViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
+
+        String timeCreated = mChecklists.get(i).getTimeCreated().split("T")[0];
+        Date dateCreate = DateUtils.parseDate(timeCreated);
+        String monthString = (String) DateFormat.format("MMM", dateCreate);
+        String day = (String) DateFormat.format("dd", dateCreate);
+        currentChecklistViewHolder.mDayCreated.setText(day);
+        currentChecklistViewHolder.mMonthCreated.setText(monthString);
+
         currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
         if (getDueTimeOfChecklist(i).equals("expired")) {
             currentChecklistViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_red));
             currentChecklistViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));
         }
 
-        List<ChecklistMember> checklistMembers = mChecklists.get(i).getChecklistMembers();
-        if (checklistMembers != null) {
-            int numberMember = checklistMembers.size() + 1;
-            currentChecklistViewHolder.mMemberNumber.setText(String.valueOf(numberMember));
-        }
         int doneTask = mChecklists.get(i).getDoneTask();
         int totalTask = mChecklists.get(i).getTotalTask();
 
         if (totalTask == 0) {
-            currentChecklistViewHolder.progressBar.setProgress(0, true);
+            currentChecklistViewHolder.progressBar.setProgress(0, 100);
         } else {
             int progress = (int) ((doneTask / (totalTask * 1.0)) * 100);
-            currentChecklistViewHolder.progressBar.setProgress(progress, true);
+            currentChecklistViewHolder.progressBar.setProgress(progress, 100);
         }
     }
 
@@ -188,19 +196,20 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mChecklistName, mChecklistProgress, mMemberNumber, mTemplateName, mDueTime;
-        private LinearLayout item;
-        private ProgressBar progressBar;
+        private TextView mChecklistName,mTemplateName, mDueTime, mDayCreated, mMonthCreated;
+        private ConstraintLayout item;
+        private CircularProgressIndicator progressBar;
 
         public CurrentChecklistViewHolder(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.item_checklist_progress);
             mChecklistName = itemView.findViewById(R.id.tv_checklist_name);
-            mChecklistProgress = itemView.findViewById(R.id.tv_checklist_progress);
-            mMemberNumber = itemView.findViewById(R.id.tv_people_number);
             mTemplateName = itemView.findViewById(R.id.tv_template_name);
             progressBar = itemView.findViewById(R.id.pb_checklist_home);
+            progressBar.setMaxProgress(100);
             mDueTime = itemView.findViewById(R.id.tv_due_time_checklist);
+            mDayCreated = item.findViewById(R.id.tv_day_created);
+            mMonthCreated = item.findViewById(R.id.tv_month_created);
         }
     }
 

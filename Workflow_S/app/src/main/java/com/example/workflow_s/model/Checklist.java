@@ -8,10 +8,11 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Checklist {
+public class Checklist implements Serializable {
 
     @SerializedName("id")
     private Integer id;

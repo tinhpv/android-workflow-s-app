@@ -18,7 +18,8 @@ public class OrganizationMemberViewHolder extends RecyclerView.ViewHolder {
 
     public TextView mMemberName;
     public TextView mEmail;
-    public ImageView mAvatar;
+    public ImageView mAvatar, mAdmin;
+
     public View view;
 
     public OrganizationMemberViewHolder(@NonNull View itemView) {
@@ -27,5 +28,6 @@ public class OrganizationMemberViewHolder extends RecyclerView.ViewHolder {
         mMemberName = itemView.findViewById(R.id.tv_user_display_name);
         mEmail = itemView.findViewById(R.id.tv_user_email);
         mAvatar = itemView.findViewById(R.id.img_user_avatar);
+        mAdmin = itemView.findViewById(R.id.img_admin);
     }
 }

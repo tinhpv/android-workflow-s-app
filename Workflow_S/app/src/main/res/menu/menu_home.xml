@@ -7,7 +7,7 @@
         android:id="@+id/action_notif"
         android:title="Notification"
         android:orderInCategory="1"
-        android:icon="@mipmap/notif_icon"
+        android:icon="@mipmap/notification_ic"
         app:showAsAction="ifRoom">
     </item>
 

@@ -113,10 +113,10 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         EditText searchEditText = searchView.findViewById(R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
 
-        searchEditText.setHint("Search other checklist");
-        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHint("Search");
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         Typeface myFont = ResourcesCompat.getFont(getContext(), R.font.avenir_light);
         searchEditText.setTypeface(myFont);

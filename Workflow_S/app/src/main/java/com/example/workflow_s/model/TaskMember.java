@@ -2,7 +2,9 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TaskMember {
+import java.io.Serializable;
+
+public class TaskMember implements Serializable  {
 
     @SerializedName("id")
     private Integer id;

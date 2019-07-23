@@ -6,7 +6,7 @@
         android:id="@+id/action_switch"
         android:title="Switch"
         android:orderInCategory="1"
-        android:icon="@mipmap/shuffle_ic_white"
+        android:icon="@mipmap/change_org_ic_dark"
         app:showAsAction="ifRoom">
     </item>
 
