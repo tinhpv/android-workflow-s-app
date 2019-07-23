@@ -7,7 +7,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/backgroundColor">
 
-
     <TextView
         android:id="@+id/tv_alert_member"
         android:layout_width="match_parent"
@@ -32,7 +31,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_alert_member">
-
 
         <LinearLayout
             android:layout_width="match_parent"

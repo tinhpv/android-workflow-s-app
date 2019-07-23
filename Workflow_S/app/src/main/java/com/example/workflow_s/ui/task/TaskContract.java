@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.task;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
@@ -18,12 +19,14 @@ public interface TaskContract {
         void loadTasks(int checklistId);
         void changeTaskStatus(int taskId, String taskStatus);
         void changeChecklistStatus(int checklistId, String status);
+        void getUserInfor(String userId);
     }
 
     interface TaskView {
         void finishGetChecklist(Checklist checklist);
         void finishedChangeTaskStatus();
         void finishChangeChecklistStatus(String status);
+        void finishGetInfo(User user);
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
     }
 
@@ -59,6 +62,13 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetInforUserListener {
+            void onFinishedGetUser(User user);
+            void onFailure(Throwable t);
+        }
+
+
+        void getUserById(String userId, OnFinishedGetInforUserListener listener);
         void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);
         void getAllTasks(int checklistId, OnFinishedGetTasksListener onFinishedLIstener);
         void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);

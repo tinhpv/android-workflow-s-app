@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeTaskStatusListener,
         TaskContract.GetTaskDataInteractor.OnFinishedLoadChecklistDataListener,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener {
+        TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener{
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -56,6 +58,16 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     @Override
     public void changeTaskStatus(int taskId, String taskStatus) {
         mGetTaskDataInteractor.completeTask(taskId, taskStatus, this);
+    }
+
+    @Override
+    public void getUserInfor(String userId) {
+        mGetTaskDataInteractor.getUserById(userId, this);
+    }
+
+    @Override
+    public void onFinishedGetUser(User user) {
+        mTaskView.finishGetInfo(user);
     }
 
     @Override

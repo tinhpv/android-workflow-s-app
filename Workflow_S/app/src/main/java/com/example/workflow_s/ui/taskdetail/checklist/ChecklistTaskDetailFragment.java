@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -156,21 +157,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         layoutChatbox = view.findViewById(R.id.layout_chatbox);
         layoutChatbox.setOnClickListener(this);
 
-//        mScrollView = view.findViewById(R.id.scrollView3);
-//        mScrollView.getViewTreeObserver()
-//                .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//                    @Override
-//                    public void onScrollChanged() {
-//                        if (mScrollView.getChildAt(0).getBottom()
-//                                <= (mScrollView.getHeight() + mScrollView.getScrollY())) {
-//                            //scroll view is at bottom
-//                            commentBlock.setVisibility(View.VISIBLE);
-//                        } else {
-//                            //scroll view is not at bottom
-//                            commentBlock.setVisibility(View.GONE);
-//                        }
-//                    }
-//                });
 
         getTaskIdFromParentFragment();
         bindUI();
@@ -184,6 +170,9 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
         mCommentAdapter = new CommentAdapter(getContext());
         commentRV.setAdapter(mCommentAdapter);
+
+        String avatar = SharedPreferenceUtils.retrieveData(getActivity(), getActivity().getString(R.string.pref_avatar));
+        Glide.with(getActivity()).load(avatar).into(userImageView);
     }
 
     private void getTaskIdFromParentFragment() {
@@ -441,6 +430,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     @Override
     public void onFinishedPickingImages(String imagePath, Uri imageData) {
+
         int order =  SharedPreferenceUtils.retrieveDataInt(getContext(), getString(R.string.order));
 
         String tmpImageTag = "img_task_detail_" + order;
@@ -460,6 +450,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             Log.d("VUTINH", "onFinishedPickingImages: " + picturePath);
             imageDataEncoded.put(tmpImageTag, picturePath);
         }
+
     }
 
 

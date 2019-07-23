@@ -144,7 +144,7 @@ public interface ApiService {
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
-    @PUT("/api/Checklists/done/{checklistid}/{status}")
+    @PUT("/api/Checklists/setstatus/{checklistid}/{status}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId,
                                          @Path("status") String status);
 
@@ -179,4 +179,7 @@ public interface ApiService {
 
     @POST("/api/Comments/comment")
     Call<ResponseBody> writeComment(@Body Comment comment);
+
+    @GET("/api/Users/{id}")
+    Call<User> getUserById(@Path("id") String userID);
 }

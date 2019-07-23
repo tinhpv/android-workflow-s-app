@@ -282,7 +282,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     private void countChecklistByType(Checklist checklist) {
         if (checklist.getTemplateStatus().equals("Done")) {
             completedChecklistNum++;
-        } else if (isOverdue(checklist)) {
+        } else if (checklist.getExpired()) {
             overdueChecklistNum++;
         } else {
             progressChecklistNum++;
@@ -338,7 +338,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 if (!checklist.getExpired() && !checklist.getTemplateStatus().equals("Done")) {
                     if (checklist.getUserId().equals(userId)) {
                         checklists.add(checklist);
-                        countChecklistByType(checklist);
                     } else {
                         List<ChecklistMember> listMember = checklist.getChecklistMembers();
                         if (listMember != null) {
@@ -346,11 +345,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                             for (ChecklistMember member : listMember) {
                                 if (member.getUserId().equals(userId)) {
                                     checklists.add(checklist);
-                                    countChecklistByType(checklist);
                                 } // end if
                             } // end for
                         } // end if
                     }
+                }
+            }
+
+
+            for (Checklist checklist : datasource) {
+                if (checklist.getUserId().equals(userId)) {
+                    countChecklistByType(checklist);
+                } else {
+                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                    if (listMember != null) {
+
+                        for (ChecklistMember member : listMember) {
+                            if (member.getUserId().equals(userId)) {
+                                countChecklistByType(checklist);
+                            } // end if
+                        } // end for
+                    } // end if
                 }
             }
 

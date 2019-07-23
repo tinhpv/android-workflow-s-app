@@ -127,11 +127,16 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
     @Override
     public void finishedRunChecklist(Checklist checklist) {
         Bundle args = new Bundle();
-        args.putString("checklistId", String.valueOf(checklist.getId()));
+
+        String checklistId = String.valueOf(checklist.getId());
+        args.putString("checklistId", checklistId);
+        args.putInt("location", 1);
+        args.putSerializable("listMember", checklist.getChecklistMembers());
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+
+
         this.getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         CommonUtils.replaceFragments_2(getContext(), ChecklistTaskFragment.class, args, true);
-
-
     }
 }
