@@ -3,6 +3,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
@@ -18,47 +19,33 @@
         android:id="@+id/item_checklist_progress">
 
 
-        <View
-            android:id="@+id/view2"
-            android:layout_width="10dp"
-            android:layout_height="0dp"
-            android:background="@color/home_yellow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
         <TextView
             android:id="@+id/tv_day_created"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:fontFamily="@font/avenir_heavy"
             android:text="18"
             android:textColor="@color/colorPrimaryText"
             android:textSize="22dp"
-            app:layout_constraintStart_toEndOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_month_created"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:fontFamily="@font/avenir_heavy"
             android:text="Nov"
             android:textColor="@color/light_blue"
             android:textSize="14dp"
-            app:layout_constraintEnd_toStartOf="@+id/view"
-            app:layout_constraintStart_toEndOf="@+id/view2"
+            app:layout_constraintEnd_toEndOf="@+id/tv_day_created"
+            app:layout_constraintStart_toStartOf="@+id/tv_day_created"
             app:layout_constraintTop_toBottomOf="@+id/tv_day_created" />
 
 
@@ -67,10 +54,11 @@
         <View
             android:id="@+id/view"
             android:layout_width="1dp"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:background="@color/backgroundColor"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_month_created"
             app:layout_constraintStart_toEndOf="@+id/tv_day_created"
             app:layout_constraintTop_toTopOf="@+id/tv_day_created" />
 
@@ -96,20 +84,6 @@
 
 
         <!--task number done and total-->
-        <TextView
-            android:id="@+id/tv_checklist_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawableLeft="@mipmap/task_small_ic"
-            android:drawablePadding="5dp"
-            android:textColor="#666666"
-            android:fontFamily="@font/avenir_heavy"
-            android:text="7/10 tasks"
-            android:textSize="10dp"
-            app:layout_constraintStart_toStartOf="@+id/tv_template_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_template_name" />
-
 
 
         <!--separator-->
@@ -117,20 +91,6 @@
         <!--time created-->
 
         <!--total assigned people-->
-        <TextView
-            android:id="@+id/tv_people_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:drawableLeft="@mipmap/team_small_ic"
-            android:drawablePadding="5dp"
-            android:fontFamily="@font/avenir_heavy"
-            android:text="2"
-            android:textColor="#666666"
-            android:textSize="10dp"
-            app:layout_constraintStart_toEndOf="@+id/tv_checklist_progress"
-            app:layout_constraintTop_toTopOf="@+id/tv_checklist_progress" />
 
 
         <!--template name-->
@@ -138,12 +98,12 @@
             android:id="@+id/tv_template_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:fontFamily="@font/avenir_light_oblique"
             android:text="Template's Name here"
-            android:textSize="12dp"
             android:textColor="#666666"
+            android:textSize="12dp"
             app:layout_constraintStart_toStartOf="@+id/tv_checklist_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_checklist_name" />
 
@@ -151,10 +111,9 @@
         <TextView
             android:id="@+id/tv_due_time_checklist"
             android:layout_width="80dp"
-            android:layout_height="18dp"
+            android:layout_height="15dp"
             android:layout_gravity="right"
-            android:layout_marginEnd="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/container_radius_yellow_home"
             android:fontFamily="@font/avenir_heavy"
@@ -163,19 +122,19 @@
             android:textColor="@android:color/white"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/tv_month_created"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
 
         <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
             android:id="@+id/pb_checklist_home"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginBottom="8dp"
-            app:direction="clockwise"
-            app:layout_constraintBottom_toTopOf="@+id/tv_due_time_checklist"
+            android:layout_marginEnd="20dp"
 
-            app:layout_constraintEnd_toEndOf="@+id/tv_due_time_checklist"
-            app:layout_constraintStart_toStartOf="@+id/tv_due_time_checklist"
+            android:layout_marginRight="20dp"
+            app:direction="clockwise"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_checklist_name"
             app:progressColor="@color/home_yellow"
             app:progressStrokeWidth="3.5dp"

@@ -108,10 +108,10 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         EditText searchEditText = searchView.findViewById(R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
 
         searchEditText.setHint("Search my checklist");
-        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimaryText));
 
         Typeface myFont = ResourcesCompat.getFont(getContext(), R.font.avenir_light);
         searchEditText.setTypeface(myFont);

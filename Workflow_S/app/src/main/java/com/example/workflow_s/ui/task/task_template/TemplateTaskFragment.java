@@ -24,6 +24,7 @@ import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.TemplateTaskAdapter;
 import com.example.workflow_s.utils.CommonUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     private static final String TAG = "TEMPLATE_TASK_FRAGMENT";
 
     View view;
-    private Button btnRunChecklist;
+    private FloatingActionButton btnRunChecklist;
     private TextView mTemplateDescription, mTemplateName;
     private RecyclerView templateTaskRecyclerView;
     private TemplateTaskAdapter mTemplateTaskAdapter;
@@ -54,7 +55,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_task_template, container, false);
-        getActivity().setTitle("Template's Tasks");
+        getActivity().setTitle("");
         return view;
     }
 

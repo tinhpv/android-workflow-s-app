@@ -3,6 +3,8 @@ package com.example.workflow_s.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Workflow_S
  * Created by TinhPV on 2019-06-20
@@ -10,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  **/
 
 
-public class User {
+public class User implements Serializable {
     @SerializedName("id")
     private String id;
 

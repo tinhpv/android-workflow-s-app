@@ -7,7 +7,7 @@
         android:id="@+id/action_assign"
         android:title="Assign"
         android:orderInCategory="1"
-        android:icon="@mipmap/assign_icon"
+        android:icon="@mipmap/change_org_ic_dark"
         app:showAsAction="ifRoom">
     </item>
 
@@ -15,7 +15,7 @@
         android:id="@+id/action_set_time"
         android:title="Assign"
         android:orderInCategory="2"
-        android:icon="@mipmap/clock_icon_white"
+        android:icon="@mipmap/clock_icon_dark"
         app:showAsAction="ifRoom">
     </item>
 
