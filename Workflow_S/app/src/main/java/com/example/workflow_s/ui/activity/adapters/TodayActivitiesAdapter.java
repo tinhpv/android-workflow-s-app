@@ -2,13 +2,13 @@ package com.example.workflow_s.ui.activity.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
@@ -43,16 +43,19 @@ public class TodayActivitiesAdapter extends RecyclerView.Adapter<TodayActivities
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_today_task;
         View view = layoutInflater.inflate(layoutId, viewGroup, false);
-        TodayActivitiesViewHolder viewHolder = new TodayActivitiesViewHolder(view);
+        final TodayActivitiesViewHolder viewHolder = new TodayActivitiesViewHolder(view);
 
         //activities item click
         viewHolder.mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int index = mRecyclerView.getChildLayoutPosition(v);
+                int index = viewHolder.getAdapterPosition();
+                String taskId = String.valueOf(mTasks.get(index).getId());
                 Bundle args = new Bundle();
-                args.putString("checklistId", String.valueOf(mTasks.get(index).getId()));
+                args.putString("taskId", taskId);
+                args.putString("checklistId", String.valueOf(mTasks.get(index).getChecklistId()));
                 args.putString("taskName", mTasks.get(index).getName());
+                //args.putString("checklistUserId", mTasks.get(index).ge);
                 CommonUtils.replaceFragments(viewGroup.getContext(), ChecklistTaskDetailFragment.class, args, true);
             }
         });
