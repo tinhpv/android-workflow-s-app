@@ -52,6 +52,7 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,6 +129,9 @@ public class ChecklistRunningFragment extends Fragment implements ChecklistRunni
         Bundle args = new Bundle();
         args.putString("checklistId", String.valueOf(checklist.getId()));
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-        CommonUtils.replaceFragments(getContext(), ChecklistTaskFragment.class, args, true);
+        this.getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        CommonUtils.replaceFragments_2(getContext(), ChecklistTaskFragment.class, args, true);
+
+
     }
 }

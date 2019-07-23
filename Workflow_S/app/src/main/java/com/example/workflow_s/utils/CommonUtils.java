@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -88,5 +89,38 @@ public class CommonUtils {
         }
 
     }
+
+    public static void replaceFragments_2(Context fragmentContext, Class fragmentClass, Bundle args, boolean isAddToBackStack) {
+
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Insert the fragment by replacing any existing fragment
+        if (null != args) {
+            fragment.setArguments(args);
+        }
+
+        FragmentManager fragmentManager = ((FragmentActivity)fragmentContext).getSupportFragmentManager();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_right);
+
+        if (isAddToBackStack) {
+            transaction
+                    .add(R.id.flContent, fragment,fragment.getClass().getName().toString())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            transaction
+                    .add(R.id.flContent, fragment,fragment.getClass().getName().toString())
+                    .commit();
+        }
+
+    }
+
+
 
 }

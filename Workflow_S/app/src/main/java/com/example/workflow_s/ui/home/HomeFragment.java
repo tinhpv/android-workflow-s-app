@@ -161,18 +161,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, true);
                 getActivity().setTitle("Activity");
                 break;
+
             case R.id.btn_checklist:
                 CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
                 getActivity().setTitle("Active checklist");
                 break;
+
             case R.id.btn_template:
                 CommonUtils.replaceFragments(getContext(), TemplateFragment.class, null, true);
                 getActivity().setTitle("Template");
                 break;
+
             case R.id.bt_view_all_checklist:
                 CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
                 getActivity().setTitle("Active checklist");
                 break;
+
             case R.id.bt_view_all_task:
                 CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, true);
                 getActivity().setTitle("Activity");
@@ -285,6 +289,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         }
     }
 
+    private void filterDueTimeofChecklist(Checklist checklist) {
+        String time;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (checklist.getDueTime() != null) {
+            String dateSelected = checklist.getDueTime().split("T")[0];
+            String timeSelected = checklist.getDueTime().split("T")[1];
+            Date currentTime = Calendar.getInstance().getTime();
+            String dueTime = dateSelected + " " + timeSelected;
+            try {
+                Date overdue = sdf.parse(dueTime);
+                long totalTime = overdue.getTime() - currentTime.getTime();
+                time = String.format("%dh",
+                        TimeUnit.MILLISECONDS.toHours(totalTime));
+                Log.i("checlistDueTime", time);
+                if (Integer.parseInt(time.split("h")[0]) == 0) {
+                    time = String.format("%dm",
+                            TimeUnit.MILLISECONDS.toMinutes(totalTime));
+                    if (Integer.parseInt(time.split("m")[0]) <= 0) {
+                        checklist.setExpired(true);
+                    } else {
+                        checklist.setExpired(false);
+                    }
+                }  else if (Integer.parseInt(time.split("h")[0]) <= 0){
+                    checklist.setExpired(true);
+                } else {
+                    checklist.setExpired(false);
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         mChecklistShimmerFrameLayout.stopShimmerAnimation();
@@ -295,28 +333,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         } else {
             checklists = new ArrayList<>();
             for (Checklist checklist : datasource) {
+                filterDueTimeofChecklist(checklist);
 
-                if (checklist.getUserId().equals(userId)) {
-                    checklists.add(checklist);
-                    countChecklistByType(checklist);
+                if (!checklist.getExpired() && !checklist.getTemplateStatus().equals("Done")) {
+                    if (checklist.getUserId().equals(userId)) {
+                        checklists.add(checklist);
+                        countChecklistByType(checklist);
+                    } else {
+                        List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                        if (listMember != null) {
 
-                }
-
-                else {
-                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
-                    if (listMember != null) {
-
-                        for (ChecklistMember member : listMember) {
-                            if (member.getUserId().equals(userId)) {
-                                checklists.add(checklist);
-                                countChecklistByType(checklist);
-                            }
-                        }
+                            for (ChecklistMember member : listMember) {
+                                if (member.getUserId().equals(userId)) {
+                                    checklists.add(checklist);
+                                    countChecklistByType(checklist);
+                                } // end if
+                            } // end for
+                        } // end if
                     }
                 }
             }
-            mChecklistProgressAdapter.setChecklists(checklists);
 
+            mChecklistProgressAdapter.setChecklists(checklists);
             tvCompletedChecklist.setText(String.valueOf(completedChecklistNum));
             tvOverdueChecklist.setText(String.valueOf(overdueChecklistNum));
             tvInProgressChecklist.setText(String.valueOf(progressChecklistNum));

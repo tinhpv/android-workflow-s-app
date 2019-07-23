@@ -121,7 +121,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         EditText searchEditText = searchView.findViewById(R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
 
-        searchEditText.setHint("Search my checklist");
+        searchEditText.setHint("Search checklist...");
         searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimaryText));
 
         Typeface myFont = ResourcesCompat.getFont(getContext(), R.font.avenir_light);
@@ -210,10 +210,6 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
         itemTouchhelper.attachToRecyclerView(checklistRecyclerView);
 
-
-//        ItemTouchHelper itemTouchHelper = new
-//                ItemTouchHelper(new SwipeToDeleteCallBack(mCurrentChecklistAdapter));
-//        itemTouchHelper.attachToRecyclerView(checklistRecyclerView);
     }
 
 
@@ -221,6 +217,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         if (null != datasource) {
             currentChecklist = new ArrayList<>();
+
             for (Checklist checklist : datasource) {
                 filterDueTimeofChecklist(checklist);
                 if (checklist.getUserId().equals(userId)) {
@@ -293,6 +290,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 //                tmpTemplate = template1;
 //            }
 //        }
+
         //categorizeTemplate(tmpTemplate);
         selectedTemplate = template;
         categorizeChecklist(template, selectedStatus);
@@ -560,7 +558,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                 e.printStackTrace();
             }
         }
-        }
+    }
 
 //
 
