@@ -289,6 +289,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
         mChecklistShimmerFrameLayout.stopShimmerAnimation();
         mChecklistShimmerFrameLayout.setVisibility(View.GONE);
+
         if (datasource.size() == 0) {
             mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
         } else {

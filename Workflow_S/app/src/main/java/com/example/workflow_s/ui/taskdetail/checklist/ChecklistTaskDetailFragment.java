@@ -5,8 +5,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,24 +20,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.ui.comment.CommentAdapter;
+import com.example.workflow_s.ui.comment.CommentFragment;
+import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
 import com.example.workflow_s.ui.taskdetail.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.package_dialog.ImageDialogFragment;
 import com.example.workflow_s.ui.taskdetail.dialog.time_setting.TimeSettingDialogFragment;
+import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.Constant;
 import com.example.workflow_s.utils.ImageUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -46,6 +56,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -60,13 +71,12 @@ import okhttp3.RequestBody;
 public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailContract.TaskDetailView,
         View.OnClickListener, ImageDialogFragment.ClickEventListener {
 
-
     private View view;
     private int taskId, checklistId;
     private String currentPhotoPath, taskStatus, checklistUserId;
     private LinearLayout mContainerLayout;
     private FloatingActionButton buttonCompleteTask, buttonSaveContent;
-    private TextView tvAlertMember;
+    private TextView tvAlertMember, tvCommentNumber;
     private TaskDetailContract.TaskDetailPresenter mPresenter;
     private Task currentTask;
 
@@ -75,6 +85,14 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     private HashMap<String, String> imageDataEncoded;
     private Boolean isChanged, isTaskMember;
     private int totalImagesNumberToUpload, location;
+
+    private RecyclerView commentRV;
+    private CommentAdapter mCommentAdapter;
+    private RecyclerView.LayoutManager commentLayoutManager;
+
+    private LinearLayout layoutChatbox;
+    private CircleImageView userImageView;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,9 +151,39 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         buttonSaveContent = view.findViewById(R.id.bt_save_content);
         buttonSaveContent.setOnClickListener(this);
 
+        userImageView = view.findViewById(R.id.img_user_commented);
+        tvCommentNumber = view.findViewById(R.id.tv_comment_number);
+        layoutChatbox = view.findViewById(R.id.layout_chatbox);
+        layoutChatbox.setOnClickListener(this);
+
+//        mScrollView = view.findViewById(R.id.scrollView3);
+//        mScrollView.getViewTreeObserver()
+//                .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//                    @Override
+//                    public void onScrollChanged() {
+//                        if (mScrollView.getChildAt(0).getBottom()
+//                                <= (mScrollView.getHeight() + mScrollView.getScrollY())) {
+//                            //scroll view is at bottom
+//                            commentBlock.setVisibility(View.VISIBLE);
+//                        } else {
+//                            //scroll view is not at bottom
+//                            commentBlock.setVisibility(View.GONE);
+//                        }
+//                    }
+//                });
 
         getTaskIdFromParentFragment();
+        bindUI();
         initData();
+    }
+
+    private void bindUI() {
+        commentRV = view.findViewById(R.id.rv_comment);
+        commentLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        commentRV.setLayoutManager(commentLayoutManager);
+
+        mCommentAdapter = new CommentAdapter(getContext());
+        commentRV.setAdapter(mCommentAdapter);
     }
 
     private void getTaskIdFromParentFragment() {
@@ -156,6 +204,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         totalImagesNumberToUpload = 0;
         mPresenter = new TaskDetailPresenterImpl(this, new TaskDetailInteractor());
         mPresenter.getTaskMember(taskId);
+        mPresenter.loadComment(taskId);
     }
 
     @Override
@@ -168,6 +217,13 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
+    @Override
+    public void finishLoadComment(List<Comment> commentList) {
+        if (null != commentList) {
+            tvCommentNumber.setText("Comments (" + commentList.size() + ")");
+            mCommentAdapter.setCommentList(commentList);
+        }
+    }
 
     public boolean checkIfCurrentUserIsTaskMember() {
         String userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
@@ -490,6 +546,13 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
                 updateButtonLayout(taskStatus);
                 break;
+
+            case R.id.layout_chatbox:
+                Bundle args = new Bundle();
+                args.putInt("taskId", taskId);
+                CommonUtils.replaceFragments(getContext(), CommentFragment.class, args, true);
+                break;
+
             case R.id.bt_save_content:
                 handleSaveContentDetail();
                 break;

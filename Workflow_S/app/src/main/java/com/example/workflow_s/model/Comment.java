@@ -1,17 +1,18 @@
 package com.example.workflow_s.model;
 
+import android.content.Intent;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
 
     @SerializedName("id")
     private String id;
 
     @SerializedName("taskId")
-    private String taskId;
-
-    @SerializedName("taskName")
-    private String taskName;
+    private Integer taskId;
 
     @SerializedName("userId")
     private String userId;
@@ -31,10 +32,9 @@ public class Comment {
     @SerializedName("username")
     private String username;
 
-    public Comment(String id, String taskId, String taskName, String userId, String comment1, Integer priority, boolean isRead, String userImage, String username) {
+    public Comment(String id, Integer taskId, String userId, String comment1, Integer priority, boolean isRead, String userImage, String username) {
         this.id = id;
         this.taskId = taskId;
-        this.taskName = taskName;
         this.userId = userId;
         this.comment1 = comment1;
         this.priority = priority;
@@ -51,20 +51,12 @@ public class Comment {
         this.id = id;
     }
 
-    public String getTaskId() {
+    public Integer getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(String taskId) {
+    public void setTaskId(Integer taskId) {
         this.taskId = taskId;
-    }
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
     }
 
     public String getUserId() {
