@@ -1,8 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    
 
-</LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_user_commented"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/team_small_ic"
+        app:civ_border_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_user_display_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:fontFamily="@font/avenir_heavy"
+        android:text="Phan Vu Tinh"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@+id/img_user_commented"
+        app:layout_constraintTop_toTopOf="@+id/img_user_commented" />
+
+    <TextView
+        android:id="@+id/tv_date_time_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/avenir_heavy"
+        android:text="12 Jul"
+        android:textColor="@color/gray"
+        android:textSize="11dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_user_display_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_user_display_name" />
+
+    <TextView
+        android:id="@+id/tv_comment_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/avenir_light"
+        android:lineSpacingExtra="4sp"
+        android:text="Phan Vu Tinh"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_user_display_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_display_name" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

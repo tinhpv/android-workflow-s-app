@@ -45,6 +45,7 @@
     <string name="data_na_message">NOTHING TO SHOW</string>
     <string name="no_data_checklist_message">Your in-progress checklist will appear here.</string>
     <string name="no_data_task_message">Your task that will be due today will appear here.</string>
+    <string name="no_data_comment_message">Your comment will appear here.</string>
 
     <!--task status value-->
     <string name="task_done">Done</string>

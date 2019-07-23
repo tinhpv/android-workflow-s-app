@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.taskdetail;
 
 
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
@@ -19,6 +20,23 @@ import java.util.List;
 
 public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDataInteractor{
 
+
+    @Override
+    public void getAllComments(int taskId, final OnFinishedLoadCommentListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<Comment>> call = service.getAllComments(taskId);
+        call.enqueue(new Callback<List<Comment>>() {
+            @Override
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                listener.onFinishedGetComments(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void getTaskMember(int taskId, final OnFinishedGetTaskMemberListener listener) {

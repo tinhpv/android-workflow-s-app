@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
@@ -55,6 +56,11 @@ public class TemplateTaskDetailFragment extends Fragment implements TaskDetailCo
 
     @Override
     public void finishedSaveContent() {
+
+    }
+
+    @Override
+    public void finishLoadComment(List<Comment> commentList) {
 
     }
 

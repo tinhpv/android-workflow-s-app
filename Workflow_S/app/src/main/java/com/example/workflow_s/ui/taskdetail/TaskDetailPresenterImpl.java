@@ -2,6 +2,7 @@ package com.example.workflow_s.ui.taskdetail;
 
 import android.util.Log;
 
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
@@ -18,7 +19,8 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedChangeTaskStatusListener,
             TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedUploadImageListener,
-            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskMemberListener {
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedGetTaskMemberListener,
+            TaskDetailContract.GetTaskDetailDataInteractor.OnFinishedLoadCommentListener {
 
     private static final String TAG = "TASK_DETAIL_PRESENTER";
     private TaskDetailContract.TaskDetailView mTaskDetailView;
@@ -47,6 +49,16 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     @Override
     public void getTask(int taskId) {
         mGetTaskDetailDataInteractor.getTaskById(taskId, this);
+    }
+
+    @Override
+    public void loadComment(int taskId) {
+        mGetTaskDetailDataInteractor.getAllComments(taskId, this);
+    }
+
+    @Override
+    public void onFinishedGetComments(List<Comment> commentList) {
+        mTaskDetailView.finishLoadComment(commentList);
     }
 
     @Override

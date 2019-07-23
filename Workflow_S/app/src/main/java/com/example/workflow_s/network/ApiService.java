@@ -172,4 +172,11 @@ public interface ApiService {
 
     @PUT("/api/Checklists/duetime/{checklistid}/{datetime}")
     Call<ResponseBody> setChecklistDueTime(@Path("checklistid") int checklistId, @Path("datetime") String datetime);
+
+
+    @GET("/api/Comments/taskcomment/{taskId}")
+    Call<List<Comment>> getAllComments(@Path("taskId") int taskId);
+
+    @POST("/api/Comments/comment")
+    Call<ResponseBody> writeComment(@Body Comment comment);
 }
