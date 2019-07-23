@@ -3,13 +3,14 @@ package com.example.workflow_s.ui.checklist.dialog_fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.workflow_s.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
@@ -65,7 +66,7 @@ public class ChecklistDialogFragment extends BottomSheetDialogFragment implement
     private void setupTemplateRV() {
         templateChecklistRecyclerView = view.findViewById(R.id.rv_template_category);
         templateChecklistRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         templateChecklistRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ChecklistDialogAdapter(this);
         templateChecklistRecyclerView.setAdapter(mAdapter);
