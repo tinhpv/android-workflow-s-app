@@ -56,6 +56,8 @@ public class Checklist implements Serializable {
     @SerializedName("taskItem")
     private List<Task> taskItems;
 
+    private Boolean isExpired;
+
     public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask) {
         this.id = id;
         this.userId = userId;
@@ -115,6 +117,24 @@ public class Checklist implements Serializable {
         this.checklistMembers = checklistMembers;
         this.dueTime = dueTime;
         this.taskItems = taskItems;
+    }
+
+    public Checklist(Integer id, String userId, String name, String description, String timeCreated, String templateStatus, Integer organizationId, Integer templateId, Integer totalTask, Integer doneTask, String templateName, ArrayList<ChecklistMember> checklistMembers, String dueTime, List<Task> taskItems, Boolean isExpired) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.description = description;
+        this.timeCreated = timeCreated;
+        this.templateStatus = templateStatus;
+        this.organizationId = organizationId;
+        this.templateId = templateId;
+        this.totalTask = totalTask;
+        this.doneTask = doneTask;
+        this.templateName = templateName;
+        this.checklistMembers = checklistMembers;
+        this.dueTime = dueTime;
+        this.taskItems = taskItems;
+        this.isExpired = isExpired;
     }
 
     public Integer getId() {
@@ -211,5 +231,13 @@ public class Checklist implements Serializable {
 
     public void setTaskItems(List<Task> taskItems) {
         this.taskItems = taskItems;
+    }
+
+    public Boolean getExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(Boolean expired) {
+        isExpired = expired;
     }
 }

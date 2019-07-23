@@ -5,14 +5,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +14,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
@@ -33,21 +34,27 @@ import com.example.workflow_s.ui.checklist.ChecklistPresenterImpl;
 import com.example.workflow_s.ui.checklist.adapter.CurrentChecklistAdapter;
 import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
+import com.example.workflow_s.ui.checklist.dialog_fragment.StatusChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AllChecklistFragment extends Fragment implements ChecklistContract.AllChecklistView,
         ChecklistDialogFragment.DataBackContract,
         View.OnClickListener,
-        CurrentChecklistAdapter.EventListener {
+        CurrentChecklistAdapter.EventListener, StatusChecklistDialogFragment.DataBackContract {
 
 
     private static final String NAME_ARG = "AllChecklist";
 
     View view;
-    private Button templateButton;
+    private Button templateButton, statusButton;
     private CurrentChecklistAdapter mCurrentChecklistAdapter;
     private RecyclerView checklistRecyclerView;
     private RecyclerView.LayoutManager checklistLayoutManager;
@@ -55,12 +62,12 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     private ChecklistContract.ChecklistPresenter mPresenter;
 
     private ArrayList<String> templateListName;
-    private ArrayList<Checklist> checklists, templateChecklists;
+    private ArrayList<Checklist> checklists, templateChecklists, myStatusChecklist;
     private List<Template> templateList;
-    private String selectedTemplate;
+    private String selectedTemplate, selectedStatus;
 
     private List<ChecklistMember> checklistMembers;
-
+    private boolean flagTemplate = false, flagStatus = false;
 
     private String orgId, userId;
 
@@ -84,7 +91,13 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         templateButton = view.findViewById(R.id.bt_template_checklist);
         templateButton.setOnClickListener(this);
         templateButton.setText("All");
+
+        statusButton = view.findViewById(R.id.bt_status_checklist);
+        statusButton.setOnClickListener(this);
+        statusButton.setText("All");
+
         selectedTemplate = "All";
+        selectedStatus = "All";
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         setupChecklistRV();
         initData();
@@ -145,18 +158,28 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         checklistDialogFragment.show(getFragmentManager(), NAME_ARG);
     }
 
+    private void prepareShowingStatusDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putString("selected_status", selectedStatus);
+        StatusChecklistDialogFragment statusChecklistDialogFragment = StatusChecklistDialogFragment.newInstance();
+        statusChecklistDialogFragment.setTargetFragment(this, 0);
+        statusChecklistDialogFragment.setArguments(bundle);
+        statusChecklistDialogFragment.show(getFragmentManager(), NAME_ARG);
+    }
+
     private void initData() {
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
         mPresenter.loadAllChecklist(orgId);
         mPresenter.requestTemplateData(orgId);
+        myStatusChecklist = new ArrayList<>();
     }
 
     private void setupChecklistRV() {
         checklistRecyclerView = view.findViewById(R.id.rv_checklist);
         checklistRecyclerView.setHasFixedSize(true);
-        checklistLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        checklistLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         checklistRecyclerView.setLayoutManager(checklistLayoutManager);
 
         mCurrentChecklistAdapter = new CurrentChecklistAdapter(this, getContext());
@@ -186,6 +209,7 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         if (null != datasource) {
             checklists = new ArrayList<>();
             for (Checklist checklist : datasource) {
+                filterDueTimeofChecklist(checklist);
                 if (!checklist.getUserId().equals(userId)) {
                 //    checklists.add(checklist);
                     boolean flag = true;
@@ -207,6 +231,38 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         } // end if null
 
     }
+
+    private void filterDueTimeofChecklist(Checklist checklist) {
+        String time;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (checklist.getDueTime() != null) {
+            String dateSelected = checklist.getDueTime().split("T")[0];
+            String timeSelected = checklist.getDueTime().split("T")[1];
+            Date currentTime = Calendar.getInstance().getTime();
+            String dueTime = dateSelected + " " + timeSelected;
+            try {
+                Date overdue = sdf.parse(dueTime);
+                long totalTime = overdue.getTime() - currentTime.getTime();
+                time = String.format("%dh",
+                        TimeUnit.MILLISECONDS.toHours(totalTime));
+                if (Integer.parseInt(time.split("h")[0]) == 0) {
+                    time = String.format("%dm",
+                            TimeUnit.MILLISECONDS.toMinutes(totalTime));
+                    if (Integer.parseInt(time.split("m")[0]) <= 0) {
+                        checklist.setExpired(true);
+                    }
+                }  else if (Integer.parseInt(time.split("h")[0]) <= 0){
+                    checklist.setExpired(true);
+                } else {
+                    checklist.setExpired(false);
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     public void finishGetTemplates(List<Template> templateList) {
@@ -231,6 +287,8 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     public void onClick(View v) {
         if (v.getId() == R.id.bt_template_checklist) {
             prepareShowingTemplateDialog();
+        } else if (v.getId() == R.id.bt_status_checklist) {
+            prepareShowingStatusDialog();
         }
     }
 
@@ -242,35 +300,183 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
     @Override
     public void onFinishSelectTemplate(String template) {
         templateButton.setText(template);
-        Template tmpTemplate = null;
-        for (Template template1 : templateList) {
-            if (template1.getName().equals(template)) {
-                tmpTemplate = template1;
+//        Template tmpTemplate = null;
+//        for (Template template1 : templateList) {
+//            if (template1.getName().equals(template)) {
+//                tmpTemplate = template1;
+//            }
+//        }
+//        categorizeTemplate(tmpTemplate);
+        selectedTemplate = template;
+        categorizeChecklist(template, selectedStatus);
+    }
+
+    private void categorizeChecklist(String template, String status) {
+        myStatusChecklist.clear();
+        if (template.equals("All")) {
+            if (status.equals("All")) {
+                mCurrentChecklistAdapter.setChecklists(checklists);
+            } else if (status.equals("Done")){
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateStatus().equals("Done")) {
+                        myStatusChecklist.add(checklist);
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else if (status.equals("Running")) {
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateStatus().equals("Checklist")) {
+                        if (!checklist.getExpired()) {
+                            myStatusChecklist.add(checklist);
+                        } //end if
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else if (status.equals("Expired")) {
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateStatus().equals("Checklist")) {
+                        if (checklist.getExpired()) {
+                            myStatusChecklist.add(checklist);
+                        } //end if
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            }
+
+        } else {
+            Template tmpTemplate = null;
+            for (Template template1 : templateList) {
+                if (template1.getName().equals(template)) {
+                    tmpTemplate = template1;
+                }
+            }
+            int templateId = tmpTemplate.getId();
+            if (status.equals("All")) {
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateId() == templateId) {
+                        myStatusChecklist.add(checklist);
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else if (status.equals("Done")){
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateId() == templateId && checklist.getTemplateStatus().equals("Done")) {
+                        myStatusChecklist.add(checklist);
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else if (status.equals("Running")) {
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateId() == templateId && checklist.getTemplateStatus().equals("Checklist")) {
+                        if (!checklist.getExpired()) {
+                            myStatusChecklist.add(checklist);
+                        } //end if
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else if (status.equals("Expired")) {
+                for (Checklist checklist : checklists) {
+                    if (checklist.getTemplateId() == templateId && checklist.getTemplateStatus().equals("Checklist")) {
+                        if (checklist.getExpired()) {
+                            myStatusChecklist.add(checklist);
+                        } //end if
+                    } //end if
+                } //end for
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
             }
         }
-        categorizeTemplate(tmpTemplate);
+
     }
+
 
     private void categorizeTemplate(Template template) {
 
         if (template == null) {
+            flagTemplate = false;
             selectedTemplate = "All";
-            mCurrentChecklistAdapter.setChecklists(checklists);
+            if (flagStatus) {
+                mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+            } else {
+                mCurrentChecklistAdapter.setChecklists(checklists);
+            }
         } else {
+            flagTemplate = true;
             String tempName = template.getName();
             selectedTemplate = tempName;
             int templateId = template.getId();
                 templateChecklists = new ArrayList<>();
-                for (Checklist checklist : checklists) {
-                    if (checklist.getTemplateId() == templateId) {
-                        templateChecklists.add(checklist);
-                    } //end if
-                } // end for
-                mCurrentChecklistAdapter.setChecklists(templateChecklists);
+                if (flagStatus) {
+                    for (Checklist checklist : myStatusChecklist) {
+                        if (checklist.getTemplateId() == templateId) {
+                            templateChecklists.add(checklist);
+                        } //end if
+                    } // end for
+                    mCurrentChecklistAdapter.setChecklists(templateChecklists);
+                } else {
+                    for (Checklist checklist : checklists) {
+                        if (checklist.getTemplateId() == templateId) {
+                            templateChecklists.add(checklist);
+                        } //end if
+                    } // end for
+                    mCurrentChecklistAdapter.setChecklists(templateChecklists);
+                }
+
 
         }
 
     }
+
+    private void categorizeStatus(String status) {
+        myStatusChecklist.clear();
+        ArrayList<Checklist> tempChecklist;
+        if (flagTemplate) {
+            tempChecklist = templateChecklists;
+        } else {
+            tempChecklist = checklists;
+        }
+        if (status == "All") {
+            flagStatus = false;
+            selectedStatus = "All";
+            mCurrentChecklistAdapter.setChecklists(tempChecklist);
+
+        } else if (status.equals("Done")){
+            flagStatus = true;
+            selectedStatus= status;
+            for (Checklist checklist : tempChecklist) {
+                if (checklist.getTemplateStatus().equals("Done")) {
+                    myStatusChecklist.add(checklist);
+                } //end if
+            } //end for
+            mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+        } else if (status.equals("Running")){
+            flagStatus = true;
+            //myStatusChecklist.clear();
+            selectedStatus = status;
+            for (Checklist checklist : tempChecklist) {
+                if (checklist.getTemplateStatus().equals("Checklist")) {
+                    // boolean expired = checklist.getExpired();
+                    if (!checklist.getExpired()) {
+                        myStatusChecklist.add(checklist);
+                    } //end if
+                } // end if
+            } // end for
+            mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+        } else if (status.equals("Expired")) {
+            flagStatus = true;
+            //myStatusChecklist.clear();
+            selectedStatus = status;
+            for (Checklist checklist : tempChecklist) {
+                if (checklist.getTemplateStatus().equals("Checklist")) {
+                    // boolean expired = checklist.getExpired();
+                    if (checklist.getExpired()) {
+                        myStatusChecklist.add(checklist);
+                    } //end if
+                } // end if
+            } // end for
+            mCurrentChecklistAdapter.setChecklists(myStatusChecklist);
+        }
+    }
+
 
     @Override
     public void onEvent(int deletedChecklistId) {
@@ -302,5 +508,13 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onFinishSelectStatus(String status) {
+        statusButton.setText(status);
+        //categorizeStatus(status);
+        selectedStatus = status;
+        categorizeChecklist(selectedTemplate, status);
     }
 }
