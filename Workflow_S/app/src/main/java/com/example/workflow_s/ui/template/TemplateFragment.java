@@ -1,9 +1,12 @@
 package com.example.workflow_s.ui.template;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -75,10 +78,10 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         EditText searchEditText = searchView.findViewById(R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
+        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
 
-        searchEditText.setHint("Search template");
-        searchEditText.setHintTextColor(getResources().getColor(R.color.white));
+        searchEditText.setHint("Search");
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         Typeface myFont = ResourcesCompat.getFont(getContext(), R.font.avenir_light);
         searchEditText.setTypeface(myFont);
@@ -112,6 +115,8 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_template, container, false);
+        getActivity().setTitle("");
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         return view;
     }
 
@@ -151,7 +156,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     private void setupTemplateRV() {
         templateRecyclerView = view.findViewById(R.id.rv_template);
         templateRecyclerView.setHasFixedSize(true);
-        templateLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        templateLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         templateRecyclerView.setLayoutManager(templateLayoutManager);
         mAdapter = new TemplateAdapter();
         templateRecyclerView.setAdapter(mAdapter);

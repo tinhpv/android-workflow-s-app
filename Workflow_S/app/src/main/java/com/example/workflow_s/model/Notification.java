@@ -2,7 +2,9 @@ package com.example.workflow_s.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Notification {
+import java.io.Serializable;
+
+public class Notification implements Serializable {
 
     @SerializedName("id")
     private Integer id;

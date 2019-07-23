@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -67,7 +68,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private int checklistId;
     private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId, checklistStatus;
 
-    private ProgressBar mTaskProgressBar;
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
     private ArrayList<Task> tasks;
@@ -127,11 +127,11 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_task_cheklist, container, false);
-        getActivity().setTitle("Checklist's Tasks");
+        //getActivity().setTitle("Tasks");
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         return view;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         setupTaskRV();
@@ -146,6 +146,20 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
         mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this);
         checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
+
+        checklistTaskRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+
+                if (dy > 0) {
+                    getActivity().setTitle(checklistName);
+                } else if (dy < 0) {
+                    getActivity().setTitle("");
+                }
+            }
+        });
     }
 
     public void initData() {
@@ -166,7 +180,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     @Override
     public void finishGetChecklist(Checklist checklist) {
         if (null != checklist) {
@@ -186,11 +200,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initUI() {
-        mTaskProgressBar = view.findViewById(R.id.pb_checklist_task);
-        updateProgressBar();
-
         completeChecklistButton = view.findViewById(R.id.bt_complete_checklist);
         completeChecklistButton.setOnClickListener(this);
 
@@ -246,17 +256,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void updateProgressBar() {
-        if (totalTask == 0) {
-            mTaskProgressBar.setProgress(0, true);
-        } else {
-            int progress = (int) ((doneTask / (totalTask * 1.0)) * 100);
-            mTaskProgressBar.setProgress(progress, true);
-        } // end
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onEventCheckBox(Boolean isSelected, int taskId) {
         if (userId.equals(checklistUserId)) {
@@ -302,7 +301,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
         if (isSelected) {
             doneTask++;
@@ -312,7 +310,6 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             mPresenter.changeTaskStatus(taskId, getString(R.string.task_running));
         }
 
-        updateProgressBar();
 
         if (doneTask == totalTask) {
             handleCompleteChecklist(getActivity().getString(R.string.checklist_done));

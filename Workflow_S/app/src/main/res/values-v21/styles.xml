@@ -2,7 +2,7 @@
 <resources>
     <style name="ChecklistProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressBackgroundTint">#ECECEC</item>
-        <item name="android:progressTint">#F7B500</item>
+        <item name="android:progressTint">@color/colorPrimaryDark</item>
         <item name="android:progressDrawable">@drawable/progressbar_custom</item>
     </style>
 </resources>

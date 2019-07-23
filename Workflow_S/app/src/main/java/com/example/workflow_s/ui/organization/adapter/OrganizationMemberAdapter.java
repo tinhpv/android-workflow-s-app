@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.organization.adapter;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.List;
 
@@ -25,8 +27,11 @@ public class OrganizationMemberAdapter extends RecyclerView.Adapter<Organization
 
     // DataSource for RecyclerView
     private List<User> mUserList;
+    private Context mContext;
 
-    public OrganizationMemberAdapter() {}
+    public OrganizationMemberAdapter(Context context) {
+        this.mContext = context;
+    }
 
     public void setUserList(List<User> userList) {
         mUserList = userList;
@@ -56,6 +61,13 @@ public class OrganizationMemberAdapter extends RecyclerView.Adapter<Organization
         } else {
             Glide.with(organizationMemberViewHolder.view.getContext()).load(profileUrlString).into(organizationMemberViewHolder.mAvatar);
         }
+
+        if (mUserList.get(i).getRole().equals("ADMIN")) {
+            organizationMemberViewHolder.mAdmin.setVisibility(View.VISIBLE);
+        } else {
+            organizationMemberViewHolder.mAdmin.setVisibility(View.INVISIBLE);
+        }
+
 
     }
 

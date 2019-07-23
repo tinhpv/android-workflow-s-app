@@ -31,6 +31,7 @@ public class NotificationFragment extends Fragment implements NotificationContra
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_notification, container, false);
+        getActivity().setTitle("");
         return view;
     }
 
