@@ -104,7 +104,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     private void initRV() {
         templateTaskRecyclerView = view.findViewById(R.id.rv_template_task);
         templateTaskRecyclerView.setHasFixedSize(true);
-        taskLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        taskLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         templateTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
         mTemplateTaskAdapter = new TemplateTaskAdapter(this, this);
@@ -129,7 +129,11 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
             args.putInt("templateId", templateId);
             args.putString("templateName", templateName);
             args.putString("templateUserId", templateUserId);
-            CommonUtils.replaceFragments(getActivity(), ChecklistRunningFragment.class, args, false);
+
+//            ChecklistRunningFragment fragment = new ChecklistRunningFragment();
+//            fragment.setDataFromParent(args);
+//            this.getChildFragmentManager().beginTransaction().replace(R.id.parent_container, fragment).commit();
+            CommonUtils.replaceFragments_2(getActivity(), ChecklistRunningFragment.class, args, true);
         } // end if
     }
 

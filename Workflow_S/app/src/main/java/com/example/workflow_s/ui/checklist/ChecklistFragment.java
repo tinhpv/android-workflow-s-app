@@ -48,7 +48,6 @@ public class ChecklistFragment extends Fragment {
         return checklistFragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

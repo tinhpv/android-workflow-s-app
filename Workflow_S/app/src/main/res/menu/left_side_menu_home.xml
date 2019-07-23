@@ -22,7 +22,7 @@
         <item
             android:id="@+id/nav_checklist_fragment"
             android:icon="@mipmap/running_icon_small"
-            android:title="Active checklist" />
+            android:title="Checklist" />
     </group>
 
     <group>

@@ -85,7 +85,6 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     @Override
     public void onBindViewHolder(@NonNull CurrentChecklistViewHolder currentChecklistViewHolder, int i) {
         currentChecklistViewHolder.mChecklistName.setText(mChecklists.get(i).getName());
-        //currentChecklistViewHolder.mChecklistProgress.setText(mChecklists.get(i).getDoneTask() + "/" + mChecklists.get(i).getTotalTask());
         currentChecklistViewHolder.mTemplateName.setText(mChecklists.get(i).getTemplateName());
 
         String timeCreated = mChecklists.get(i).getTimeCreated().split("T")[0];
@@ -95,10 +94,21 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         currentChecklistViewHolder.mDayCreated.setText(day);
         currentChecklistViewHolder.mMonthCreated.setText(monthString);
 
-        currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
-        if (getDueTimeOfChecklist(i).equals("expired")) {
+        if (mChecklists.get(i).getTemplateStatus().equals("Done")) {
+            currentChecklistViewHolder.mDueTime.setText("completed");
+            currentChecklistViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_green));
+            currentChecklistViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));
+            currentChecklistViewHolder.progressBar.setProgressColor(mContext.getResources().getColor(R.color.accomplishedColor));
+
+        } else if (getDueTimeOfChecklist(i).equals("expired")) {
+            currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
             currentChecklistViewHolder.mDueTime.setBackground(mContext.getResources().getDrawable(R.drawable.container_radius_red));
             currentChecklistViewHolder.mDueTime.setTextColor(Color.parseColor("#FFFFFF"));
+            currentChecklistViewHolder.progressBar.setProgressColor(mContext.getResources().getColor(R.color.rederror));
+
+        } else {
+            currentChecklistViewHolder.mDueTime.setText(getDueTimeOfChecklist(i));
+            currentChecklistViewHolder.mDueTime.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryText));
         }
 
         int doneTask = mChecklists.get(i).getDoneTask();
@@ -142,7 +152,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
                 e.printStackTrace();
             }
         }
-        return  time;
+        return time;
     }
 
     @Override
