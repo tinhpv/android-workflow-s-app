@@ -1,25 +1,26 @@
 package com.example.workflow_s.ui.home.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
-import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
@@ -46,6 +47,7 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
 
     public interface EventListener {
         void onEvent(int deletedChecklistId, int position);
+        void onChange(int checklistId, String name);
     }
 
     // Constants
@@ -55,6 +57,9 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
     private List<Checklist> mChecklists;
     private RecyclerView mRecyclerView;
     private Context mContext;
+    private Dialog changeDialog;
+    private TextView idchecklist;
+    private EditText edtChecklistName;
 
     public ChecklistProgressAdapter(EventListener listener, Context context) {
         this.listener = listener;
@@ -68,6 +73,39 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
         final ChecklistProgressViewHolder viewHolder = new ChecklistProgressViewHolder(view);
+
+        //dialog change name
+        changeDialog = new Dialog(context);
+        changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        idchecklist = changeDialog.findViewById(R.id.id_checklist);
+        edtChecklistName = changeDialog.findViewById(R.id.edt_name);
+        Button saveName = changeDialog.findViewById(R.id.bt_save);
+        saveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onChange(Integer.parseInt(idchecklist.getText().toString()), edtChecklistName.getText().toString().trim());
+                changeDialog.cancel();
+            }
+        });
+        Button cancel = changeDialog.findViewById(R.id.bt_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDialog.cancel();
+            }
+        });
+
+        viewHolder.item.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                changeDialog.show();
+                int index = viewHolder.getAdapterPosition();
+                edtChecklistName.setText(mChecklists.get(index).getName());
+                idchecklist.setText(mChecklists.get(index).getId() + "");
+                return true;
+            }
+        });
 
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +153,6 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
             int progress = (int) ((doneTask / (totalTask * 1.0)) * 100);
             checklistProgressViewHolder.progressBar.setProgress(progress, 100);
         }
-
     }
 
     public void deleteItem(int position) {
@@ -154,7 +191,6 @@ public class ChecklistProgressAdapter extends RecyclerView.Adapter<ChecklistProg
                 e.printStackTrace();
             }
         }
-
         return  time;
     }
 

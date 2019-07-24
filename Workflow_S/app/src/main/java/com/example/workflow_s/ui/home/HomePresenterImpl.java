@@ -1,7 +1,5 @@
 package com.example.workflow_s.ui.home;
 
-import android.util.Log;
-
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 
@@ -17,7 +15,8 @@ import java.util.ArrayList;
 public class HomePresenterImpl implements HomeContract.HomePresenter,
         HomeContract.GetHomeDataInteractor.OnFinishedGetRunningChecklistsListener,
         HomeContract.GetHomeDataInteractor.OnFinishedGetDueTasksListener,
-        HomeContract.GetHomeDataInteractor.OnFinishedDeleteChecklistListener {
+        HomeContract.GetHomeDataInteractor.OnFinishedDeleteChecklistListener,
+        HomeContract.GetHomeDataInteractor.OnFinishedSetNameOfChecklist{
 
 
     private static final String TAG = "HOME_PRESENTER";
@@ -71,8 +70,18 @@ public class HomePresenterImpl implements HomeContract.HomePresenter,
     }
 
     @Override
+    public void setNameOfChecklist(int checklistId, String name) {
+        mGetHomeDataInteractor.setNameOfChecklist(checklistId, name, this);
+    }
+
+    @Override
     public void onFinishedDeleteChecklist() {
         mHomeView.finishDeleteChecklist();
+    }
+
+    @Override
+    public void onFinishedSetNameChecklist() {
+
     }
 
     @Override

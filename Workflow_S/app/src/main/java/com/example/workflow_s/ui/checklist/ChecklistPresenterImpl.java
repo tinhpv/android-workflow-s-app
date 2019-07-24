@@ -19,7 +19,8 @@ public class ChecklistPresenterImpl implements ChecklistContract.ChecklistPresen
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetChecklistListener,
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetFirstTaskFormChecklistListener,
             ChecklistContract.GetChecklistsDataInteractor.OnFinishedGetTemplateDataListener,
-ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener{
+ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener,
+        ChecklistContract.GetChecklistsDataInteractor.OnFinishedSetNameOfChecklist{
 
     private static final String TAG = "CHECKLISTS_PRESENTER";
     private ChecklistContract.ChecklistView mChecklistView;
@@ -64,6 +65,11 @@ ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener{
     }
 
     @Override
+    public void setNameOfChecklist(int checklistId, String name) {
+        mChecklistDataInteractor.setNameOfChecklist(checklistId, name, this);
+    }
+
+    @Override
     public void onFinishedGetChecklist(ArrayList<Checklist> checklistArrayList) {
         if (mChecklistView != null) {
             mChecklistView.setDataToChecklistRecyclerView(checklistArrayList);
@@ -93,6 +99,11 @@ ChecklistContract.GetChecklistsDataInteractor.OnFinishedDeleteChecklistListener{
         } else {
             mAllChecklistView.finishDeleteChecklist();
         }
+    }
+
+    @Override
+    public void onFinishedSetNameChecklist() {
+
     }
 
     @Override

@@ -1,28 +1,25 @@
 package com.example.workflow_s.network;
 
 import com.example.workflow_s.model.Checklist;
-import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ChecklistMember;
+import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Notification;
 import com.example.workflow_s.model.Organization;
+import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.Template;
 import com.example.workflow_s.model.User;
-import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.UserOrganization;
 
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -179,4 +176,7 @@ public interface ApiService {
 
     @POST("/api/Comments/comment")
     Call<ResponseBody> writeComment(@Body Comment comment);
+
+    @PUT("/api/Checklists/setname/{checklistid}/{name}")
+    Call<ResponseBody> setNameOfChecklist(@Path("checklistid") int checklistId, @Path("name") String name);
 }

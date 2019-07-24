@@ -2,8 +2,6 @@ package com.example.workflow_s.ui.home;
 
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
-import com.example.workflow_s.ui.base.MvpView;
-import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
 
@@ -21,6 +19,7 @@ public interface HomeContract {
         void loadRunningChecklists(String orgId);
         void loadDueTasks(String orgId, String userId);
         void deleteChecklist(int checklistId, String userId);
+        void setNameOfChecklist(int checklistId, String name);
     }
 
     interface HomeView  {
@@ -48,9 +47,15 @@ public interface HomeContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedSetNameOfChecklist {
+            void onFinishedSetNameChecklist();
+            void onFailure(Throwable t);
+        }
+
         void deleteChecklist(int checklistId, String userId, OnFinishedDeleteChecklistListener listener);
         void getAllRunningChecklists(String orgId, OnFinishedGetRunningChecklistsListener onFinishedListener);
         void getAllDueTasks(String orgId, String userId, OnFinishedGetDueTasksListener onFinishedListener);
+        void setNameOfChecklist(int checklistId, String name, OnFinishedSetNameOfChecklist onFinishedListener);
 
     }
 }
