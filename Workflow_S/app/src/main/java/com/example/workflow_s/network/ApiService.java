@@ -99,7 +99,7 @@ public interface ApiService {
 
     @POST("/api/Checklists/run/{userId}")
     Call<Checklist> runChecklist(@Path("userId") String userId,
-                                 @Body Template template);
+                                    @Body Template template);
 
     @GET("/api/UserOrganizations/organization/{userId}")
     Call<Organization> getOrganization(@Path("userId") String userId);
@@ -190,4 +190,7 @@ public interface ApiService {
     Call<ResponseBody> renameTask(@Path("taskid") int taskId,
                                   @Path("name") String taskName);
 
+
+    @PUT("/api/Checklists/setname/{checklistid}/{name}")
+    Call<ResponseBody> setNameOfChecklist(@Path("checklistid") int checklistId, @Path("name") String name);
 }

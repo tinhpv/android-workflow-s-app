@@ -1,13 +1,17 @@
 package com.example.workflow_s.ui.checklist.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -38,6 +42,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
 
     public interface EventListener {
         void onEvent(int deletedChecklistId);
+        void onChange(int checklistId, String name);
     }
 
     public CurrentChecklistAdapter(EventListener listener, Context context) {
@@ -51,6 +56,11 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     private List<Checklist> mChecklistsFull;
     private RecyclerView mRecyclerView;
     private Context mContext;
+    private Dialog changeDialog;
+    private EditText edtChecklistName;
+    private TextView idchecklist;
+    private int pos;
+    private boolean flag = false;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -61,10 +71,35 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     @NonNull
     @Override
     public CurrentChecklistViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, int i) {
-        Context context = viewGroup.getContext();
+        final Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
+        final View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
         final CurrentChecklistViewHolder viewHolder = new CurrentChecklistViewHolder(view);
+
+
+        //dialog
+        changeDialog = new Dialog(context);
+        changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        idchecklist = changeDialog.findViewById(R.id.id_checklist);
+        edtChecklistName = changeDialog.findViewById(R.id.edt_name);
+        Button saveName = changeDialog.findViewById(R.id.bt_save);
+        saveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onChange(Integer.parseInt(idchecklist.getText().toString()), edtChecklistName.getText().toString().trim());
+                changeDialog.cancel();
+                mChecklists.get(pos).setName(edtChecklistName.getText().toString());
+            }
+        });
+
+        Button cancel = changeDialog.findViewById(R.id.bt_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDialog.cancel();
+            }
+        });
 
         //checklist item click
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +111,18 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
                 args.putInt("location", 2);
                 args.putSerializable("listMember", mChecklists.get(index).getChecklistMembers());
                 CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args, true);
+            }
+        });
+        //checklist item long click
+        viewHolder.item.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                changeDialog.show();
+                int index = viewHolder.getAdapterPosition();
+                pos = index;
+                edtChecklistName.setText(mChecklists.get(index).getName());
+                idchecklist.setText(mChecklists.get(index).getId() + "");
+                return true;
             }
         });
         return viewHolder;

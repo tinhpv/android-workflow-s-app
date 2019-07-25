@@ -3,16 +3,8 @@ package com.example.workflow_s.ui.home;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,14 +16,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
-import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
+import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.home.adapter.TodayTaskAdapter;
 import com.example.workflow_s.ui.notification.NotificationFragment;
 import com.example.workflow_s.ui.template.TemplateFragment;
@@ -446,6 +446,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void onEvent(int deletedChecklistId, int position) {
         handleShowConfirmDialog(deletedChecklistId);
+    }
+
+    @Override
+    public void onChange(int checklistId, String name) {
+        mPresenter.setNameOfChecklist(checklistId, name);
+        mChecklistProgressAdapter.notifyDataSetChanged();
     }
 
     private void handleShowConfirmDialog(final int deletedChecklistId) {

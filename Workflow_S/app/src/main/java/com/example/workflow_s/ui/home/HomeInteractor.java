@@ -75,4 +75,22 @@ public class HomeInteractor implements HomeContract.GetHomeDataInteractor {
             }
         });
     }
+
+    @Override
+    public void setNameOfChecklist(int checklistId, String name,final OnFinishedSetNameOfChecklist onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.setNameOfChecklist(checklistId, name);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                onFinishedListener.onFinishedSetNameChecklist();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+    }
 }

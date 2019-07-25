@@ -23,6 +23,7 @@ public interface ChecklistContract {
         void loadFirstTaskFromChecklist(int checklistId, Checklist parentChecklistOfThisTask);
         void requestTemplateData(String orgId);
         void deleteChecklist(int checklistId, String userId);
+        void setNameOfChecklist(int checklistId, String name);
     }
 
     //view
@@ -62,9 +63,15 @@ public interface ChecklistContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedSetNameOfChecklist {
+            void onFinishedSetNameChecklist();
+            void onFailure(Throwable t);
+        }
+
         void getAllTemplates(String orgId, OnFinishedGetTemplateDataListener onFinishedListener);
         void deleteChecklist(int checklistId, String userId, OnFinishedDeleteChecklistListener listener);
         void getAllChecklist(String organizationId, OnFinishedGetChecklistListener onFinishedGetChecklistListener);
         void getFirstTask(int checklistId, Checklist parentChecklistOfThisTask, OnFinishedGetFirstTaskFormChecklistListener onFinishedListener);
+        void setNameOfChecklist(int checklistId, String name, OnFinishedSetNameOfChecklist onFinishedListener);
     }
 }

@@ -483,6 +483,13 @@ public class AllChecklistFragment extends Fragment implements ChecklistContract.
         handleShowConfirmDialog(deletedChecklistId);
     }
 
+    @Override
+    public void onChange(int checklistId, String name) {
+        mPresenter.setNameOfChecklist(checklistId, name);
+        //mCurrentChecklistAdapter.notifyDataSetChanged();
+        mCurrentChecklistAdapter.notifyDataSetChanged();
+    }
+
     private void handleShowConfirmDialog(final int deletedChecklistId) {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
