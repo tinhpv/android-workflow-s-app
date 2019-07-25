@@ -87,6 +87,24 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
     }
 
     @Override
+    public void changePriorityTasks(List<Task> taskList,final OnFinishedChangePriorityTasks listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.changePriority(taskList);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedChangePriorityTasks();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
     public void getAllTasks(int checklistId, final OnFinishedGetTasksListener onFinishedLIstener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<List<Task>> call = service.getTaskFromChecklist(checklistId);

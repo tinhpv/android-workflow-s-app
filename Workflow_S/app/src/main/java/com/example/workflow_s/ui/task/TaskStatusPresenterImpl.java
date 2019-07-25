@@ -17,7 +17,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener,
         TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener,
         TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener {
+        TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedChangePriorityTasks{
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -39,6 +40,11 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     @Override
     public void renameTask(int taskId, String taskName) {
         mGetTaskDataInteractor.renameTask(taskId, taskName, this);
+    }
+
+    @Override
+    public void changePriorityTaskList(List<Task> taskList) {
+        mGetTaskDataInteractor.changePriorityTasks(taskList, this);
     }
 
     @Override
@@ -114,6 +120,11 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     @Override
     public void onFinishedGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId) {
         mTaskView.finishGetTaskMember(taskMemberList, isSelected, taskId);
+    }
+
+    @Override
+    public void onFinishedChangePriorityTasks() {
+        Log.i("priority", "tra ve");
     }
 
     @Override

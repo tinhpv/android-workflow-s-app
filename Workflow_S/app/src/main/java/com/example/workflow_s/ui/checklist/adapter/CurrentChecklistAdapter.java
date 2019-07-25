@@ -272,4 +272,5 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         mChecklistsFull = new ArrayList<>(checklists);
         this.notifyDataSetChanged();
     }
+
 }

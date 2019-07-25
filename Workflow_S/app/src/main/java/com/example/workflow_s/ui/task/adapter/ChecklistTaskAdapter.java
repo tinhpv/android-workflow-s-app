@@ -6,12 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +17,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ChecklistMember;
@@ -31,7 +29,7 @@ import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragmen
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdapter.TaskViewHolder> {
@@ -44,9 +42,14 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         void onClickMenu(int taskId, String taskName, String action);
     }
 
+    public interface DragDropListener {
+        void onChangePriority(List<Task> taskList);
+    }
+
 
     CheckboxListener listener;
     MenuListener mMenuListener;
+    DragDropListener mDDListener;
     Context mContext;
 
 
@@ -103,10 +106,11 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     }
 
 
-    public ChecklistTaskAdapter(Context context, MenuListener menuListener, CheckboxListener checkboxListener) {
+    public ChecklistTaskAdapter(Context context, MenuListener menuListener, CheckboxListener checkboxListener, DragDropListener dragDropListener) {
         mContext = context;
         mMenuListener = menuListener;
         listener = checkboxListener;
+        mDDListener = dragDropListener;
     }
 
 
@@ -251,5 +255,22 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         } else {
             return mTaskList.size();
         } // end if
+    }
+
+    //drag and drop
+    public void onMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mTaskList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mTaskList, i, i - 1);
+            }
+        }
+        mTaskList.get(fromPosition).setPriority(fromPosition);
+        mTaskList.get(toPosition).setPriority(toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        mDDListener.onChangePriority(mTaskList);
     }
 }

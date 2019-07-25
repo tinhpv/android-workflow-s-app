@@ -1,25 +1,13 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
-import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,12 +19,17 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
@@ -44,16 +37,17 @@ import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.ui.task.ItemTouchListener;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
 import com.example.workflow_s.ui.task.TaskStatusPresenterImpl;
 import com.example.workflow_s.ui.task.adapter.ChecklistTaskAdapter;
+import com.example.workflow_s.ui.task.adapter.SimpleItemTouchHelperCallback;
 import com.example.workflow_s.ui.task.dialog.assignment.AssigningDialogFragment;
 import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,7 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChecklistTaskFragment extends Fragment
         implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener,
                     View.OnClickListener,
-                    ChecklistTaskAdapter.MenuListener {
+                    ChecklistTaskAdapter.MenuListener, ChecklistTaskAdapter.DragDropListener {
 
     private static final String TAG = "TASK_FRAGMENT";
 
@@ -89,7 +83,7 @@ public class ChecklistTaskFragment extends Fragment
 
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
-    private List<Task> tasks;
+    private List<Task> tasks, tasksPriority;
     private boolean isChecklistMember;
 
 
@@ -118,6 +112,7 @@ public class ChecklistTaskFragment extends Fragment
                 getActivity().setTitle("Active checklist");
                 break;
         }
+        mPresenter.changePriorityTaskList(tasksPriority);
         super.onDestroyView();
     }
 
@@ -173,7 +168,7 @@ public class ChecklistTaskFragment extends Fragment
         taskLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         checklistTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
-        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(getContext(), this, this);
+        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(getContext(), this, this, this);
         checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
     }
 
@@ -238,6 +233,7 @@ public class ChecklistTaskFragment extends Fragment
         if (null != taskList) {
             this.tasks = taskList;
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
+            addItemTouchCallback(checklistTaskRecyclerView);
         }
     }
 
@@ -422,6 +418,11 @@ public class ChecklistTaskFragment extends Fragment
 
     }
 
+    @Override
+    public void finishedChangePriority() {
+        Log.i("priority", "tra ve roi");
+    }
+
     private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
         if (isSelected) {
             doneTask++;
@@ -481,4 +482,24 @@ public class ChecklistTaskFragment extends Fragment
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
 
+    //drag and drop task
+    private void addItemTouchCallback(RecyclerView recyclerView) {
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(new ItemTouchListener() {
+            @Override
+            public void onMove(int oldPosition, int newPosition) {
+                mChecklistChecklistTaskAdapter.onMove(oldPosition, newPosition);
+            }
+        });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+
+    @Override
+    public void onChangePriority(List<Task> taskList) {
+        tasksPriority = new ArrayList<>();
+        tasksPriority = taskList;
+        mChecklistChecklistTaskAdapter.setTaskList(tasksPriority);
+        mChecklistChecklistTaskAdapter.notifyDataSetChanged();
+    }
 }

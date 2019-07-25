@@ -4,7 +4,6 @@ import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
-import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public interface TaskContract {
         void changeChecklistStatus(int checklistId, String status);
         void getUserInfor(String userId);
         void renameTask(int taskId, String taskName);
+        void changePriorityTaskList(List<Task> taskList);
     }
 
     interface TaskView {
@@ -31,6 +31,7 @@ public interface TaskContract {
         void finishRenameTask();
         void finishedLoadAllTasks(List<Task> taskList);
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
+        void finishedChangePriority();
     }
 
     interface TemplateView {
@@ -75,6 +76,11 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedChangePriorityTasks {
+            void onFinishedChangePriorityTasks();
+            void onFailure(Throwable t);
+        }
+
 
         void renameTask(int taskId, String taskName, OnFinishedRenameTaskListener listener);
         void getUserById(String userId, OnFinishedGetInforUserListener listener);
@@ -83,6 +89,7 @@ public interface TaskContract {
         void changeTaskStatus(String userId, int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void completeChecklist(int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);
         void getChecklistData(int orgId, int checklistId, OnFinishedLoadChecklistDataListener listener);
+        void changePriorityTasks(List<Task> taskList, OnFinishedChangePriorityTasks listener);
 
     }
 }
