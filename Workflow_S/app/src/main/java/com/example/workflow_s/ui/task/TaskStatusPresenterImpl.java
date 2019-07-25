@@ -100,8 +100,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     }
 
     @Override
-    public void changeChecklistStatus(int checklistId, String status) {
-        mGetTaskDataInteractor.completeChecklist(checklistId, status, this);
+    public void changeChecklistStatus(String userId, int checklistId, String status) {
+        mGetTaskDataInteractor.completeChecklist(userId, checklistId, status, this);
     }
 
     @Override

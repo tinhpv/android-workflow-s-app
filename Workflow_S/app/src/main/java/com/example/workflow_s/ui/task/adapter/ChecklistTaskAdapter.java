@@ -63,11 +63,15 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     private Dialog errorDialog;
     private List<ChecklistMember> mChecklistMembers;
     private int checklistId;
-    private String userId, checklistUserId;
+    private String userId, checklistUserId, checklistStatus;
 
 
     public void setChecklistId(int checklistId) {
         this.checklistId = checklistId;
+    }
+
+    public void setChecklistStatus(String checklistStatus) {
+        this.checklistStatus = checklistStatus;
     }
 
     public void setChecklistUserId(String checklistUserId) {
@@ -150,7 +154,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         });
         userId = SharedPreferenceUtils.retrieveData(viewGroup.getContext(), viewGroup.getContext().getString(R.string.pref_userId));
 
-        //task item click
+        // task item click
         viewHolder.mTaskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,10 +163,10 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 Bundle args = new Bundle();
 
                 args.putString("taskId", String.valueOf(mTaskList.get(index).getId()));
-                args.putString("taskName", mTaskList.get(index).getName());
                 args.putInt("location_activity", 2);
                 args.putInt("checklistId", checklistId);
                 args.putString("checklistUserId", checklistUserId);
+                args.putString("checklistStatus", checklistStatus);
 
                 boolean flag = false;
 
@@ -224,19 +228,24 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
 
         // checkbox
-        if (!currentTask.getTaskStatus().equals("Failed")) {
-            taskViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    } else {
-                        taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-                    }
+        if ((checklistStatus != null) && (!checklistStatus.equals("Done"))) {
+            if (!currentTask.getTaskStatus().equals("Failed") && (!currentTask.getTaskStatus().equals("Done"))) {
+                taskViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        } else {
+                            taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
 
-                    listener.onEventCheckBox(isChecked, mTaskList.get((Integer) taskViewHolder.mCheckBox.getTag()).getId(), (Integer) taskViewHolder.mCheckBox.getTag());
-                }
-            });
+                        listener.onEventCheckBox(isChecked, mTaskList.get((Integer) taskViewHolder.mCheckBox.getTag()).getId(),
+                                (Integer) taskViewHolder.mCheckBox.getTag());
+                    }
+                });
+            }
+        } else {
+            taskViewHolder.mCheckBox.setEnabled(false);
         }
 
 
@@ -276,6 +285,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                         }
                     }
                 });
+
                 popup.show();
             }
         });
@@ -310,6 +320,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 Collections.swap(mTaskList, i, i - 1);
             }
         }
+
         mTaskList.get(fromPosition).setPriority(fromPosition);
         mTaskList.get(toPosition).setPriority(toPosition);
         notifyItemMoved(fromPosition, toPosition);

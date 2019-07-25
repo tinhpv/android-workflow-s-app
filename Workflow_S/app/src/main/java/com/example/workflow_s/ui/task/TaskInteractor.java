@@ -159,9 +159,9 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
     }
 
     @Override
-    public void completeChecklist(int checklistId, final String taskStatus, final OnFinishedChangeChecklistStatusListener listener) {
+    public void completeChecklist(String userId, int checklistId, final String taskStatus, final OnFinishedChangeChecklistStatusListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.completeChecklist(checklistId, taskStatus);
+        Call<ResponseBody> call = service.completeChecklist(checklistId, taskStatus, userId);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -143,9 +143,10 @@ public interface ApiService {
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
-    @PUT("/api/Checklists/setstatus/{checklistid}/{status}")
+    @PUT("/api/Checklists/setstatus/{checklistid}/{status}/{userid}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId,
-                                         @Path("status") String status);
+                                         @Path("status") String status,
+                                         @Path("userid") String userId);
 
     @DELETE("/api/Checklists/delete/{checklistid}/{userId}")
     Call<ResponseBody> deleteChecklist(@Path("checklistid") int checklistId,
@@ -187,6 +188,9 @@ public interface ApiService {
     Call<ResponseBody> renameTask(@Path("taskid") int taskId,
                                   @Path("name") String taskName);
 
+
+    @GET("/api/Comments/tasknotification/{taskid}")
+    Call<List<Notification>> getAllNotifs(@Path("taskid") int taskId);
 
     @PUT("/api/Checklists/setname/{checklistid}/{name}")
     Call<ResponseBody> setNameOfChecklist(@Path("checklistid") int checklistId, @Path("name") String name);
