@@ -495,6 +495,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onChange(int checklistId, String name) {
         mPresenter.setNameOfChecklist(checklistId, name);
+        mCurrentChecklistAdapter.notifyDataSetChanged();
     }
 
     private void handleShowConfirmDialog(final int deletedChecklistId) {

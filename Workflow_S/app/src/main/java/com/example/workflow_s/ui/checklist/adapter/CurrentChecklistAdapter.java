@@ -60,6 +60,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     private EditText edtChecklistName;
     private TextView idchecklist;
     private int pos;
+    private boolean flag = false;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -88,6 +89,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
             public void onClick(View v) {
                 listener.onChange(Integer.parseInt(idchecklist.getText().toString()), edtChecklistName.getText().toString().trim());
                 changeDialog.cancel();
+                mChecklists.get(pos).setName(edtChecklistName.getText().toString());
             }
         });
 
@@ -244,8 +246,6 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         Checklist checklist = mChecklists.get(position);
         listener.onEvent(checklist.getId());
     }
-
-
 
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {

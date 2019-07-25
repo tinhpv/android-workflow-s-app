@@ -401,6 +401,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void onChange(int checklistId, String name) {
         mPresenter.setNameOfChecklist(checklistId, name);
+        mChecklistProgressAdapter.notifyDataSetChanged();
     }
 
     private void handleShowConfirmDialog(final int deletedChecklistId) {
