@@ -5,6 +5,7 @@ import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
+import com.example.workflow_s.ui.organization.OrganizationContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public interface TaskContract {
         void changeChecklistStatus(int checklistId, String status);
         void getUserInfor(String userId);
         void renameTask(int taskId, String taskName);
+
+        void getUserList(int orgId);
     }
 
     interface TaskView {
@@ -31,6 +34,7 @@ public interface TaskContract {
         void finishRenameTask();
         void finishedLoadAllTasks(List<Task> taskList);
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
+        void finishGetUserList(List<User> userList);
     }
 
     interface TemplateView {
@@ -75,7 +79,12 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetMembers {
+            void onFinishedGetMembers(List<User> userList);
+            void onFailure(Throwable t);
+        }
 
+        void getMemberOrganization(int orgId, OnFinishedGetMembers onFinishedListener);
         void renameTask(int taskId, String taskName, OnFinishedRenameTaskListener listener);
         void getUserById(String userId, OnFinishedGetInforUserListener listener);
         void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);

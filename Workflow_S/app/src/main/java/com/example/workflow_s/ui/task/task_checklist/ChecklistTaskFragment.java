@@ -57,6 +57,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -90,6 +91,7 @@ public class ChecklistTaskFragment extends Fragment
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
     private List<Task> tasks;
+    private HashMap<Integer, Integer> taskPositions;
     private boolean isChecklistMember;
 
 
@@ -163,8 +165,10 @@ public class ChecklistTaskFragment extends Fragment
         mUsername = view.findViewById(R.id.tv_user_display_name);
         mTimeCreated = view.findViewById(R.id.tv_time_created);
 
+
         setupTaskRV();
         initData();
+
     }
 
     private void setupTaskRV() {
@@ -178,6 +182,9 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     public void initData() {
+
+        taskPositions = new HashMap<>();
+
         // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
@@ -192,8 +199,7 @@ public class ChecklistTaskFragment extends Fragment
 
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
-
-
+        mPresenter.getUserList(Integer.parseInt(orgId));
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
         mPresenter.loadTasks(checklistId);
     }
@@ -242,6 +248,13 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     @Override
+    public void finishGetUserList(List<User> userList) {
+        if (userList != null) {
+            mChecklistChecklistTaskAdapter.setUserList(userList);
+        }
+    }
+
+    @Override
     public void finishGetInfo(User user) {
         if (null != user) {
             Glide.with(getContext()).load(user.getAvatar()).into(userImg);
@@ -266,11 +279,12 @@ public class ChecklistTaskFragment extends Fragment
 
 
     @Override
-    public void onEventCheckBox(Boolean isSelected, int taskId) {
+    public void onEventCheckBox(Boolean isSelected, int taskId, int position) {
         if (!checklistStatus.equals("Done")) {
             if (userId.equals(checklistUserId)) {
-                handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+                handleTickTaskOnChecklistTaskFragment(taskId, isSelected, position);
             } else {
+                taskPositions.put(taskId, position);
                 mPresenter.getTaskMember(taskId, isSelected);
             } // end if
         } // end if
@@ -278,6 +292,7 @@ public class ChecklistTaskFragment extends Fragment
 
     @Override
     public void onClickMenu(int taskId, String taskName, String action) {
+
         if (action.equals(getString(R.string.item_action_rename))) { // RENAME
             prepareDisplayRenameDialog(taskId, taskName);
         } else if (action.equals(getActivity().getString(R.string.item_action_skip))) { // SKIP
@@ -298,6 +313,7 @@ public class ChecklistTaskFragment extends Fragment
             @Override
             public void onClick(View v) {
                 mPresenter.changeTaskStatus(userId, taskId, "Running");
+                totalTask++;
                 dialog.dismiss();
             }
         });
@@ -315,6 +331,7 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     private void prepareDisplaySkipTaskDialog(final int taskId) {
+
         final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_skip_task, null);
@@ -325,6 +342,7 @@ public class ChecklistTaskFragment extends Fragment
             @Override
             public void onClick(View v) {
                 mPresenter.changeTaskStatus(userId, taskId, "Failed");
+                totalTask--;
                 dialog.dismiss();
             }
         });
@@ -414,7 +432,8 @@ public class ChecklistTaskFragment extends Fragment
         }
 
         if (isTaskMember) {
-            handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+            int position = taskPositions.get(taskId);
+            handleTickTaskOnChecklistTaskFragment(taskId, isSelected, position);
         } else {
             CommonUtils.showDialog(getContext(), "You're not assigned to this task, so you cannot complete it");
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
@@ -422,12 +441,21 @@ public class ChecklistTaskFragment extends Fragment
 
     }
 
-    private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
+    private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected, int position) {
+
+        Task currentTask = tasks.get(position);
+        mChecklistChecklistTaskAdapter.setTaskList(tasks);
+
         if (isSelected) {
             doneTask++;
+            currentTask.setTaskStatus("Done");
+            currentTask.setActionUser(userId);
             mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_done));
+
         } else {
             doneTask--;
+            currentTask.setTaskStatus("Failed");
+            currentTask.setActionUser(userId);
             mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_running));
         }
 
@@ -450,11 +478,15 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     private void handleCompleteChecklist(String status) {
+
         updateButtonAppearanceByStatus(status);
+
         if (status.equals("Done")) {
             showDialogCongrats();
         }
+
         mPresenter.changeChecklistStatus(checklistId, status);
+
     }
 
     private void showDialogCongrats() {
@@ -478,7 +510,8 @@ public class ChecklistTaskFragment extends Fragment
     @Override
     public void finishChangeChecklistStatus(String status) {
         checklistStatus = status;
-        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        mPresenter.loadTasks(checklistId);
+        doneTask = totalTask;
     }
 
 }

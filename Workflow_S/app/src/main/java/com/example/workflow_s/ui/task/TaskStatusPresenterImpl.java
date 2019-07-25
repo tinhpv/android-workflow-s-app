@@ -17,7 +17,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener,
         TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener,
         TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener {
+        TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedGetMembers {
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -34,6 +35,16 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         this.mTemplateView = mTaskView;
         this.mTaskView = null;
         this.mGetTaskDataInteractor = mGetTaskDataInteractor;
+    }
+
+    @Override
+    public void getUserList(int orgId) {
+        mGetTaskDataInteractor.getMemberOrganization(orgId, this);
+    }
+
+    @Override
+    public void onFinishedGetMembers(List<User> userList) {
+        mTaskView.finishGetUserList(userList);
     }
 
     @Override
