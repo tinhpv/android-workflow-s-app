@@ -94,8 +94,6 @@ public class ChecklistTaskFragment extends Fragment
     private HashMap<Integer, Integer> taskPositions;
     private boolean isChecklistMember;
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,6 +197,7 @@ public class ChecklistTaskFragment extends Fragment
 
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
+
         mPresenter.getUserList(Integer.parseInt(orgId));
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
         mPresenter.loadTasks(checklistId);
@@ -510,6 +509,12 @@ public class ChecklistTaskFragment extends Fragment
     @Override
     public void finishChangeChecklistStatus(String status) {
         checklistStatus = status;
+        updateButtonAppearanceByStatus(checklistStatus);
+        if (checklistStatus.equals("Done")) {
+            mChecklistCompletedAlert.setVisibility(View.VISIBLE);
+        } else {
+            mChecklistCompletedAlert.setVisibility(View.GONE);
+        }
         mPresenter.loadTasks(checklistId);
         doneTask = totalTask;
     }

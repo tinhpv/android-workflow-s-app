@@ -368,18 +368,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
             for (Checklist checklist : datasource) {
                 if (checklist.getUserId().equals(userId)) {
                     countChecklistByType(checklist);
+                } else {
+                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                    if (listMember != null) {
+
+                        for (ChecklistMember member : listMember) {
+                            if (member.getUserId().equals(userId)) {
+                                countChecklistByType(checklist);
+                            } // end if
+                        } // end for
+                    } // end if
                 }
-//                else {
-//                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
-//                    if (listMember != null) {
-//
-//                        for (ChecklistMember member : listMember) {
-//                            if (member.getUserId().equals(userId)) {
-//                                countChecklistByType(checklist);
-//                            } // end if
-//                        } // end for
-//                    } // end if
-//                }
             }
 
             ValueAnimator animator = ValueAnimator.ofInt(0, completedChecklistNum);
