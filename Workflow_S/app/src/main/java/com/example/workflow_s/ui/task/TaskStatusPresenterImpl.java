@@ -16,7 +16,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         TaskContract.GetTaskDataInteractor.OnFinishedLoadChecklistDataListener,
         TaskContract.GetTaskDataInteractor.OnFinishedChangeChecklistStatusListener,
         TaskContract.GetTaskDataInteractor.OnFinishedGetTaskMemberListener,
-        TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener{
+        TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener,
+        TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener {
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -33,6 +34,16 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         this.mTemplateView = mTaskView;
         this.mTaskView = null;
         this.mGetTaskDataInteractor = mGetTaskDataInteractor;
+    }
+
+    @Override
+    public void renameTask(int taskId, String taskName) {
+        mGetTaskDataInteractor.renameTask(taskId, taskName, this);
+    }
+
+    @Override
+    public void onFinishedRenameTask() {
+        mTaskView.finishRenameTask();
     }
 
     @Override
@@ -56,8 +67,8 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
     }
 
     @Override
-    public void changeTaskStatus(int taskId, String taskStatus) {
-        mGetTaskDataInteractor.completeTask(taskId, taskStatus, this);
+    public void changeTaskStatus(String userId, int taskId, String taskStatus) {
+        mGetTaskDataInteractor.changeTaskStatus(userId, taskId, taskStatus, this);
     }
 
     @Override
@@ -77,12 +88,17 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
 
     @Override
     public void onFinishedGetTasks(ArrayList<Task> taskArrayList) {
-        mTemplateView.setDataToTaskRecyclerView(taskArrayList);
+        if (mTaskView == null) {
+            mTemplateView.setDataToTaskRecyclerView(taskArrayList);
+        } else {
+            mTaskView.finishedLoadAllTasks(taskArrayList);
+        }
+
     }
 
     @Override
-    public void onFinishedChangeTaskStatus() {
-        mTaskView.finishedChangeTaskStatus();
+    public void onFinishedChangeTaskStatus(String status) {
+        mTaskView.finishedChangeTaskStatus(status);
     }
 
     @Override

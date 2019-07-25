@@ -35,7 +35,7 @@ import java.util.ArrayList;
  **/
 
 
-public class TemplateTaskFragment extends Fragment implements TaskContract.TemplateView, TemplateTaskAdapter.CheckboxListener, View.OnClickListener {
+public class TemplateTaskFragment extends Fragment implements TaskContract.TemplateView, View.OnClickListener {
 
     private static final String TAG = "TEMPLATE_TASK_FRAGMENT";
 
@@ -107,19 +107,13 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
         taskLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         templateTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
-        mTemplateTaskAdapter = new TemplateTaskAdapter(this, this);
+        mTemplateTaskAdapter = new TemplateTaskAdapter(this);
         templateTaskRecyclerView.setAdapter(mTemplateTaskAdapter);
     }
 
     @Override
     public void setDataToTaskRecyclerView(ArrayList<Task> datasource) {
         mTemplateTaskAdapter.setTemplateTaskList(datasource);
-    }
-
-    @Override
-    public void onEventCheckBox(Boolean isSelected) {
-        Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
-        btnRunChecklist.startAnimation(shakeAnimation);
     }
 
     @Override

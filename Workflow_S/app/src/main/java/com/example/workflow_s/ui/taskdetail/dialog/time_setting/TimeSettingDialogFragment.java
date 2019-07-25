@@ -121,7 +121,9 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
             setDateButton.setVisibility(View.VISIBLE);
             setDateButton.setOnClickListener(this);
             setTimeButton.setOnClickListener(this);
+
         } else {
+
             saveButton.setVisibility(View.GONE);
             cancelButton.setVisibility(View.GONE);
             okButton.setVisibility(View.VISIBLE);
@@ -134,11 +136,15 @@ public class TimeSettingDialogFragment extends DialogFragment implements View.On
 
     private boolean checkIfUserIsTaskMember() {
         String userId = SharedPreferenceUtils.retrieveData(getActivity(), getActivity().getString(R.string.pref_userId));
+        TaskMember tempMember = new TaskMember(null, taskId, userId);
+        mTaskMemberList.add(tempMember);
+
         for (TaskMember member : mTaskMemberList) {
             if (userId.equals(member.getUserId())) {
                 return true;
             }
         }
+
         return false;
     }
 

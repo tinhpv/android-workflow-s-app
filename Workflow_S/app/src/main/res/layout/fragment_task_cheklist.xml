@@ -131,7 +131,7 @@
                         android:layout_below="@id/container_infor"
                         android:layout_marginLeft="20dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/light_blue" />
+                        android:background="@color/home_red" />
 
                     <LinearLayout
                         android:id="@+id/container_time_created"
@@ -204,7 +204,7 @@
                 android:fontFamily="@font/avenir_light"
                 android:justificationMode="inter_word"
                 android:lineSpacingMultiplier="1.25"
-                android:text="567890987656786567897654678"
+                android:text=""
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="15sp" />
 

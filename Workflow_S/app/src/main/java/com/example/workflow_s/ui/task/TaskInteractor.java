@@ -17,6 +17,22 @@ import retrofit2.Response;
 
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
 
+    @Override
+    public void renameTask(int taskId, String taskName, final OnFinishedRenameTaskListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.renameTask(taskId, taskName);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedRenameTask();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void getUserById(String userId, final OnFinishedGetInforUserListener listener) {
@@ -89,13 +105,13 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
     }
 
     @Override
-    public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
+    public void changeTaskStatus(String userId, int taskId, final String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.completeTask(taskId, taskStatus);
+        Call<ResponseBody> call = service.changeTaskStatus(userId, taskId, taskStatus);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedChangeTaskStatus();
+                listener.onFinishedChangeTaskStatus(taskStatus);
             }
 
             @Override

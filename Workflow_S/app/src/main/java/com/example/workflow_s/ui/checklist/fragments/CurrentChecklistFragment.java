@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ import com.example.workflow_s.ui.checklist.adapter.SwipeToDeleteCallBack;
 import com.example.workflow_s.ui.checklist.dialog_fragment.ChecklistDialogFragment;
 import com.example.workflow_s.ui.checklist.dialog_fragment.StatusChecklistDialogFragment;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,6 +71,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     private String template = "All", status = "All";
 
     private ChecklistContract.ChecklistPresenter mPresenter;
+    private ShimmerFrameLayout templateLoadingFrame;
+    private LinearLayout checklistDataNotFound;
     //private LinearLayout mChecklistDataStatusMessage;
 
     public CurrentChecklistFragment() {}
@@ -106,6 +110,13 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        templateLoadingFrame.setVisibility(View.VISIBLE);
+        templateLoadingFrame.startShimmerAnimation();
     }
 
     @Override
@@ -148,6 +159,9 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         btnTemplateFilter = view.findViewById(R.id.bt_template_checklist);
         btnTemplateFilter.setOnClickListener(this);
         btnTemplateFilter.setText("All");
+
+        templateLoadingFrame = view.findViewById(R.id.checklist_shimmer_view);
+        checklistDataNotFound = view.findViewById(R.id.checklist_data_notfound_message);
 
         btnStatusFiler = view.findViewById(R.id.bt_status_checklist);
         btnStatusFiler.setOnClickListener(this);
@@ -215,26 +229,35 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
-        if (null != datasource) {
-            currentChecklist = new ArrayList<>();
+        templateLoadingFrame.stopShimmerAnimation();
+        templateLoadingFrame.setVisibility(View.GONE);
 
-            for (Checklist checklist : datasource) {
-                filterDueTimeofChecklist(checklist);
-                if (checklist.getUserId().equals(userId)) {
-                    currentChecklist.add(checklist);
-                } else {
-                    checklistMembers = new ArrayList<>();
-                    checklistMembers = checklist.getChecklistMembers();
-                    if (checklistMembers != null) {
-                        for (ChecklistMember member : checklistMembers) {
-                            if (member.getUserId().equals(userId)) {
-                                currentChecklist.add(checklist);
+        if (null != datasource) {
+
+            if (datasource.size() == 0) {
+                checklistDataNotFound.setVisibility(View.VISIBLE);
+            } else {
+                currentChecklist = new ArrayList<>();
+
+                for (Checklist checklist : datasource) {
+                    filterDueTimeofChecklist(checklist);
+                    if (checklist.getUserId().equals(userId)) {
+                        currentChecklist.add(checklist);
+                    } else {
+                        checklistMembers = new ArrayList<>();
+                        checklistMembers = checklist.getChecklistMembers();
+                        if (checklistMembers != null) {
+                            for (ChecklistMember member : checklistMembers) {
+                                if (member.getUserId().equals(userId)) {
+                                    currentChecklist.add(checklist);
+                                }
                             }
                         }
-                    }
-                } // end if
-            } // end for
-            mCurrentChecklistAdapter.setChecklists(currentChecklist);
+                    } // end if
+                } // end for
+                mCurrentChecklistAdapter.setChecklists(currentChecklist);
+            }
+
         } // end if null
     }
 

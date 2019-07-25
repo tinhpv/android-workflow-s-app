@@ -74,10 +74,10 @@ public class TaskDetailInteractor implements TaskDetailContract.GetTaskDetailDat
     }
 
     @Override
-    public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
+    public void completeTask(String userId, int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
 
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.completeTask(taskId, taskStatus);
+        Call<ResponseBody> call = service.changeTaskStatus(userId, taskId, taskStatus);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

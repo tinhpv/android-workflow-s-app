@@ -1,6 +1,7 @@
 package com.example.workflow_s.ui.task.task_checklist;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -25,10 +26,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -62,7 +68,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  **/
 
 
-public class ChecklistTaskFragment extends Fragment implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener, View.OnClickListener {
+public class ChecklistTaskFragment extends Fragment
+        implements TaskContract.TaskView, ChecklistTaskAdapter.CheckboxListener,
+                    View.OnClickListener,
+                    ChecklistTaskAdapter.MenuListener {
 
     private static final String TAG = "TASK_FRAGMENT";
 
@@ -80,7 +89,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
-    private ArrayList<Task> tasks;
+    private List<Task> tasks;
     private boolean isChecklistMember;
 
 
@@ -164,7 +173,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         taskLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         checklistTaskRecyclerView.setLayoutManager(taskLayoutManager);
 
-        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(this);
+        mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(getContext(), this, this);
         checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
     }
 
@@ -174,7 +183,7 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
         location = arguments.getInt("location");
         checklistMembers = new ArrayList<>();
-        checklistMembers = (ArrayList<ChecklistMember>) arguments.getSerializable("listMember");
+//        checklistMembers = (ArrayList<ChecklistMember>) arguments.getSerializable("listMember");
 
         // USER's DATA
         userId = SharedPreferenceUtils.retrieveData(getContext(), getString(R.string.pref_userId));
@@ -183,7 +192,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
 
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
+
+
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        mPresenter.loadTasks(checklistId);
     }
 
 
@@ -197,9 +209,8 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
             timeCreatedString = checklist.getTimeCreated();
             totalTask = checklist.getTotalTask();
             doneTask = checklist.getDoneTask();
-            tasks = (ArrayList<Task>) checklist.getTaskItems();
 
-            mChecklistChecklistTaskAdapter.setTaskList(tasks);
+            checklistMembers = checklist.getChecklistMembers();
             mChecklistChecklistTaskAdapter.setChecklistMembers(checklistMembers);
 
             mChecklistName.setText(checklistName);
@@ -219,7 +230,14 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
                 mChecklistCompletedAlert.setVisibility(View.GONE);
             }
             mPresenter.getUserInfor(checklistUserId);
+        }
+    }
 
+    @Override
+    public void finishedLoadAllTasks(List<Task> taskList) {
+        if (null != taskList) {
+            this.tasks = taskList;
+            mChecklistChecklistTaskAdapter.setTaskList(tasks);
         }
     }
 
@@ -254,9 +272,116 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
                 handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
             } else {
                 mPresenter.getTaskMember(taskId, isSelected);
-            }
-        }
+            } // end if
+        } // end if
+    }
 
+    @Override
+    public void onClickMenu(int taskId, String taskName, String action) {
+        if (action.equals(getString(R.string.item_action_rename))) { // RENAME
+            prepareDisplayRenameDialog(taskId, taskName);
+        } else if (action.equals(getActivity().getString(R.string.item_action_skip))) { // SKIP
+            prepareDisplaySkipTaskDialog(taskId);
+        } else {
+            prepareDisplayReactivateDialog(taskId);
+        }
+    }
+
+    private void prepareDisplayReactivateDialog(final int taskId) {
+        final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_skip_task, null);
+        Button confirmButton = dialogView.findViewById(R.id.btn_ok);
+        Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.changeTaskStatus(userId, taskId, "Running");
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setView(dialogView);
+        dialog.show();
+    }
+
+    private void prepareDisplaySkipTaskDialog(final int taskId) {
+        final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_skip_task, null);
+        Button confirmButton = dialogView.findViewById(R.id.btn_ok);
+        Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.changeTaskStatus(userId, taskId, "Failed");
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setView(dialogView);
+        dialog.show();
+
+    }
+
+    private void prepareDisplayRenameDialog(final int taskId, final String oldTaskName) {
+        final AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_rename_task, null);
+        final EditText editedTaskName = dialogView.findViewById(R.id.edt_task_name_editted);
+        editedTaskName.setText(oldTaskName);
+        Button confirmButton = dialogView.findViewById(R.id.btn_confirm);
+        Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = editedTaskName.getText().toString();
+                if (newName.trim().length() == 0) {
+                    Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
+                    editedTaskName.startAnimation(shakeAnimation);
+                }  else if (!newName.trim().equals(oldTaskName.trim())) {
+                    mPresenter.renameTask(taskId, newName);
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setView(dialogView);
+        dialog.show();
+
+    }
+
+    @Override
+    public void finishRenameTask() {
+        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
     }
 
     private boolean isChecklistMember() {
@@ -269,8 +394,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     }
 
     @Override
-    public void finishedChangeTaskStatus() {
-
+    public void finishedChangeTaskStatus(String status) {
+        if (status.equals("Failed") || status.equals("Running")) {
+            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -298,10 +425,10 @@ public class ChecklistTaskFragment extends Fragment implements TaskContract.Task
     private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
         if (isSelected) {
             doneTask++;
-            mPresenter.changeTaskStatus(taskId, getActivity().getString(R.string.task_done));
+            mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_done));
         } else {
             doneTask--;
-            mPresenter.changeTaskStatus(taskId, getActivity().getString(R.string.task_running));
+            mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_running));
         }
 
         if (doneTask == totalTask) {

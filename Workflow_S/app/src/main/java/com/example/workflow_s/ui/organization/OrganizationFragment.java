@@ -179,6 +179,7 @@ public class OrganizationFragment extends Fragment implements OrganizationContra
             }
 
         }
+
     }
 
     @Override

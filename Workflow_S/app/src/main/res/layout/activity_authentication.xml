@@ -10,13 +10,14 @@
         android:id="@+id/phone_submit_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="My number is"
             android:fontFamily="@font/avenir_heavy"
-            android:textSize="40sp"
+            android:textSize="35dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="60dp" />
 
@@ -63,28 +64,55 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <TextView
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="My code is"
-           android:fontFamily="@font/avenir_heavy"
-           android:textSize="40sp"
-           android:layout_marginLeft="20dp"
-           android:layout_marginTop="60dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="20dp">
 
 
-       <com.goodiebag.pinview.Pinview
-           android:id="@+id/pinView"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           app:pinWidth="50dp"
-           app:pinHeight="50dp"
-           app:pinLength="6"
-           app:cursorVisible="false"
-           app:forceKeyboard="true"
-           app:inputType="number"
-           app:password="false"
-           app:textSize="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My code is"
+                android:fontFamily="@font/avenir_heavy"
+                android:textSize="40dp"
+                android:layout_marginLeft="20dp"
+                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resend"
+                android:fontFamily="@font/avenir_heavy_oblique"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"
+                android:textColor="@color/gray"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="160dp"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/container_infor"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/light_blue" />
+
+        <com.goodiebag.pinview.Pinview
+            android:id="@+id/pinView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:pinWidth="45dp"
+            app:pinHeight="45dp"
+            app:pinLength="6"
+            app:cursorVisible="false"
+            app:forceKeyboard="true"
+            app:inputType="number"
+            app:password="false"
+            app:textSize="10dp" />
 
 
        <Button
