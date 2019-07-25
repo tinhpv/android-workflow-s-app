@@ -25,7 +25,10 @@ public class ChecklistPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                return CurrentChecklistFragment.newInstance();
+//                Bundle args = new Bundle();
+//                args.putInt("status_checklist_current", status);
+//                CurrentChecklistFragment.newInstance().setArguments(args);
+                return CurrentChecklistFragment.newInstance(status);
             case 1:
                 return AllChecklistFragment.newInstance();
             default:
@@ -50,6 +53,7 @@ public class ChecklistPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return numberOfTabs;
     }
+
 
 
 }
