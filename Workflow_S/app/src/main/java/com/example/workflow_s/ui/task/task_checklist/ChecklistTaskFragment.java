@@ -114,6 +114,8 @@ public class ChecklistTaskFragment extends Fragment
                 getActivity().setTitle("Active checklist");
                 break;
         }
+        tasksPriority = new ArrayList<>();
+        tasksPriority = mChecklistChecklistTaskAdapter.getTaskList();
         mPresenter.changePriorityTaskList(tasksPriority);
         super.onDestroyView();
     }
@@ -529,9 +531,9 @@ public class ChecklistTaskFragment extends Fragment
 
     @Override
     public void onChangePriority(List<Task> taskList) {
-        tasksPriority = new ArrayList<>();
-        tasksPriority = taskList;
-        mChecklistChecklistTaskAdapter.setTaskList(tasksPriority);
-        mChecklistChecklistTaskAdapter.notifyDataSetChanged();
+//        tasksPriority = new ArrayList<>();
+//        tasksPriority = taskList;
+//        mChecklistChecklistTaskAdapter.setTaskList(tasksPriority);
+//        mChecklistChecklistTaskAdapter.notifyDataSetChanged();
     }
 }

@@ -10,7 +10,11 @@ import com.example.workflow_s.ui.checklist.fragments.CurrentChecklistFragment;
 
 public class ChecklistPagerAdapter extends FragmentPagerAdapter {
 
-    private int numberOfTabs;
+    private int numberOfTabs, status;
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public ChecklistPagerAdapter(FragmentManager fm, int numberOfTabs) {
         super(fm);
@@ -46,4 +50,6 @@ public class ChecklistPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return numberOfTabs;
     }
+
+
 }

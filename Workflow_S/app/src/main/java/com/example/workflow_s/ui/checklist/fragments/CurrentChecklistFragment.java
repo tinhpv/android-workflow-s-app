@@ -66,6 +66,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     private List<ChecklistMember> checklistMembers;
     private List<Template> templateList;
     private String userId, orgId, selectedTemplate, selectedStatus;
+    private int statusChecklist = 0;
 
     private boolean flagTemplate = false, flagStatus = false;
     private String template = "All", status = "All";
@@ -167,8 +168,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         btnStatusFiler.setOnClickListener(this);
         btnStatusFiler.setText("All");
 
-        selectedTemplate = "All";
-        selectedStatus = "All";
+//        selectedTemplate = "All";
+//        selectedStatus = "All";
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         setupChecklistRV();
         initData();
@@ -195,6 +196,9 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     }
 
     private void initData() {
+        //Bundle args = getArguments();
+        //statusChecklist = args.getInt("status_checklist");
+       // switchStatusChecklist(statusChecklist);
         mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
         orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
         userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
@@ -202,6 +206,34 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         mPresenter.requestTemplateData(orgId);
         myStatusChecklist = new ArrayList<>();
         myTemplateChecklist = new ArrayList<>();
+    }
+
+    private void switchStatusChecklist(int statusChecklist) {
+        mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
+        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+        mPresenter.loadAllChecklist(orgId);
+        mPresenter.requestTemplateData(orgId);
+        myStatusChecklist = new ArrayList<>();
+        myTemplateChecklist = new ArrayList<>();
+        switch (statusChecklist) {
+            case 1:
+                selectedTemplate = "All";
+                selectedStatus = "Done";
+                break;
+            case 2:
+                selectedTemplate = "All";
+                selectedStatus = "Running";
+                break;
+            case 3:
+                selectedTemplate = "All";
+                selectedStatus = "Expired";
+                break;
+                default:
+                    selectedTemplate = "All";
+                    selectedStatus = "All";
+                    break;
+        }
     }
 
     private void setupChecklistRV() {
@@ -256,6 +288,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                     } // end if
                 } // end for
                 mCurrentChecklistAdapter.setChecklists(currentChecklist);
+                //categorizeChecklist(selectedTemplate, selectedStatus);
             }
 
         } // end if null
@@ -306,15 +339,6 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onFinishSelectTemplate(String template) {
         btnTemplateFilter.setText(template);
-
-//        Template tmpTemplate = null;
-//        for (Template template1 : templateList) {
-//            if (template1.getName().equals(template)) {
-//                tmpTemplate = template1;
-//            }
-//        }
-
-        //categorizeTemplate(tmpTemplate);
         selectedTemplate = template;
         categorizeChecklist(template, selectedStatus);
     }
@@ -550,7 +574,6 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     @Override
     public void onFinishSelectStatus(String status) {
         btnStatusFiler.setText(status);
-        //categorizeStatus(status);
         selectedStatus = status;
         categorizeChecklist(selectedTemplate, status);
     }
