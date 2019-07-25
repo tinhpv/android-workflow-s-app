@@ -7,7 +7,7 @@
     <string name="login_button">Login with Google</string>
     <string name="button_template">template</string>
     <string name="button_checklist">checklist</string>
-    <string name="button_activity">activity</string>
+    <string name="button_activity">task</string>
 
 
     <!--App Message-->
@@ -46,6 +46,7 @@
     <string name="no_data_checklist_message">Your in-progress checklist will appear here.</string>
     <string name="no_data_task_message">Your task that will be due today will appear here.</string>
     <string name="no_data_comment_message">Your comment will appear here.</string>
+    <string name="no_data_task_message_2">Your tasks will appear here.</string>
 
     <!--task status value-->
     <string name="task_done">Done</string>
@@ -58,6 +59,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="item_action_rename">rename</string>
+    <string name="item_action_skip">skip</string>
+    <string name="item_action_reactivate">reactivate</string>
+
 
 
 </resources>

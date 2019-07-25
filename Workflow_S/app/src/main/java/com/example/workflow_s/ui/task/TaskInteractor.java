@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.task;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.User;
 import com.example.workflow_s.network.ApiClient;
 import com.example.workflow_s.network.ApiService;
 
@@ -15,6 +16,40 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
+
+    @Override
+    public void renameTask(int taskId, String taskName, final OnFinishedRenameTaskListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.renameTask(taskId, taskName);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedRenameTask();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
+
+    @Override
+    public void getUserById(String userId, final OnFinishedGetInforUserListener listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<User> call = service.getUserById(userId);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                listener.onFinishedGetUser(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
 
     @Override
     public void getTaskMember(final int taskId, final boolean isSelected, final OnFinishedGetTaskMemberListener listener) {
@@ -70,13 +105,13 @@ public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
     }
 
     @Override
-    public void completeTask(int taskId, String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
+    public void changeTaskStatus(String userId, int taskId, final String taskStatus, final OnFinishedChangeTaskStatusListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
-        Call<ResponseBody> call = service.completeTask(taskId, taskStatus);
+        Call<ResponseBody> call = service.changeTaskStatus(userId, taskId, taskStatus);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                listener.onFinishedChangeTaskStatus();
+                listener.onFinishedChangeTaskStatus(taskStatus);
             }
 
             @Override

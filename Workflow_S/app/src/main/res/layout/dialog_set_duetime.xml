@@ -9,16 +9,19 @@
     android:gravity="center_horizontal"
     android:layout_gravity="center">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SET DUE TIME"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:paddingVertical="16dp"
-        android:fontFamily="@font/avenir_heavy"
-        android:background="@drawable/background_textview_dialog"
-        android:gravity="center"/>
+        android:background="@drawable/container_alert_dialog_light_blue">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/deadline_large_ic"
+            android:layout_gravity="center"
+            android:paddingVertical="22dp" />
+
+    </FrameLayout>
     
     <LinearLayout
         android:layout_width="300dp"
@@ -36,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="10/10/2019"
             android:textColor="@color/colorPrimaryText"
-            android:fontFamily="@font/avenir_heavy"
+            android:fontFamily="@font/avenir_medium"
             android:textSize="16sp"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
@@ -68,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="10:00 PM"
             android:textColor="@color/colorPrimaryText"
-            android:fontFamily="@font/avenir_heavy"
+            android:fontFamily="@font/avenir_medium"
             android:textSize="16sp"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
@@ -114,10 +117,10 @@
                 android:layout_height="40dp"
                 android:text="Save"
                 android:textAllCaps="false"
-                android:textSize="15sp"
+                android:textSize="14dp"
                 android:textColor="@android:color/white"
                 android:fontFamily="@font/avenir_heavy"
-                android:background="@drawable/button_radius_dark"
+                android:background="@drawable/button_radius_light_blue"
                 android:layout_marginHorizontal="5dp" />
 
             <Button
@@ -125,7 +128,7 @@
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:text="Cancel"
-                android:textSize="15sp"
+                android:textSize="14dp"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimaryText"
                 android:fontFamily="@font/avenir_heavy"

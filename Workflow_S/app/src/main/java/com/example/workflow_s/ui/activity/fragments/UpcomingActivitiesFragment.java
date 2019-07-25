@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
@@ -33,6 +34,7 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
     private RecyclerView upcomingActivitiesRecyclerView;
     private TodayActivitiesAdapter mAdapter;
     private RecyclerView.LayoutManager upcomingLayoutManager;
+    private LinearLayout mDataLayout;
 
     private ActivityContract.ActivityPresenter mPresenter;
     private String orgId, userId;
@@ -48,6 +50,7 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initData();
+        mDataLayout = view.findViewById(R.id.task_data_notfound_message);
         setupUpcomingActivitiesRV();
     }
 
@@ -61,7 +64,7 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
     public void setupUpcomingActivitiesRV() {
         upcomingActivitiesRecyclerView = view.findViewById(R.id.rv_upcoming_activities);
         upcomingActivitiesRecyclerView.setHasFixedSize(true);
-        upcomingLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        upcomingLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         upcomingActivitiesRecyclerView.setLayoutManager(upcomingLayoutManager);
 
         mAdapter = new TodayActivitiesAdapter();
@@ -70,6 +73,12 @@ public class UpcomingActivitiesFragment extends Fragment implements ActivityCont
 
     @Override
     public void finishedGetUpcomingTasks(List<Task> lisUpcomingTask) {
-        mAdapter.setTasks(lisUpcomingTask);
+        if (lisUpcomingTask.size() == 0) {
+            mDataLayout.setVisibility(View.VISIBLE);
+        } else {
+            mAdapter.setTasks(lisUpcomingTask);
+            mDataLayout.setVisibility(View.GONE);
+        }
+
     }
 }

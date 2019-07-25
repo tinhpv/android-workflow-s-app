@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.home.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,7 +118,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<TodayTaskAdapter.Toda
     public class TodayTaskViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextView, mTextViewTime;
-        private LinearLayout item;
+        private ConstraintLayout item;
 
 
         public TodayTaskViewHolder(@NonNull View itemView) {

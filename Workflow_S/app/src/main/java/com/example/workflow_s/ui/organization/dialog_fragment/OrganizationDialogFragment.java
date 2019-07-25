@@ -70,7 +70,7 @@ public class OrganizationDialogFragment extends BottomSheetDialogFragment implem
     private void setupOrganizationRV() {
         organizationNameRecyclerView = view.findViewById(R.id.rv_org_name);
         organizationNameRecyclerView.setHasFixedSize(true);
-        orgNameLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        orgNameLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         organizationNameRecyclerView.setLayoutManager(orgNameLayoutManager);
         mAdapter = new OrganizationDialogAdapter(this);
         organizationNameRecyclerView.setAdapter(mAdapter);

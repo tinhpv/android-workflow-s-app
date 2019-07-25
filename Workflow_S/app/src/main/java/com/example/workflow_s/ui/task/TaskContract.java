@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.task;
 import com.example.workflow_s.model.Checklist;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.checklist.ChecklistContract;
 
 import java.util.ArrayList;
@@ -16,14 +17,19 @@ public interface TaskContract {
         void loadChecklistData(int orgId, int checklistId);
         void getTaskMember(int taskId, boolean isSelected);
         void loadTasks(int checklistId);
-        void changeTaskStatus(int taskId, String taskStatus);
+        void changeTaskStatus(String userId, int taskId, String taskStatus);
         void changeChecklistStatus(int checklistId, String status);
+        void getUserInfor(String userId);
+        void renameTask(int taskId, String taskName);
     }
 
     interface TaskView {
         void finishGetChecklist(Checklist checklist);
-        void finishedChangeTaskStatus();
+        void finishedChangeTaskStatus(String status);
         void finishChangeChecklistStatus(String status);
+        void finishGetInfo(User user);
+        void finishRenameTask();
+        void finishedLoadAllTasks(List<Task> taskList);
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
     }
 
@@ -40,7 +46,7 @@ public interface TaskContract {
         }
 
         interface OnFinishedChangeTaskStatusListener {
-            void onFinishedChangeTaskStatus();
+            void onFinishedChangeTaskStatus(String taskStatus);
             void onFailure(Throwable t);
         }
 
@@ -59,9 +65,22 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetInforUserListener {
+            void onFinishedGetUser(User user);
+            void onFailure(Throwable t);
+        }
+
+        interface OnFinishedRenameTaskListener {
+            void onFinishedRenameTask();
+            void onFailure(Throwable t);
+        }
+
+
+        void renameTask(int taskId, String taskName, OnFinishedRenameTaskListener listener);
+        void getUserById(String userId, OnFinishedGetInforUserListener listener);
         void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);
         void getAllTasks(int checklistId, OnFinishedGetTasksListener onFinishedLIstener);
-        void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
+        void changeTaskStatus(String userId, int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void completeChecklist(int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);
         void getChecklistData(int orgId, int checklistId, OnFinishedLoadChecklistDataListener listener);
 

@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
-                android:nestedScrollingEnabled="true"></androidx.recyclerview.widget.RecyclerView>
+                android:nestedScrollingEnabled="false"></androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
     </ScrollView>
@@ -67,7 +67,7 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/colorPrimary"
-        android:src="@mipmap/checkmark_ic_white"
+        android:src="@mipmap/running_icon_white"
         app:borderWidth="0dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -115,8 +115,8 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_template, container, false);
-        getActivity().setTitle("");
-        //((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        getActivity().setTitle("Template");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         return view;
     }
 
@@ -190,10 +190,7 @@ public class TemplateFragment extends Fragment implements TemplateContract.Templ
                 categoryList.add(template.getCategory());
             }
         } // end for
-
     }
-
-
 
     @Override
     public void onFinishSelectCategory(String category) {

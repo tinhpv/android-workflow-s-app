@@ -82,8 +82,8 @@ public class TaskDetailPresenterImpl implements TaskDetailContract.TaskDetailPre
     }
 
     @Override
-    public void completeTask(int taskId, String taskStatus) {
-        mGetTaskDetailDataInteractor.completeTask(taskId, taskStatus, this);
+    public void completeTask(String userId, int taskId, String taskStatus) {
+        mGetTaskDetailDataInteractor.completeTask(userId, taskId, taskStatus, this);
     }
 
     @Override

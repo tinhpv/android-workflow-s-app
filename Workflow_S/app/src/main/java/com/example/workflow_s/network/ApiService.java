@@ -99,7 +99,7 @@ public interface ApiService {
 
     @POST("/api/Checklists/run/{userId}")
     Call<Checklist> runChecklist(@Path("userId") String userId,
-                                    @Body Template template);
+                                 @Body Template template);
 
     @GET("/api/UserOrganizations/organization/{userId}")
     Call<Organization> getOrganization(@Path("userId") String userId);
@@ -138,13 +138,15 @@ public interface ApiService {
     @PUT("/api/Checklists/done/{checklistid}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId);
 
-    @PUT("/api/TaskItems/done/{taskid}/{status}")
-    Call<ResponseBody> completeTask(@Path("taskid") int taskId, @Path("status") String taskStatus);
+    @PUT("/api/TaskItems/setstatus/{userid}/{taskid}/{status}")
+    Call<ResponseBody> changeTaskStatus(@Path("userid") String userId,
+                                        @Path("taskid") int taskId,
+                                        @Path("status") String taskStatus);
 
     @PUT("/api/ContentDetails/update")
     Call<ResponseBody> saveTaskContentDetail(@Body List<ContentDetail> detailList);
 
-    @PUT("/api/Checklists/done/{checklistid}/{status}")
+    @PUT("/api/Checklists/setstatus/{checklistid}/{status}")
     Call<ResponseBody> completeChecklist(@Path("checklistid") int checklistId,
                                          @Path("status") String status);
 
@@ -179,4 +181,13 @@ public interface ApiService {
 
     @POST("/api/Comments/comment")
     Call<ResponseBody> writeComment(@Body Comment comment);
+
+    @GET("/api/Users/{id}")
+    Call<User> getUserById(@Path("id") String userID);
+
+
+    @PUT("/api/TaskItems/setname/{taskid}/{name}")
+    Call<ResponseBody> renameTask(@Path("taskid") int taskId,
+                                  @Path("name") String taskName);
+
 }

@@ -3,6 +3,7 @@ package com.example.workflow_s.ui.task.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,19 +30,12 @@ import java.util.List;
 
 public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapter.TaskViewHolder> {
 
-    TemplateTaskAdapter.CheckboxListener listener;
-
-    public interface CheckboxListener {
-        void onEventCheckBox(Boolean isSelected);
-    }
-
     private List<Task> mTemplateTaskList;
     private TemplateTaskFragment mTemplateTaskFragment;
     private RecyclerView mRecyclerView;
 
-    public TemplateTaskAdapter(TemplateTaskFragment templateTaskFragment, CheckboxListener listener) {
+    public TemplateTaskAdapter(TemplateTaskFragment templateTaskFragment) {
         mTemplateTaskFragment = templateTaskFragment;
-        this.listener = listener;
     }
 
     public void setTemplateTaskList(List<Task> templateTaskList) {
@@ -60,7 +54,7 @@ public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapte
     public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        int layoutId = R.layout.recyclerview_item_task;
+        int layoutId = R.layout.recyclerview_item_task_template;
         View view = layoutInflater.inflate(layoutId, viewGroup, false);
         TaskViewHolder viewHolder = new TaskViewHolder(view);
 
@@ -81,13 +75,6 @@ public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapte
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
         taskViewHolder.mTextView.setText(mTemplateTaskList.get(i).getName());
-        taskViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                buttonView.setChecked(false);
-                listener.onEventCheckBox(isChecked);
-            }
-        });
     }
 
     @Override
@@ -102,9 +89,8 @@ public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapte
     // viewholder
     public class TaskViewHolder extends RecyclerView.ViewHolder {
 
-        private LinearLayout mTaskItem;
+        private ConstraintLayout mTaskItem;
         private TextView mTextView;
-        private CheckBox mCheckBox;
         public View view;
 
         public TaskViewHolder(@NonNull View itemView) {
@@ -112,7 +98,6 @@ public class TemplateTaskAdapter extends RecyclerView.Adapter<TemplateTaskAdapte
             view = itemView;
             mTaskItem = itemView.findViewById(R.id.task_item);
             mTextView = itemView.findViewById(R.id.txt_task_name);
-            mCheckBox = itemView.findViewById(R.id.cb_complete_task);
         }
     }
 }

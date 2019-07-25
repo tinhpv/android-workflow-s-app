@@ -1,14 +1,18 @@
 package com.example.workflow_s.ui.activity.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Task;
@@ -32,6 +36,7 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
     private TodayActivitiesAdapter mTodayActivitiesAdapter;
     private RecyclerView todayActivitiesRecyclerView;
     private RecyclerView.LayoutManager todayLayoutManager;
+    private LinearLayout mDataNotFound;
 
     private ActivityContract.ActivityPresenter mPresenter;
     private String orgId, userId;
@@ -40,12 +45,14 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_today_activity, container, false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         initData();
+        mDataNotFound = view.findViewById(R.id.task_data_notfound_message);
         setupTodayActivitiesRV();
     }
 
@@ -68,6 +75,12 @@ public class TodayActivitiesFragment extends Fragment implements ActivityContrac
 
     @Override
     public void finishedGetDueTasks(List<Task> listDueTask) {
-        mTodayActivitiesAdapter.setTasks(listDueTask);
+        if (listDueTask.size() == 0) {
+            mDataNotFound.setVisibility(View.VISIBLE);
+        } else {
+            mDataNotFound.setVisibility(View.GONE);
+            mTodayActivitiesAdapter.setTasks(listDueTask);
+        }
+
     }
 }

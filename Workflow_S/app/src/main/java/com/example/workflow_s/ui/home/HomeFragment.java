@@ -1,5 +1,6 @@
 package com.example.workflow_s.ui.home;
 
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -250,39 +251,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         btnActivity.setBackgroundResource(0);
     }
 
-    private boolean isOverdue(Checklist checklist) {
-        String time = "not set";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String dateSelected = checklist.getDueTime().split("T")[0];
-        String timeSelected = checklist.getDueTime().split("T")[1];
-        Date currentTime = Calendar.getInstance().getTime();
-        String dueTime = dateSelected + " " + timeSelected;
-        try {
-            Date overdue = sdf.parse(dueTime);
-            long totalTime = overdue.getTime() - currentTime.getTime();
-            time = String.format("%dh",
-                    TimeUnit.MILLISECONDS.toHours(totalTime));
-            if (Integer.parseInt(time.split("h")[0]) < 0) {
-                return true;
-
-            } else if (Integer.parseInt(time.split("h")[0]) == 0){
-                time = String.format("%dm",
-                        TimeUnit.MILLISECONDS.toMinutes(totalTime));
-                if (Integer.parseInt(time.split("m")[0]) < 1) {
-                    return true;
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    private boolean isOverdue(Checklist checklist) {
+//        String time = "not set";
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//
+//        String dateSelected = checklist.getDueTime().split("T")[0];
+//        String timeSelected = checklist.getDueTime().split("T")[1];
+//        Date currentTime = Calendar.getInstance().getTime();
+//        String dueTime = dateSelected + " " + timeSelected;
+//        try {
+//            Date overdue = sdf.parse(dueTime);
+//            long totalTime = overdue.getTime() - currentTime.getTime();
+//            time = String.format("%dh",
+//                    TimeUnit.MILLISECONDS.toHours(totalTime));
+//            if (Integer.parseInt(time.split("h")[0]) < 0) {
+//                return true;
+//
+//            } else if (Integer.parseInt(time.split("h")[0]) == 0){
+//                time = String.format("%dm",
+//                        TimeUnit.MILLISECONDS.toMinutes(totalTime));
+//                if (Integer.parseInt(time.split("m")[0]) < 1) {
+//                    return true;
+//                }
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
     private void countChecklistByType(Checklist checklist) {
         if (checklist.getTemplateStatus().equals("Done")) {
             completedChecklistNum++;
-        } else if (isOverdue(checklist)) {
+        } else if (checklist.getExpired()) {
             overdueChecklistNum++;
         } else {
             progressChecklistNum++;
@@ -325,6 +326,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void setDataToChecklistRecyclerView(ArrayList<Checklist> datasource) {
+        completedChecklistNum = 0;
+        progressChecklistNum = 0;
+        overdueChecklistNum = 0;
+
         mChecklistShimmerFrameLayout.stopShimmerAnimation();
         mChecklistShimmerFrameLayout.setVisibility(View.GONE);
 
@@ -338,26 +343,71 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 if (!checklist.getExpired() && !checklist.getTemplateStatus().equals("Done")) {
                     if (checklist.getUserId().equals(userId)) {
                         checklists.add(checklist);
-                        countChecklistByType(checklist);
-                    } else {
-                        List<ChecklistMember> listMember = checklist.getChecklistMembers();
-                        if (listMember != null) {
-
-                            for (ChecklistMember member : listMember) {
-                                if (member.getUserId().equals(userId)) {
-                                    checklists.add(checklist);
-                                    countChecklistByType(checklist);
-                                } // end if
-                            } // end for
-                        } // end if
                     }
+//                    else {
+//                        List<ChecklistMember> listMember = checklist.getChecklistMembers();
+//                        if (listMember != null) {
+//
+//                            for (ChecklistMember member : listMember) {
+//                                if (member.getUserId().equals(userId)) {
+//                                    checklists.add(checklist);
+//                                } // end if
+//                            } // end for
+//                        } // end if
+//                    }
                 }
             }
 
-            mChecklistProgressAdapter.setChecklists(checklists);
-            tvCompletedChecklist.setText(String.valueOf(completedChecklistNum));
-            tvOverdueChecklist.setText(String.valueOf(overdueChecklistNum));
-            tvInProgressChecklist.setText(String.valueOf(progressChecklistNum));
+            if (checklists.size() != 0) {
+                mChecklistProgressAdapter.setChecklists(checklists);
+            } else {
+                mCheckListDataStatusMessage.setVisibility(View.VISIBLE);
+            }
+
+            // categorize
+            for (Checklist checklist : datasource) {
+                if (checklist.getUserId().equals(userId)) {
+                    countChecklistByType(checklist);
+                }
+//                else {
+//                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
+//                    if (listMember != null) {
+//
+//                        for (ChecklistMember member : listMember) {
+//                            if (member.getUserId().equals(userId)) {
+//                                countChecklistByType(checklist);
+//                            } // end if
+//                        } // end for
+//                    } // end if
+//                }
+            }
+
+            ValueAnimator animator = ValueAnimator.ofInt(0, completedChecklistNum);
+            animator.setDuration(500);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    tvCompletedChecklist.setText(animation.getAnimatedValue().toString());
+                }
+            });
+
+            animator.start();
+            animator = ValueAnimator.ofInt(0, overdueChecklistNum);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    tvOverdueChecklist.setText(animation.getAnimatedValue().toString());
+                }
+            });
+
+            animator.start();
+
+            animator = ValueAnimator.ofInt(0, progressChecklistNum);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    tvInProgressChecklist.setText(animation.getAnimatedValue().toString());
+                }
+            });
+
+            animator.start();
         }
 
     }

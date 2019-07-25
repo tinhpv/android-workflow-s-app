@@ -1,11 +1,13 @@
 package com.example.workflow_s.ui.taskdetail.checklist;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +22,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +37,6 @@ import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.ui.comment.CommentAdapter;
 import com.example.workflow_s.ui.comment.CommentFragment;
-import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
@@ -73,7 +72,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     private View view;
     private int taskId, checklistId;
-    private String currentPhotoPath, taskStatus, checklistUserId;
+    private String currentPhotoPath, taskStatus, checklistUserId, userId;
     private LinearLayout mContainerLayout;
     private FloatingActionButton buttonCompleteTask, buttonSaveContent;
     private TextView tvAlertMember, tvCommentNumber;
@@ -146,6 +145,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mContainerLayout = view.findViewById(R.id.task_detail_layout);
         tvAlertMember = view.findViewById(R.id.tv_alert_member);
+
         buttonCompleteTask = view.findViewById(R.id.bt_complete_task);
         buttonCompleteTask.setOnClickListener(this);
         buttonSaveContent = view.findViewById(R.id.bt_save_content);
@@ -156,21 +156,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         layoutChatbox = view.findViewById(R.id.layout_chatbox);
         layoutChatbox.setOnClickListener(this);
 
-//        mScrollView = view.findViewById(R.id.scrollView3);
-//        mScrollView.getViewTreeObserver()
-//                .addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//                    @Override
-//                    public void onScrollChanged() {
-//                        if (mScrollView.getChildAt(0).getBottom()
-//                                <= (mScrollView.getHeight() + mScrollView.getScrollY())) {
-//                            //scroll view is at bottom
-//                            commentBlock.setVisibility(View.VISIBLE);
-//                        } else {
-//                            //scroll view is not at bottom
-//                            commentBlock.setVisibility(View.GONE);
-//                        }
-//                    }
-//                });
+        userId = SharedPreferenceUtils.retrieveData(getContext(), getActivity().getString(R.string.pref_userId));
 
         getTaskIdFromParentFragment();
         bindUI();
@@ -184,6 +170,9 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
         mCommentAdapter = new CommentAdapter(getContext());
         commentRV.setAdapter(mCommentAdapter);
+
+        String avatar = SharedPreferenceUtils.retrieveData(getActivity(), getActivity().getString(R.string.pref_avatar));
+        Glide.with(getActivity()).load(avatar).into(userImageView);
     }
 
     private void getTaskIdFromParentFragment() {
@@ -241,12 +230,13 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void finishedGetTaskDetail(Task task) {
         if (null != task) {
             currentTask = task;
             taskStatus = currentTask.getTaskStatus();
-            updateButtonLayout(taskStatus);
+            updateLayout(taskStatus);
             mPresenter.loadDetails(taskId);
         }
     }
@@ -261,23 +251,26 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         }
     }
 
-    private void updateButtonLayout(String taskStatus) {
-        // FIXME - fix o day neprivate void getTaskIdFromParentFragment() {
-        //        Bundle arguments = getArguments();
-        //        taskId = Integer.parseInt(arguments.getString("taskId"));
-        //        location = arguments.getInt("location_activity");
-        //        checklistId = arguments.getInt("checklistId");
-        //        checklistUserId = arguments.getString("checklistUserId");
-        //
-        //        getActivity().setTitle("Task Detail");
-        //
-        //        isChanged = false;
-        //        imageDataEncoded = new HashMap<String, String>();
-        //    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void updateLayout(String taskStatus) {
+
         if (taskStatus.equals(getString(R.string.task_done))) {
-//            buttonCompleteTask.setText("Reactive");
+            buttonCompleteTask.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.reactivate_task_ic));
+            tvAlertMember.setVisibility(View.VISIBLE);
+            tvAlertMember.setBackgroundColor(getContext().getColor(R.color.accomplishedColor));
+            tvAlertMember.setText("This task is completed");
+
         } else if (taskStatus.equals(getString(R.string.task_running))) {
-//            buttonCompleteTask.setText("Complete");
+            buttonCompleteTask.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.checkmark_ic_white));
+            tvAlertMember.setVisibility(View.INVISIBLE);
+
+        } else if (taskStatus.equals("Failed")) {
+            tvAlertMember.setVisibility(View.VISIBLE);
+            tvAlertMember.setText("This task is skipped!!");
+            tvAlertMember.setBackgroundResource(R.color.home_red);
+            tvAlertMember.setTextColor(getContext().getColor(R.color.extreme_white));
+            buttonCompleteTask.hide();
+            buttonSaveContent.hide();
         }
     }
 
@@ -326,21 +319,36 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
             mContainerLayout.addView(label);
 
             if (isTaskMember) {
-                // button to upload image
-                Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button,
-                        mContainerLayout,
-                        false);
+                if (currentTask.getTaskStatus().equals("Failed")) {
 
-                mContainerLayout.addView(uploadButton);
+                    // button to upload image
+                    Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button_disable,
+                            mContainerLayout,
+                            false);
 
-                uploadButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //shared preferences
-                        SharedPreferenceUtils.saveCurrentOrder(getContext(), orderOfContent);
-                        prepareShowingCategoryDialog();
-                    }
-                });
+                    mContainerLayout.addView(uploadButton);
+
+
+                } else {
+
+                    // button to upload image
+                    Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button,
+                            mContainerLayout,
+                            false);
+
+                    mContainerLayout.addView(uploadButton);
+
+                    uploadButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //shared preferences
+                            SharedPreferenceUtils.saveCurrentOrder(getContext(), orderOfContent);
+                            prepareShowingCategoryDialog();
+                        }
+                    });
+
+                }
+
             } else {
                 Button uploadButton = (Button) inflater.inflate(R.layout.taskdetail_button_disable,
                         mContainerLayout,
@@ -364,32 +372,39 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
         // ... and the edit text here
         if (isTaskMember) {
-            EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
-            userEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (currentTask.getTaskStatus().equals("Failed")) {
+                EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edittext_disable, mContainerLayout, false);
+                mContainerLayout.addView(userEditText);
+            } else {
+                EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edit_text, mContainerLayout, false);
+                userEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        isChanged = true;
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                String tmpEdtTag = "edit_text_detail_" + orderOfContent;
+                userEditText.setTag(tmpEdtTag);
+
+                if (detail.getText() != null) {
+                    userEditText.setText(detail.getText());
                 }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    isChanged = true;
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-            String tmpEdtTag = "edit_text_detail_" + orderOfContent;
-            userEditText.setTag(tmpEdtTag);
-
-            if (detail.getText() != null) {
-                userEditText.setText(detail.getText());
+                mContainerLayout.addView(userEditText);
             }
 
-            mContainerLayout.addView(userEditText);
+
         } else {
             EditText userEditText = (EditText) inflater.inflate(R.layout.taskdetail_edittext_disable, mContainerLayout, false);
             mContainerLayout.addView(userEditText);
@@ -441,6 +456,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     @Override
     public void onFinishedPickingImages(String imagePath, Uri imageData) {
+
         int order =  SharedPreferenceUtils.retrieveDataInt(getContext(), getString(R.string.order));
 
         String tmpImageTag = "img_task_detail_" + order;
@@ -531,20 +547,21 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         Toast.makeText(getContext(), "Change task status successfully", Toast.LENGTH_SHORT).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_complete_task:
                 if (taskStatus.equals(getString(R.string.task_done))) {
                     taskStatus = getString(R.string.task_running);
-                    mPresenter.completeTask(taskId, getString(R.string.task_running));
+                    mPresenter.completeTask(userId, taskId, getString(R.string.task_running));
                 } else {
                     taskStatus = getString(R.string.task_done);
                     handleSaveContentDetail();
-                    mPresenter.completeTask(taskId, getString(R.string.task_done));
+                    mPresenter.completeTask(userId, taskId, getString(R.string.task_done));
                 }
 
-                updateButtonLayout(taskStatus);
+                updateLayout(taskStatus);
                 break;
 
             case R.id.layout_chatbox:

@@ -31,7 +31,7 @@ public interface  TaskDetailContract {
         void loadDetails(int taskId);
         void getTask(int taskId);
         void getTaskMember(int taskId);
-        void completeTask(int taskId, String taskStatus);
+        void completeTask(String userId, int taskId, String taskStatus);
         void uploadImage(int contentId, int orderContent, MultipartBody.Part photo);
         void updateTaskDetail(List<ContentDetail> detailList);
     }
@@ -79,7 +79,7 @@ public interface  TaskDetailContract {
         void getTaskMember(int taskId, OnFinishedGetTaskMemberListener listener);
         void getTaskById(int taskId, OnFinishedGetTaskListener listener);
         void uploadImage(int contentId, int orderContent, MultipartBody.Part photo, OnFinishedUploadImageListener listener);
-        void completeTask(int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
+        void completeTask(String userId, int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
         void getContentDetail(int taskId, OnFinishedGetTaskDetailListener onFinishedListener);
         void saveDetail(List<ContentDetail> list, OnFinishedSaveContentListener saveContentListener);
     }

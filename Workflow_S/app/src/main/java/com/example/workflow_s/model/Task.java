@@ -32,6 +32,9 @@ public class Task implements Serializable {
     @SerializedName("taskStatus")
     private String taskStatus;
 
+    @SerializedName("actionUser")
+    private String actionUser;
+
     @SerializedName("contentDetails")
     private List<ContentDetail> contentDetails;
 
@@ -61,12 +64,33 @@ public class Task implements Serializable {
         this.memberList = userId;
     }
 
+    public Task(Integer id, Integer checklistId, String name, String dueTime, Integer priority, String taskStatus, String actionUser, List<ContentDetail> contentDetails, List<User> memberList, List<TaskMember> taskMemberList) {
+        this.id = id;
+        this.checklistId = checklistId;
+        this.name = name;
+        this.dueTime = dueTime;
+        this.priority = priority;
+        this.taskStatus = taskStatus;
+        this.actionUser = actionUser;
+        this.contentDetails = contentDetails;
+        this.memberList = memberList;
+        this.taskMemberList = taskMemberList;
+    }
+
     public List<TaskMember> getTaskMemberList() {
         return taskMemberList;
     }
 
     public void setTaskMemberList(List<TaskMember> taskMemberList) {
         this.taskMemberList = taskMemberList;
+    }
+
+    public String getActionUser() {
+        return actionUser;
+    }
+
+    public void setActionUser(String actionUser) {
+        this.actionUser = actionUser;
     }
 
     public Integer getId() {
