@@ -17,11 +17,10 @@ public interface TaskContract {
         void getTaskMember(int taskId, boolean isSelected);
         void loadTasks(int checklistId);
         void changeTaskStatus(String userId, int taskId, String taskStatus);
-        void changeChecklistStatus(int checklistId, String status);
+        void changeChecklistStatus(String userId, int checklistId, String status);
         void getUserInfor(String userId);
         void renameTask(int taskId, String taskName);
         void changePriorityTaskList(List<Task> taskList);
-
         void getUserList(int orgId);
     }
 
@@ -95,7 +94,7 @@ public interface TaskContract {
         void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);
         void getAllTasks(int checklistId, OnFinishedGetTasksListener onFinishedLIstener);
         void changeTaskStatus(String userId, int taskId, String taskStatus, OnFinishedChangeTaskStatusListener listener);
-        void completeChecklist(int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);
+        void completeChecklist(String userId, int checklistId, String taskStatus, OnFinishedChangeChecklistStatusListener listener);
         void getChecklistData(int orgId, int checklistId, OnFinishedLoadChecklistDataListener listener);
         void changePriorityTasks(List<Task> taskList, OnFinishedChangePriorityTasks listener);
 

@@ -174,6 +174,7 @@ public class ChecklistTaskFragment extends Fragment
 
         mChecklistChecklistTaskAdapter = new ChecklistTaskAdapter(getContext(), this, this, this);
         checklistTaskRecyclerView.setAdapter(mChecklistChecklistTaskAdapter);
+        mChecklistChecklistTaskAdapter.setChecklistStatus("Checklist");
     }
 
     public void initData() {
@@ -195,8 +196,7 @@ public class ChecklistTaskFragment extends Fragment
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
         mPresenter.getUserList(Integer.parseInt(orgId));
-        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
-        mPresenter.loadTasks(checklistId);
+
     }
 
 
@@ -210,6 +210,8 @@ public class ChecklistTaskFragment extends Fragment
             timeCreatedString = checklist.getTimeCreated();
             totalTask = checklist.getTotalTask();
             doneTask = checklist.getDoneTask();
+
+            mChecklistChecklistTaskAdapter.setChecklistStatus(checklistStatus);
 
             checklistMembers = checklist.getChecklistMembers();
             mChecklistChecklistTaskAdapter.setChecklistMembers(checklistMembers);
@@ -247,6 +249,9 @@ public class ChecklistTaskFragment extends Fragment
     public void finishGetUserList(List<User> userList) {
         if (userList != null) {
             mChecklistChecklistTaskAdapter.setUserList(userList);
+
+            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+            mPresenter.loadTasks(checklistId);
         }
     }
 
@@ -394,7 +399,7 @@ public class ChecklistTaskFragment extends Fragment
 
     @Override
     public void finishRenameTask() {
-        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        mPresenter.loadTasks(checklistId);
     }
 
     private boolean isChecklistMember() {
@@ -409,7 +414,8 @@ public class ChecklistTaskFragment extends Fragment
     @Override
     public void finishedChangeTaskStatus(String status) {
         if (status.equals("Failed") || status.equals("Running")) {
-            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+//            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+            mPresenter.loadTasks(checklistId);
         }
     }
 
@@ -482,7 +488,7 @@ public class ChecklistTaskFragment extends Fragment
         if (status.equals("Done")) {
             showDialogCongrats();
         }
-        mPresenter.changeChecklistStatus(checklistId, status);
+        mPresenter.changeChecklistStatus(userId, checklistId, status);
     }
 
     private void showDialogCongrats() {

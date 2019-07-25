@@ -47,6 +47,7 @@
     <string name="no_data_task_message">Your task that will be due today will appear here.</string>
     <string name="no_data_comment_message">Your comment will appear here.</string>
     <string name="no_data_task_message_2">Your tasks will appear here.</string>
+    <string name="no_data_activities_message">Your task activities will appear here.</string>
 
     <!--task status value-->
     <string name="task_done">Done</string>

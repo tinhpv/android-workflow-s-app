@@ -35,8 +35,10 @@ import com.example.workflow_s.model.Comment;
 import com.example.workflow_s.model.ContentDetail;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
+import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.comment.CommentAdapter;
 import com.example.workflow_s.ui.comment.CommentFragment;
+import com.example.workflow_s.ui.history.HistoryFragment;
 import com.example.workflow_s.ui.taskdetail.TaskDetailContract;
 import com.example.workflow_s.ui.taskdetail.TaskDetailInteractor;
 import com.example.workflow_s.ui.taskdetail.TaskDetailPresenterImpl;
@@ -72,7 +74,8 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
     private View view;
     private int taskId, checklistId;
-    private String currentPhotoPath, taskStatus, checklistUserId, userId;
+    private String currentPhotoPath, taskStatus, checklistUserId, userId, checklistStatus;
+
     private LinearLayout mContainerLayout;
     private FloatingActionButton buttonCompleteTask, buttonSaveContent;
     private TextView tvAlertMember, tvCommentNumber;
@@ -97,6 +100,12 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
+            case R.id.action_activity:
+                Bundle args = new Bundle();
+                args.putInt("taskId", taskId);
+                CommonUtils.replaceFragments(getContext(), HistoryFragment.class, args, true);
+                return true;
+
             case R.id.action_task_assign:
                 AssigningDialogFragment assigningDialogFragment = AssigningDialogFragment.newInstance(taskId, checklistId, checklistUserId, isTaskMember);
                 assigningDialogFragment.show(fm, "fragment_assign_");
@@ -128,9 +137,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     @Override
     public void onPause() {
         super.onPause();
-        if (isChanged) {
-            Toast.makeText(getContext(), "Still not saved", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Nullable
@@ -181,6 +187,7 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
         location = arguments.getInt("location_activity");
         checklistId = arguments.getInt("checklistId");
         checklistUserId = arguments.getString("checklistUserId");
+        checklistStatus = arguments.getString("checklistStatus");
 
         getActivity().setTitle("Task Detail");
 
@@ -242,13 +249,20 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
     }
 
     void updateUIWithAuth(boolean isMember) {
-        if (!isMember) {
-            tvAlertMember.setVisibility(View.VISIBLE);
+        if (checklistStatus.equals("Done")) {
             buttonCompleteTask.hide();
             buttonSaveContent.hide();
         } else {
-            tvAlertMember.setVisibility(View.GONE);
+            if (!isMember) {
+                tvAlertMember.setVisibility(View.VISIBLE);
+                buttonCompleteTask.hide();
+                buttonSaveContent.hide();
+            } else {
+                tvAlertMember.setVisibility(View.GONE);
+            }
         }
+
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -262,7 +276,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
 
         } else if (taskStatus.equals(getString(R.string.task_running))) {
             buttonCompleteTask.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.checkmark_ic_white));
-            tvAlertMember.setVisibility(View.INVISIBLE);
 
         } else if (taskStatus.equals("Failed")) {
             tvAlertMember.setVisibility(View.VISIBLE);
