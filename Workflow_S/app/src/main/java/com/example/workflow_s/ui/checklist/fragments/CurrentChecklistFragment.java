@@ -79,7 +79,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     public CurrentChecklistFragment() {}
 
     //static constructor
-    public static CurrentChecklistFragment newInstance() {
+    public static CurrentChecklistFragment newInstance(int status) {
         final CurrentChecklistFragment currentChecklistFragment = new CurrentChecklistFragment();
         // The 1 below is an optimization, being the number of arguments that will
         // be added to this bundle.  If you know the number of arguments you will add
@@ -90,6 +90,9 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         // the 'name' parameter is NULL then this will work, so you should consider
         // at this point if the parameter is mandatory and if so check for NULL and
         // throw an appropriate error if so
+        Bundle args = new Bundle();
+        args.putInt("status_checklist_current", status);
+        currentChecklistFragment.setArguments(args);
         return currentChecklistFragment;
     }
 
@@ -196,16 +199,16 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
     }
 
     private void initData() {
-        //Bundle args = getArguments();
-        //statusChecklist = args.getInt("status_checklist");
-       // switchStatusChecklist(statusChecklist);
-        mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
-        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
-        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
-        mPresenter.loadAllChecklist(orgId);
-        mPresenter.requestTemplateData(orgId);
-        myStatusChecklist = new ArrayList<>();
-        myTemplateChecklist = new ArrayList<>();
+        Bundle args = getArguments();
+        statusChecklist = args.getInt("status_checklist_current");
+        switchStatusChecklist(statusChecklist);
+//        mPresenter = new ChecklistPresenterImpl(this, new ChecklistInteractor());
+//        orgId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_orgId));
+//        userId = SharedPreferenceUtils.retrieveData(getActivity(), getString(R.string.pref_userId));
+//        mPresenter.loadAllChecklist(orgId);
+//        mPresenter.requestTemplateData(orgId);
+//        myStatusChecklist = new ArrayList<>();
+//        myTemplateChecklist = new ArrayList<>();
     }
 
     private void switchStatusChecklist(int statusChecklist) {
@@ -217,6 +220,10 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         myStatusChecklist = new ArrayList<>();
         myTemplateChecklist = new ArrayList<>();
         switch (statusChecklist) {
+            case 0:
+                selectedTemplate = "All";
+                selectedStatus = "All";
+                break;
             case 1:
                 selectedTemplate = "All";
                 selectedStatus = "Done";
@@ -234,6 +241,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                     selectedStatus = "All";
                     break;
         }
+        btnStatusFiler.setText(selectedStatus);
+        btnTemplateFilter.setText(selectedTemplate);
     }
 
     private void setupChecklistRV() {
@@ -287,8 +296,8 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                         }
                     } // end if
                 } // end for
-                mCurrentChecklistAdapter.setChecklists(currentChecklist);
-                //categorizeChecklist(selectedTemplate, selectedStatus);
+                //mCurrentChecklistAdapter.setChecklists(currentChecklist);
+                categorizeChecklist(selectedTemplate, selectedStatus);
             }
 
         } // end if null

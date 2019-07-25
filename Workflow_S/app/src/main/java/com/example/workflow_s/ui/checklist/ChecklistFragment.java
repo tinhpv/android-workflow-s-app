@@ -73,9 +73,9 @@ public class ChecklistFragment extends Fragment {
         adapter = new ChecklistPagerAdapter(getChildFragmentManager(), NUMBER_OF_TABS);
 
         //intent status
-//        Bundle args = getArguments();
-//        int statusChecklist = args.getInt("status_checklist");
-        //adapter.setStatus(statusChecklist);
+       Bundle args = getArguments();
+       int statusChecklist = args.getInt("status_checklist");
+       adapter.setStatus(statusChecklist);
 
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);

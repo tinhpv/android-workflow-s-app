@@ -186,6 +186,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void onClick(View v) {
+        Bundle args = new Bundle();
+        args.putInt("status_checklist", 0);
         switch (v.getId()) {
             case R.id.btn_activity:
                 CommonUtils.replaceFragments(getContext(), ActivityFragment.class, null, true);
@@ -193,7 +195,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 break;
 
             case R.id.btn_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
+
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, args, true);
                 getActivity().setTitle("Active checklist");
                 break;
 
@@ -203,7 +206,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                 break;
 
             case R.id.bt_view_all_checklist:
-                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, null, true);
+                CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, args, true);
                 getActivity().setTitle("Active checklist");
                 break;
 
