@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         setupChecklistRV();
         setupTaskRV();
         initData();
-
+        onClickChecklistProgress();
 
         String token = FirebaseInstanceId.getInstance().getToken();
         if (token == null) {
@@ -144,6 +144,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
             //Log.i("UserToken", SharedPreferenceUtils.retrieveData(view.getContext(), view.getContext().getString(R.string.pref_token)));
         }
 
+    }
+
+    private void onClickChecklistProgress() {
+        tvCompletedChecklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putInt("status_checklist", 1);
+                CommonUtils.replaceFragments(view.getContext(), ChecklistFragment.class, args, true);
+            }
+        });
+
+        tvInProgressChecklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putInt("status_checklist", 2);
+                CommonUtils.replaceFragments(view.getContext(), ChecklistFragment.class, args, true);
+            }
+        });
+
+        tvOverdueChecklist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putInt("status_checklist", 3);
+                CommonUtils.replaceFragments(view.getContext(), ChecklistFragment.class, args, true);
+            }
+        });
     }
 
 
@@ -250,35 +279,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
         btnChecklist.setBackgroundResource(0);
         btnActivity.setBackgroundResource(0);
     }
-
-//    private boolean isOverdue(Checklist checklist) {
-//        String time = "not set";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//
-//        String dateSelected = checklist.getDueTime().split("T")[0];
-//        String timeSelected = checklist.getDueTime().split("T")[1];
-//        Date currentTime = Calendar.getInstance().getTime();
-//        String dueTime = dateSelected + " " + timeSelected;
-//        try {
-//            Date overdue = sdf.parse(dueTime);
-//            long totalTime = overdue.getTime() - currentTime.getTime();
-//            time = String.format("%dh",
-//                    TimeUnit.MILLISECONDS.toHours(totalTime));
-//            if (Integer.parseInt(time.split("h")[0]) < 0) {
-//                return true;
-//
-//            } else if (Integer.parseInt(time.split("h")[0]) == 0){
-//                time = String.format("%dm",
-//                        TimeUnit.MILLISECONDS.toMinutes(totalTime));
-//                if (Integer.parseInt(time.split("m")[0]) < 1) {
-//                    return true;
-//                }
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
 
     private void countChecklistByType(Checklist checklist) {
         if (checklist.getTemplateStatus().equals("Done")) {

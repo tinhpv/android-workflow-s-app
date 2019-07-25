@@ -3,23 +3,22 @@ package com.example.workflow_s.ui.checklist;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabItem;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.workflow_s.R;
 import com.example.workflow_s.ui.checklist.adapter.ChecklistPagerAdapter;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * Workflow_S
@@ -72,6 +71,11 @@ public class ChecklistFragment extends Fragment {
 
         mViewPager = view.findViewById(R.id.view_checklist_pager);
         adapter = new ChecklistPagerAdapter(getChildFragmentManager(), NUMBER_OF_TABS);
+
+        //intent status
+//        Bundle args = getArguments();
+//        int statusChecklist = args.getInt("status_checklist");
+        //adapter.setStatus(statusChecklist);
 
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);

@@ -312,7 +312,11 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         }
         mTaskList.get(fromPosition).setPriority(fromPosition);
         mTaskList.get(toPosition).setPriority(toPosition);
+        //mDDListener.onChangePriority(mTaskList);
         notifyItemMoved(fromPosition, toPosition);
-        mDDListener.onChangePriority(mTaskList);
+    }
+
+    public List<Task> getTaskList() {
+        return  mTaskList;
     }
 }
