@@ -55,7 +55,7 @@ public class TemplateTaskFragment extends Fragment implements TaskContract.Templ
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_task_template, container, false);
-        getActivity().setTitle("");
+        getActivity().setTitle("Template's Tasks");
         return view;
     }
 

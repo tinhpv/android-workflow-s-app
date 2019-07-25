@@ -22,9 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
+import com.example.workflow_s.model.User;
 import com.example.workflow_s.ui.taskdetail.checklist.ChecklistTaskDetailFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
@@ -32,10 +34,12 @@ import com.example.workflow_s.utils.SharedPreferenceUtils;
 import java.util.Collections;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdapter.TaskViewHolder> {
 
     public interface CheckboxListener {
-        void onEventCheckBox(Boolean isSelected, int taskId);
+        void onEventCheckBox(Boolean isSelected, int taskId, int position);
     }
 
     public interface MenuListener {
@@ -55,6 +59,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
 
     private RecyclerView mRecyclerView;
     private List<Task> mTaskList;
+    private List<User> mUserList;
     private Dialog errorDialog;
     private List<ChecklistMember> mChecklistMembers;
     private int checklistId;
@@ -78,6 +83,10 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         notifyDataSetChanged();
     }
 
+    public void setUserList(List<User> userList) {
+        mUserList = userList;
+    }
+
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -88,10 +97,11 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout mTaskItem;
-        private LinearLayout taskUnavailable;
+        private LinearLayout taskUnavailable, taskAction;
         private CheckBox mCheckBox;
-        private TextView mTextView;
+        private TextView mTextView, tvTaskAction;
         private ImageButton menuButton;
+        private CircleImageView userAvatarAction;
         public View view;
 
         public TaskViewHolder(@NonNull View itemView) {
@@ -102,6 +112,9 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
             mCheckBox = itemView.findViewById(R.id.cb_complete_task);
             menuButton = itemView.findViewById(R.id.bt_item_menu);
             taskUnavailable = itemView.findViewById(R.id.task_being_unavailable);
+            tvTaskAction = itemView.findViewById(R.id.tv_task_action);
+            userAvatarAction = itemView.findViewById(R.id.img_user_avatar);
+            taskAction = itemView.findViewById(R.id.task_action_container);
         }
     }
 
@@ -114,10 +127,10 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     }
 
 
-
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int i) {
+
         Context context = viewGroup.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         int layoutId = R.layout.recyclerview_item_task;
@@ -182,14 +195,31 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         taskViewHolder.menuButton.setTag(i);
 
         final Task currentTask = mTaskList.get(i);
+
         if (currentTask.getTaskStatus().equals("Failed")) {
             taskViewHolder.taskUnavailable.setVisibility(View.VISIBLE);
             taskViewHolder.mCheckBox.setChecked(false);
+            taskViewHolder.taskAction.setVisibility(View.VISIBLE);
+            User user = getUserFromList(currentTask.getActionUser());
+            if (user != null) {
+                Glide.with(mContext).load(user.getAvatar()).into(taskViewHolder.userAvatarAction);
+                taskViewHolder.tvTaskAction.setText(user.getName() + " skipped this task");
+            }
+
         } else if (currentTask.getTaskStatus().equals("Done")) {
             taskViewHolder.mCheckBox.setChecked(true);
             taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            taskViewHolder.taskAction.setVisibility(View.VISIBLE);
+
+            User user = getUserFromList(currentTask.getActionUser());
+            if (user != null) {
+                Glide.with(mContext).load(user.getAvatar()).into(taskViewHolder.userAvatarAction);
+                taskViewHolder.tvTaskAction.setText(user.getName() + " completed this task");
+            }
+
         } else {
             taskViewHolder.mCheckBox.setChecked(false);
+            taskViewHolder.taskAction.setVisibility(View.GONE);
         }
 
 
@@ -203,7 +233,8 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                     } else {
                         taskViewHolder.mTextView.setPaintFlags(taskViewHolder.mTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
                     }
-                    listener.onEventCheckBox(isChecked, mTaskList.get((Integer) taskViewHolder.mCheckBox.getTag()).getId());
+
+                    listener.onEventCheckBox(isChecked, mTaskList.get((Integer) taskViewHolder.mCheckBox.getTag()).getId(), (Integer) taskViewHolder.mCheckBox.getTag());
                 }
             });
         }
@@ -223,6 +254,8 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 PopupMenu popup = new PopupMenu(mContext, v);
                 if (currentTask.getTaskStatus().equals("Failed")) {
                     popup.inflate(R.menu.menu_task_unavailable);
+                } else if (currentTask.getTaskStatus().equals("Done")) {
+                    popup.inflate(R.menu.menu_task_alternative);
                 } else {
                     popup.inflate(R.menu.item_popup_menu);
                 }
@@ -246,6 +279,15 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
                 popup.show();
             }
         });
+    }
+
+    private User getUserFromList(String id) {
+        for (User user : mUserList) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -51,6 +51,7 @@ import com.example.workflow_s.utils.SharedPreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,6 +85,7 @@ public class ChecklistTaskFragment extends Fragment
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
     private List<Task> tasks, tasksPriority;
+    private HashMap<Integer, Integer> taskPositions;
     private boolean isChecklistMember;
 
 
@@ -173,6 +175,9 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     public void initData() {
+
+        taskPositions = new HashMap<>();
+
         // GET NECESSARY DATA FROM PARENT
         Bundle arguments = getArguments();
         checklistId = Integer.parseInt(arguments.getString("checklistId"));
@@ -187,8 +192,7 @@ public class ChecklistTaskFragment extends Fragment
 
         // OK - HARDCODE HERE
         mPresenter = new TaskStatusPresenterImpl(this, new TaskInteractor());
-
-
+        mPresenter.getUserList(Integer.parseInt(orgId));
         mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
         mPresenter.loadTasks(checklistId);
     }
@@ -238,6 +242,13 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     @Override
+    public void finishGetUserList(List<User> userList) {
+        if (userList != null) {
+            mChecklistChecklistTaskAdapter.setUserList(userList);
+        }
+    }
+
+    @Override
     public void finishGetInfo(User user) {
         if (null != user) {
             Glide.with(getContext()).load(user.getAvatar()).into(userImg);
@@ -262,11 +273,12 @@ public class ChecklistTaskFragment extends Fragment
 
 
     @Override
-    public void onEventCheckBox(Boolean isSelected, int taskId) {
+    public void onEventCheckBox(Boolean isSelected, int taskId, int position) {
         if (!checklistStatus.equals("Done")) {
             if (userId.equals(checklistUserId)) {
-                handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+                handleTickTaskOnChecklistTaskFragment(taskId, isSelected, position);
             } else {
+                taskPositions.put(taskId, position);
                 mPresenter.getTaskMember(taskId, isSelected);
             } // end if
         } // end if
@@ -274,6 +286,7 @@ public class ChecklistTaskFragment extends Fragment
 
     @Override
     public void onClickMenu(int taskId, String taskName, String action) {
+
         if (action.equals(getString(R.string.item_action_rename))) { // RENAME
             prepareDisplayRenameDialog(taskId, taskName);
         } else if (action.equals(getActivity().getString(R.string.item_action_skip))) { // SKIP
@@ -294,6 +307,7 @@ public class ChecklistTaskFragment extends Fragment
             @Override
             public void onClick(View v) {
                 mPresenter.changeTaskStatus(userId, taskId, "Running");
+                totalTask++;
                 dialog.dismiss();
             }
         });
@@ -321,6 +335,7 @@ public class ChecklistTaskFragment extends Fragment
             @Override
             public void onClick(View v) {
                 mPresenter.changeTaskStatus(userId, taskId, "Failed");
+                totalTask--;
                 dialog.dismiss();
             }
         });
@@ -410,7 +425,8 @@ public class ChecklistTaskFragment extends Fragment
         }
 
         if (isTaskMember) {
-            handleTickTaskOnChecklistTaskFragment(taskId, isSelected);
+            int position = taskPositions.get(taskId);
+            handleTickTaskOnChecklistTaskFragment(taskId, isSelected, position);
         } else {
             CommonUtils.showDialog(getContext(), "You're not assigned to this task, so you cannot complete it");
             mChecklistChecklistTaskAdapter.setTaskList(tasks);
@@ -423,12 +439,21 @@ public class ChecklistTaskFragment extends Fragment
         Log.i("priority", "tra ve roi");
     }
 
-    private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected) {
+    private void handleTickTaskOnChecklistTaskFragment(int taskId, boolean isSelected, int position) {
+
+        Task currentTask = tasks.get(position);
+        mChecklistChecklistTaskAdapter.setTaskList(tasks);
+
         if (isSelected) {
             doneTask++;
+            currentTask.setTaskStatus("Done");
+            currentTask.setActionUser(userId);
             mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_done));
+
         } else {
             doneTask--;
+            currentTask.setTaskStatus("Failed");
+            currentTask.setActionUser(userId);
             mPresenter.changeTaskStatus(userId, taskId, getActivity().getString(R.string.task_running));
         }
 
@@ -479,7 +504,14 @@ public class ChecklistTaskFragment extends Fragment
     @Override
     public void finishChangeChecklistStatus(String status) {
         checklistStatus = status;
-        mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+        updateButtonAppearanceByStatus(checklistStatus);
+        if (checklistStatus.equals("Done")) {
+            mChecklistCompletedAlert.setVisibility(View.VISIBLE);
+        } else {
+            mChecklistCompletedAlert.setVisibility(View.GONE);
+        }
+        mPresenter.loadTasks(checklistId);
+        doneTask = totalTask;
     }
 
     //drag and drop task

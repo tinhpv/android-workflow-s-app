@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.ui.activity.ActivityFragment;
 import com.example.workflow_s.ui.checklist.ChecklistFragment;
@@ -44,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -342,17 +344,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
                     if (checklist.getUserId().equals(userId)) {
                         checklists.add(checklist);
                     }
-//                    else {
-//                        List<ChecklistMember> listMember = checklist.getChecklistMembers();
-//                        if (listMember != null) {
-//
-//                            for (ChecklistMember member : listMember) {
-//                                if (member.getUserId().equals(userId)) {
-//                                    checklists.add(checklist);
-//                                } // end if
-//                            } // end for
-//                        } // end if
-//                    }
+                    else {
+                        List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                        if (listMember != null) {
+
+                            for (ChecklistMember member : listMember) {
+                                if (member.getUserId().equals(userId)) {
+                                    checklists.add(checklist);
+                                } // end if
+                            } // end for
+                        } // end if
+                    }
                 }
             }
 
@@ -366,22 +368,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
             for (Checklist checklist : datasource) {
                 if (checklist.getUserId().equals(userId)) {
                     countChecklistByType(checklist);
+                } else {
+                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
+                    if (listMember != null) {
+
+                        for (ChecklistMember member : listMember) {
+                            if (member.getUserId().equals(userId)) {
+                                countChecklistByType(checklist);
+                            } // end if
+                        } // end for
+                    } // end if
                 }
-//                else {
-//                    List<ChecklistMember> listMember = checklist.getChecklistMembers();
-//                    if (listMember != null) {
-//
-//                        for (ChecklistMember member : listMember) {
-//                            if (member.getUserId().equals(userId)) {
-//                                countChecklistByType(checklist);
-//                            } // end if
-//                        } // end for
-//                    } // end if
-//                }
             }
 
             ValueAnimator animator = ValueAnimator.ofInt(0, completedChecklistNum);
-            animator.setDuration(500);
+            animator.setDuration(200);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     tvCompletedChecklist.setText(animation.getAnimatedValue().toString());

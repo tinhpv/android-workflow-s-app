@@ -18,6 +18,25 @@ import retrofit2.Response;
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
 
     @Override
+    public void getMemberOrganization(int orgId, final OnFinishedGetMembers onFinishedListener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<List<User>> call = service.getOrganizationMember(orgId);
+
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                onFinishedListener.onFinishedGetMembers(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                onFinishedListener.onFailure(t);
+            }
+        });
+
+    }
+
+    @Override
     public void renameTask(int taskId, String taskName, final OnFinishedRenameTaskListener listener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);
         Call<ResponseBody> call = service.renameTask(taskId, taskName);

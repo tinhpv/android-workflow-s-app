@@ -21,6 +21,8 @@ public interface TaskContract {
         void getUserInfor(String userId);
         void renameTask(int taskId, String taskName);
         void changePriorityTaskList(List<Task> taskList);
+
+        void getUserList(int orgId);
     }
 
     interface TaskView {
@@ -31,6 +33,7 @@ public interface TaskContract {
         void finishRenameTask();
         void finishedLoadAllTasks(List<Task> taskList);
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
+        void finishGetUserList(List<User> userList);
         void finishedChangePriority();
     }
 
@@ -76,12 +79,17 @@ public interface TaskContract {
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedGetMembers {
+            void onFinishedGetMembers(List<User> userList);
+            void onFailure(Throwable t);
+        }
         interface OnFinishedChangePriorityTasks {
             void onFinishedChangePriorityTasks();
             void onFailure(Throwable t);
         }
 
 
+        void getMemberOrganization(int orgId, OnFinishedGetMembers onFinishedListener);
         void renameTask(int taskId, String taskName, OnFinishedRenameTaskListener listener);
         void getUserById(String userId, OnFinishedGetInforUserListener listener);
         void getTaskMember(int taskId, boolean isSelected, OnFinishedGetTaskMemberListener listener);
