@@ -17,6 +17,43 @@ import retrofit2.Response;
 
 public class TaskInteractor implements TaskContract.GetTaskDataInteractor {
 
+
+    @Override
+    public void deleteChecklist(int checklistId, String userId, final OnFinishedDeleteChecklist listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.deleteChecklist(checklistId, userId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedDeleteChecklist();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+
+    }
+
+    @Override
+    public void renameChecklist(int checklistId, String name, final OnFinishedRenameChecklist listener) {
+        ApiService service = ApiClient.getClient().create(ApiService.class);
+        Call<ResponseBody> call = service.setNameOfChecklist(checklistId, name);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                listener.onFinishedRenameChecklist();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                listener.onFailure(t);
+            }
+        });
+    }
+
     @Override
     public void getMemberOrganization(int orgId, final OnFinishedGetMembers onFinishedListener) {
         ApiService service = ApiClient.getClient().create(ApiService.class);

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.workflow_s.R;
 import com.example.workflow_s.model.Checklist;
+import com.example.workflow_s.ui.home.adapter.ChecklistProgressAdapter;
 import com.example.workflow_s.ui.task.task_checklist.ChecklistTaskFragment;
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
@@ -38,16 +39,17 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentChecklistAdapter.CurrentChecklistViewHolder> {
 
-    EventListener listener;
+    MenuListener mMenuListener;
 
-    public interface EventListener {
-        void onEvent(int deletedChecklistId);
-        void onChange(int checklistId, String name);
+
+    public interface MenuListener {
+        void onClickMenu(int checklistId, String checklistName, String checklistUserId, String action, int position);
     }
 
-    public CurrentChecklistAdapter(EventListener listener, Context context) {
-        this.listener = listener;
+
+    public CurrentChecklistAdapter(MenuListener menuListener, Context context) {
         this.mContext = context;
+        this.mMenuListener = menuListener;
     }
 
 
@@ -61,6 +63,9 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
     private TextView idchecklist;
     private int pos;
     private boolean flag = false;
+
+    private int selectedChecklistId, selectedItemPosition;
+    private String selectedChecklistName, selectedChecklistUserId;
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -76,30 +81,28 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         final View view = layoutInflater.inflate(R.layout.recyclerview_item_checklist_progress, viewGroup, false);
         final CurrentChecklistViewHolder viewHolder = new CurrentChecklistViewHolder(view);
 
-
-        //dialog
-        changeDialog = new Dialog(context);
-        changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
-        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        idchecklist = changeDialog.findViewById(R.id.id_checklist);
-        edtChecklistName = changeDialog.findViewById(R.id.edt_name);
-        Button saveName = changeDialog.findViewById(R.id.bt_save);
-        saveName.setOnClickListener(new View.OnClickListener() {
+        final Dialog checklistMenuDialog = new Dialog(context);
+        checklistMenuDialog.setContentView(R.layout.dialog_checklist_option);
+        checklistMenuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Button renameButton = checklistMenuDialog.findViewById(R.id.bt_rename);
+        Button deleteButton = checklistMenuDialog.findViewById(R.id.bt_delete);
+        renameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onChange(Integer.parseInt(idchecklist.getText().toString()), edtChecklistName.getText().toString().trim());
-                changeDialog.cancel();
-                mChecklists.get(pos).setName(edtChecklistName.getText().toString());
+                mMenuListener.onClickMenu(selectedChecklistId, selectedChecklistName, selectedChecklistUserId,"rename", selectedItemPosition);
+                checklistMenuDialog.dismiss();
             }
         });
 
-        Button cancel = changeDialog.findViewById(R.id.bt_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeDialog.cancel();
+                mMenuListener.onClickMenu(selectedChecklistId, selectedChecklistName, selectedChecklistUserId,"delete", selectedItemPosition);
+                checklistMenuDialog.dismiss();
             }
         });
+
+
 
         //checklist item click
         viewHolder.item.setOnClickListener(new View.OnClickListener() {
@@ -113,15 +116,17 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
                 CommonUtils.replaceFragments(v.getContext(), ChecklistTaskFragment.class, args, true);
             }
         });
+
         //checklist item long click
         viewHolder.item.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                changeDialog.show();
+                checklistMenuDialog.show();
                 int index = viewHolder.getAdapterPosition();
-                pos = index;
-                edtChecklistName.setText(mChecklists.get(index).getName());
-                idchecklist.setText(mChecklists.get(index).getId() + "");
+                selectedChecklistId = mChecklists.get(index).getId();
+                selectedChecklistName = mChecklists.get(index).getName();
+                selectedChecklistUserId = mChecklists.get(index).getUserId();
+                selectedItemPosition = index;
                 return true;
             }
         });
@@ -242,10 +247,6 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         }
     };
 
-    public void deleteItem(int position) {
-        Checklist checklist = mChecklists.get(position);
-        listener.onEvent(checklist.getId());
-    }
 
     //viewholder
     public class CurrentChecklistViewHolder extends RecyclerView.ViewHolder {
@@ -273,4 +274,7 @@ public class CurrentChecklistAdapter extends RecyclerView.Adapter<CurrentCheckli
         this.notifyDataSetChanged();
     }
 
+    public List<Checklist> getChecklists() {
+        return mChecklists;
+    }
 }

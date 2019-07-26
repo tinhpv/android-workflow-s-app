@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,7 +58,8 @@ import java.util.concurrent.TimeUnit;
  **/
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView, ChecklistProgressAdapter.EventListener {
+public class HomeFragment extends Fragment implements View.OnClickListener,
+        HomeContract.HomeView, ChecklistProgressAdapter.MenuListener {
 
     View view;
     private Button btnTemplate, btnChecklist, btnActivity, btnViewAllChecklist, btnViewAllActivities;
@@ -252,17 +256,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
         mChecklistProgressAdapter = new ChecklistProgressAdapter(this, getContext());
         checklistProgressRecyclerView.setAdapter(mChecklistProgressAdapter);
-
-        SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                final int position = viewHolder.getAdapterPosition();
-                mChecklistProgressAdapter.deleteItem(position);
-            }
-        };
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
-        itemTouchhelper.attachToRecyclerView(checklistProgressRecyclerView);
     }
 
     private void makeDashboardButtonLookGood() {
@@ -442,43 +435,115 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
 
     @Override
     public void finishDeleteChecklist() {
-        mPresenter.loadRunningChecklists(orgId);
+        //mPresenter.loadRunningChecklists(orgId);
     }
+
 
     @Override
-    public void onEvent(int deletedChecklistId, int position) {
-        handleShowConfirmDialog(deletedChecklistId);
+    public void onClickMenu(int checklistId, String checklistName, String checklistUserId, String action, int position) {
+        if (action.equals("delete")) {
+            handleShowConfirmDialog(checklistId, checklistUserId, position);
+        } else { // rename
+            prepareShowRenameDialog(checklistId, checklistName, checklistUserId, position);
+        }
     }
 
-    @Override
-    public void onChange(int checklistId, String name) {
-        mPresenter.setNameOfChecklist(checklistId, name);
-        mChecklistProgressAdapter.notifyDataSetChanged();
+    private void prepareShowRenameDialog(final int checklistId, String checklistName, String checklistUserId, final int position) {
+        if (userId.equals(checklistUserId)) {
+            final Dialog changeDialog = new Dialog(getContext());
+            changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
+            changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            final EditText edtChecklistName = changeDialog.findViewById(R.id.edt_name);
+            edtChecklistName.setText(checklistName);
+
+            Button saveName = changeDialog.findViewById(R.id.bt_save);
+            saveName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String newName = edtChecklistName.getText().toString().trim();
+                    if (newName.length() == 0) {
+                        Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
+                        edtChecklistName.startAnimation(shakeAnimation);
+                    } else {
+                        checklists.get(position).setName(newName);
+                        mChecklistProgressAdapter.notifyDataSetChanged();
+                        mPresenter.setNameOfChecklist(checklistId, newName);
+                        changeDialog.dismiss();
+                    }
+                }
+            });
+
+            Button cancel = changeDialog.findViewById(R.id.bt_cancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeDialog.dismiss();
+                }
+            });
+
+            changeDialog.show();
+        } else {
+            final Dialog errorDialog = new Dialog(getContext());
+            errorDialog.setContentView(R.layout.dialog_error_task);
+            errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+            msg.setText("You're not the owner, so cannot delete!");
+
+            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    errorDialog.cancel();
+                }
+            });
+            errorDialog.show();
+        }
+
     }
 
-    private void handleShowConfirmDialog(final int deletedChecklistId) {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+    private void handleShowConfirmDialog(final int deletedChecklistId, String checklistUserId, final int position) {
+        if (userId.equals(checklistUserId)) {
+            final Dialog dialog = new Dialog(getContext());
+            dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
 
-        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
-        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+            Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+            Button cancelButton = dialog.findViewById(R.id.btn_cancel);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v2) {
-                mPresenter.deleteChecklist(deletedChecklistId, userId);
-                dialog.dismiss();
-            }
-        });
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v2) {
+                    mPresenter.deleteChecklist(deletedChecklistId, userId);
+                    checklists.remove(position);
+                    mChecklistProgressAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mChecklistProgressAdapter.notifyDataSetChanged();
-                dialog.dismiss();
-            }
-        });
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mChecklistProgressAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            final Dialog errorDialog = new Dialog(getContext());
+            errorDialog.setContentView(R.layout.dialog_error_task);
+            errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+            msg.setText("You're not the owner, so cannot delete!");
+
+            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    errorDialog.cancel();
+                }
+            });
+            errorDialog.show();
+        }
     }
 }

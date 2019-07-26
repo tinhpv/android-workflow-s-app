@@ -85,6 +85,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
     public void setTaskList(List<Task> taskList) {
         mTaskList = taskList;
         notifyDataSetChanged();
+
     }
 
     public void setUserList(List<User> userList) {
@@ -224,6 +225,7 @@ public class ChecklistTaskAdapter extends RecyclerView.Adapter<ChecklistTaskAdap
         } else {
             taskViewHolder.mCheckBox.setChecked(false);
             taskViewHolder.taskAction.setVisibility(View.GONE);
+            taskViewHolder.taskUnavailable.setVisibility(View.GONE);
         }
 
 

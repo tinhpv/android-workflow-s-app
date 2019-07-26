@@ -19,7 +19,9 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         TaskContract.GetTaskDataInteractor.OnFinishedGetInforUserListener,
         TaskContract.GetTaskDataInteractor.OnFinishedRenameTaskListener,
         TaskContract.GetTaskDataInteractor.OnFinishedChangePriorityTasks,
-        TaskContract.GetTaskDataInteractor.OnFinishedGetMembers{
+        TaskContract.GetTaskDataInteractor.OnFinishedGetMembers,
+        TaskContract.GetTaskDataInteractor.OnFinishedDeleteChecklist,
+        TaskContract.GetTaskDataInteractor.OnFinishedRenameChecklist {
 
     private static final String TAG = "TASK_PRESENTER";
     private TaskContract.TaskView mTaskView;
@@ -38,6 +40,26 @@ public class TaskStatusPresenterImpl implements TaskContract.TaskPresenter,
         this.mGetTaskDataInteractor = mGetTaskDataInteractor;
     }
 
+
+    @Override
+    public void renameChecklist(int checklistId, String name) {
+        mGetTaskDataInteractor.renameChecklist(checklistId, name, this);
+    }
+
+    @Override
+    public void deleteChecklist(int checklistId, String userId) {
+        mGetTaskDataInteractor.deleteChecklist(checklistId, userId, this);
+    }
+
+    @Override
+    public void onFinishedRenameChecklist() {
+        mTaskView.finishRenameChecklist();
+    }
+
+    @Override
+    public void onFinishedDeleteChecklist() {
+        mTaskView.finishDeleteChecklist();
+    }
 
     @Override
     public void onFinishedGetMembers(List<User> userList) {
