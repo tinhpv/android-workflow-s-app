@@ -261,8 +261,6 @@ public class ChecklistTaskDetailFragment extends Fragment implements TaskDetailC
                 tvAlertMember.setVisibility(View.GONE);
             }
         }
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

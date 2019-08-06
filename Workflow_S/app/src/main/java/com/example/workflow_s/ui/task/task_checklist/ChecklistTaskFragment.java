@@ -37,6 +37,7 @@ import com.example.workflow_s.model.ChecklistMember;
 import com.example.workflow_s.model.Task;
 import com.example.workflow_s.model.TaskMember;
 import com.example.workflow_s.model.User;
+import com.example.workflow_s.ui.checklist.ChecklistFragment;
 import com.example.workflow_s.ui.task.ItemTouchListener;
 import com.example.workflow_s.ui.task.TaskContract;
 import com.example.workflow_s.ui.task.TaskInteractor;
@@ -48,6 +49,8 @@ import com.example.workflow_s.ui.task.dialog.time_setting.TimeSettingDialogFragm
 import com.example.workflow_s.utils.CommonUtils;
 import com.example.workflow_s.utils.DateUtils;
 import com.example.workflow_s.utils.SharedPreferenceUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +83,7 @@ public class ChecklistTaskFragment extends Fragment
 
     private TaskContract.TaskPresenter mPresenter;
     private int checklistId;
-    private String checklistName, checklistDescription, checklistUserId, currentDueTime, userId, orgId, checklistStatus, timeCreatedString;
+    private String checklistName, checklistDescription, checklistUserId, userId, orgId, checklistStatus, timeCreatedString;
 
     private int totalTask, doneTask, location;
     private List<ChecklistMember> checklistMembers;
@@ -124,6 +127,48 @@ public class ChecklistTaskFragment extends Fragment
     public boolean onOptionsItemSelected(MenuItem item) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         switch (item.getItemId()) {
+            case R.id.action_delete:
+                if (userId.equals(checklistUserId)) {
+                    handleShowConfirmDialog(checklistId);
+                } else {
+                    final Dialog errorDialog = new Dialog(getContext());
+                    errorDialog.setContentView(R.layout.dialog_error_task);
+                    errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+                    msg.setText("You're not the owner, so cannot delete!");
+
+                    Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+                    btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            errorDialog.cancel();
+                        }
+                    });
+                    errorDialog.show();
+                }
+
+                return true;
+            case R.id.action_rename:
+                if (userId.equals(checklistUserId)) {
+                    prepareShowRenameDialog(checklistId, checklistName);
+                } else {
+                    final Dialog errorDialog = new Dialog(getContext());
+                    errorDialog.setContentView(R.layout.dialog_error_task);
+                    errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+                    msg.setText("You're not the owner, so cannot rename!");
+
+                    Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+                    btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            errorDialog.cancel();
+                        }
+                    });
+                    errorDialog.show();
+                }
+
+                return true;
             case R.id.action_set_time:
                 TimeSettingDialogFragment settingDialogFragment
                         = TimeSettingDialogFragment.newInstance(checklistId, checklistUserId, checklistMembers);
@@ -146,7 +191,7 @@ public class ChecklistTaskFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_task_cheklist, container, false);
-        //getActivity().setTitle("Tasks");
+        getActivity().setTitle("");
         //((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         return view;
     }
@@ -292,6 +337,19 @@ public class ChecklistTaskFragment extends Fragment
     }
 
     @Override
+    public void finishRenameChecklist() {
+
+    }
+
+    @Override
+    public void finishDeleteChecklist() {
+
+        Bundle args = new Bundle();
+        args.putInt("status_checklist", 0);
+        CommonUtils.replaceFragments(getContext(), ChecklistFragment.class, args, false);
+    }
+
+    @Override
     public void onClickMenu(int taskId, String taskName, String action) {
 
         if (action.equals(getString(R.string.item_action_rename))) { // RENAME
@@ -413,10 +471,11 @@ public class ChecklistTaskFragment extends Fragment
 
     @Override
     public void finishedChangeTaskStatus(String status) {
-        if (status.equals("Failed") || status.equals("Running")) {
-//            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
-            mPresenter.loadTasks(checklistId);
-        }
+//        if (status.equals("Failed") || status.equals("Running")) {
+////            mPresenter.loadChecklistData(Integer.parseInt(orgId), checklistId);
+//
+//        }
+        mPresenter.loadTasks(checklistId);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -541,5 +600,65 @@ public class ChecklistTaskFragment extends Fragment
 //        tasksPriority = taskList;
 //        mChecklistChecklistTaskAdapter.setTaskList(tasksPriority);
 //        mChecklistChecklistTaskAdapter.notifyDataSetChanged();
+    }
+
+    private void prepareShowRenameDialog(final int checklistId, String checklistName) {
+        final Dialog changeDialog = new Dialog(getContext());
+        changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        final EditText edtChecklistName = changeDialog.findViewById(R.id.edt_name);
+        edtChecklistName.setText(checklistName);
+
+        Button saveName = changeDialog.findViewById(R.id.bt_save);
+        saveName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newName = edtChecklistName.getText().toString().trim();
+                if (newName.length() == 0) {
+                    Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
+                    edtChecklistName.startAnimation(shakeAnimation);
+                } else {
+                    mChecklistName.setText(newName);
+                    mPresenter.renameChecklist(checklistId, newName);
+                    changeDialog.dismiss();
+                }
+            }
+        });
+
+        Button cancel = changeDialog.findViewById(R.id.bt_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDialog.dismiss();
+            }
+        });
+
+        changeDialog.show();
+    }
+
+    private void handleShowConfirmDialog(final int deletedChecklistId) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v2) {
+                mPresenter.deleteChecklist(deletedChecklistId, userId);
+                dialog.dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 }

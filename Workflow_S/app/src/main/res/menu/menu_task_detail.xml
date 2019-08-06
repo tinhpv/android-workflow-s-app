@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-
     <item
         android:id="@+id/action_assign"
         android:title="Assign"
@@ -18,6 +17,22 @@
         android:title="Assign"
         android:orderInCategory="2"
         android:icon="@mipmap/clock_icon_dark"
+        app:showAsAction="ifRoom">
+    </item>
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="Delete"
+        android:orderInCategory="3"
+        android:icon="@mipmap/delete_ic_dark"
+        app:showAsAction="ifRoom">
+    </item>
+
+    <item
+        android:id="@+id/action_rename"
+        android:title="Rename"
+        android:orderInCategory="4"
+        android:icon="@mipmap/edit_ic_dark"
         app:showAsAction="ifRoom">
     </item>
 

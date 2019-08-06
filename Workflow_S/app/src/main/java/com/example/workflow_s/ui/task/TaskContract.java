@@ -20,6 +20,8 @@ public interface TaskContract {
         void changeChecklistStatus(String userId, int checklistId, String status);
         void getUserInfor(String userId);
         void renameTask(int taskId, String taskName);
+        void renameChecklist(int checklistId, String name);
+        void deleteChecklist(int checklistId, String userId);
         void changePriorityTaskList(List<Task> taskList);
         void getUserList(int orgId);
     }
@@ -34,6 +36,8 @@ public interface TaskContract {
         void finishGetTaskMember(List<TaskMember> taskMemberList, boolean isSelected, int taskId);
         void finishGetUserList(List<User> userList);
         void finishedChangePriority();
+        void finishRenameChecklist();
+        void finishDeleteChecklist();
     }
 
     interface TemplateView {
@@ -82,12 +86,24 @@ public interface TaskContract {
             void onFinishedGetMembers(List<User> userList);
             void onFailure(Throwable t);
         }
+
         interface OnFinishedChangePriorityTasks {
             void onFinishedChangePriorityTasks();
             void onFailure(Throwable t);
         }
 
+        interface OnFinishedRenameChecklist {
+            void onFinishedRenameChecklist();
+            void onFailure(Throwable t);
+        }
 
+        interface OnFinishedDeleteChecklist {
+            void onFinishedDeleteChecklist();
+            void onFailure(Throwable t);
+        }
+
+        void deleteChecklist(int checklistId, String userId, OnFinishedDeleteChecklist listener);
+        void renameChecklist(int checklistId, String name, OnFinishedRenameChecklist listener);
         void getMemberOrganization(int orgId, OnFinishedGetMembers onFinishedListener);
         void renameTask(int taskId, String taskName, OnFinishedRenameTaskListener listener);
         void getUserById(String userId, OnFinishedGetInforUserListener listener);

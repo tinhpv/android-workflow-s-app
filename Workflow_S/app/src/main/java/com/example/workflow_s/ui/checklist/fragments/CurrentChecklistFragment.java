@@ -12,10 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,7 +54,8 @@ import java.util.concurrent.TimeUnit;
 
 public class CurrentChecklistFragment extends Fragment implements ChecklistContract.ChecklistView,
         ChecklistDialogFragment.DataBackContract,
-        View.OnClickListener, CurrentChecklistAdapter.EventListener , StatusChecklistDialogFragment.DataBackContract{
+        View.OnClickListener, StatusChecklistDialogFragment.DataBackContract,
+        CurrentChecklistAdapter.MenuListener {
 
     private static final String NAME_ARG = "CurrentChecklist";
 
@@ -253,18 +257,6 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
         mCurrentChecklistAdapter = new CurrentChecklistAdapter(this, getContext());
         checklistRecyclerView.setAdapter(mCurrentChecklistAdapter);
-
-        SwipeToDeleteCallBack swipeToDeleteCallBack = new SwipeToDeleteCallBack(getContext()) {
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                final int position = viewHolder.getAdapterPosition();
-                mCurrentChecklistAdapter.deleteItem(position);
-            }
-        };
-
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallBack);
-        itemTouchhelper.attachToRecyclerView(checklistRecyclerView);
-
     }
 
 
@@ -354,7 +346,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
 
     @Override
     public void finishDeleteChecklist() {
-        mPresenter.loadAllChecklist(orgId);
+//        mPresenter.loadAllChecklist(orgId);
     }
 
     private void categorizeChecklist(String template, String status) {
@@ -470,25 +462,7 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
                 }
 
             }
-           // String tempName = template.getName();
-//            selectedTemplate = tempName;
-//            int templateId = template.getId();
-//            myTemplateChecklist = new ArrayList<>();
-//            if (flagStatus) {
-//                for (Checklist checklist : myStatusChecklist) {
-//                    if (checklist.getTemplateId() == templateId) {
-//                        myTemplateChecklist.add(checklist);
-//                    } //end if
-//                } //end for
-//                mCurrentChecklistAdapter.setChecklists(myTemplateChecklist);
-//            } else {
-//                for (Checklist checklist : currentChecklist) {
-//                    if (checklist.getTemplateId() == templateId) {
-//                        myTemplateChecklist.add(checklist);
-//                    } //end if
-//                } //end for
-//                mCurrentChecklistAdapter.setChecklists(myTemplateChecklist);
-//            }
+
         }
     }
 
@@ -543,41 +517,121 @@ public class CurrentChecklistFragment extends Fragment implements ChecklistContr
         }
     }
 
-    @Override
-    public void onEvent(int deletedChecklistId) {
-        handleShowConfirmDialog(deletedChecklistId);
-    }
 
     @Override
-    public void onChange(int checklistId, String name) {
-        mPresenter.setNameOfChecklist(checklistId, name);
-        mCurrentChecklistAdapter.notifyDataSetChanged();
+    public void onClickMenu(int checklistId, String checklistName, String checklistUserId, String action, int position) {
+        if (action.equals("delete")) {
+            handleShowConfirmDialog(checklistId, checklistUserId, position);
+        } else { // rename
+            prepareShowRenameDialog(checklistId, checklistName, checklistUserId, position);
+        }
     }
 
-    private void handleShowConfirmDialog(final int deletedChecklistId) {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+    private void prepareShowRenameDialog(final int checklistId, String checklistName, String checklistUserId, final int position) {
+        if (userId.equals(checklistUserId)) {
+            final Dialog changeDialog = new Dialog(getContext());
+            changeDialog.setContentView(R.layout.dialog_edit_checklist_name);
+            changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        Button confirmButton = dialog.findViewById(R.id.btn_confirm);
-        Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+            final EditText edtChecklistName = changeDialog.findViewById(R.id.edt_name);
+            edtChecklistName.setText(checklistName);
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v2) {
-                mPresenter.deleteChecklist(deletedChecklistId, userId);
-                dialog.dismiss();
-            }
-        });
+            Button saveName = changeDialog.findViewById(R.id.bt_save);
+            saveName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String newName = edtChecklistName.getText().toString().trim();
+                    if (newName.length() == 0) {
+                        Animation shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.shake_animation);
+                        edtChecklistName.startAnimation(shakeAnimation);
+                    } else {
+                        mPresenter.setNameOfChecklist(checklistId, newName);
+                        List<Checklist> tmp = mCurrentChecklistAdapter.getChecklists();
+                        tmp.get(position).setName(newName);
+                        mCurrentChecklistAdapter.setChecklists(tmp);
+                        changeDialog.dismiss();
+                    }
+                }
+            });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentChecklistAdapter.notifyDataSetChanged();
-                dialog.dismiss();
-            }
-        });
+            Button cancel = changeDialog.findViewById(R.id.bt_cancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeDialog.dismiss();
+                }
+            });
+
+            changeDialog.show();
+        } else {
+            final Dialog errorDialog = new Dialog(getContext());
+            errorDialog.setContentView(R.layout.dialog_error_task);
+            errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+            msg.setText("You're not the owner, so cannot rename it!");
+
+            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    errorDialog.cancel();
+                }
+            });
+            errorDialog.show();
+        }
+
+
+
+    }
+
+
+    private void handleShowConfirmDialog(final int deletedChecklistId, String checklistUserId, final int position) {
+        if (userId.equals(checklistUserId)) {
+
+            final Dialog dialog = new Dialog(getContext());
+            dialog.setContentView(R.layout.dialog_confirm_delete_checklist);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+
+            Button confirmButton = dialog.findViewById(R.id.btn_confirm);
+            Button cancelButton = dialog.findViewById(R.id.btn_cancel);
+
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v2) {
+                    mPresenter.deleteChecklist(deletedChecklistId, userId);
+                    List<Checklist> tmp = mCurrentChecklistAdapter.getChecklists();
+                    tmp.remove(position);
+                    mCurrentChecklistAdapter.setChecklists(tmp);
+                    dialog.dismiss();
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCurrentChecklistAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            final Dialog errorDialog = new Dialog(getContext());
+            errorDialog.setContentView(R.layout.dialog_error_task);
+            errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView msg = errorDialog.findViewById(R.id.tv_error_message);
+            msg.setText("You're not the owner, so cannot delete!");
+
+            Button btnOk = errorDialog.findViewById(R.id.btn_ok);
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    errorDialog.cancel();
+                }
+            });
+            errorDialog.show();
+        }
+
+
     }
 
     @Override
