@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="30dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal"
+    android:layout_gravity="center">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/container_alert_dialog_light_blue">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/edit_large_ic"
+            android:layout_gravity="center"
+            android:paddingVertical="22dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_heavy"
+        android:textColor="@color/colorPrimaryText"
+        android:text="Checklist's name*"
+        android:textSize="16dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginHorizontal="17dp"/>
+
+    <EditText
+        android:id="@+id/edt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="checklistname"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_light"
+        android:textSize="17dp"
+        android:padding="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="22dp"
+        android:layout_marginHorizontal="17dp" />
+
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/bt_save"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/avenir_heavy"
+                android:background="@drawable/button_radius_light_blue"
+                android:layout_marginHorizontal="5dp" />
+
+
+            <Button
+                android:id="@+id/bt_cancel"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="Cancel"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryText"
+                android:fontFamily="@font/avenir_heavy"
+                android:background="@drawable/button_radius_gray"
+                android:layout_marginHorizontal="5dp"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

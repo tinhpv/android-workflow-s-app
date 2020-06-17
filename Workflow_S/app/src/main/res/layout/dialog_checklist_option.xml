@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center_horizontal"
+    android:layout_gravity="center">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/container_alert_dialog_light_blue">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/team_large_ic"
+            android:layout_gravity="center"
+            android:paddingVertical="22dp" />
+
+    </FrameLayout>
+
+
+    <Button
+        android:id="@+id/bt_rename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="Rename"
+        android:textSize="20dp"
+        android:textAllCaps="false"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/avenir_medium"
+        android:textColor="@color/colorPrimaryText"/>
+
+    <Button
+        android:id="@+id/bt_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textAllCaps="false"
+        android:text="Delete"
+        android:textSize="20dp"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/avenir_black"
+        android:textColor="@color/rederror"/>
+
+</LinearLayout>
+

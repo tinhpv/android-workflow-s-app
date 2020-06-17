@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor">
+
+    <TextView
+        android:id="@+id/checklist_completed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This checklist is completed!"
+        android:fontFamily="@font/avenir_black"
+        android:padding="15sp"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:background="@color/accomplishedColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checklist_completed">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_task_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="150dp"
+                android:fontFamily="@font/avenir_heavy"
+                android:text="Student Registration Process"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="24dp" />
+
+            <LinearLayout
+                android:id="@+id/container_infor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_task_name"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="100dp"
+                        android:layout_height="1.5dp"
+                        android:layout_below="@id/container_infor"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/light_blue" />
+
+                    <LinearLayout
+                        android:id="@+id/container_user"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_task_name"
+                        android:orientation="horizontal">
+
+                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/img_user_avatar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/tv_task_name"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="1dp"
+                            android:src="@mipmap/team_large_ic"
+                            app:civ_border_width="0dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@id/img_user_avatar"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="@+id/img_user_avatar"
+                            app:layout_constraintStart_toEndOf="@+id/img_user_avatar"
+                            app:layout_constraintTop_toTopOf="@+id/img_user_avatar">
+
+
+                            <TextView
+                                android:id="@+id/tv_user_display_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir_heavy"
+                                android:text="Phan Vu Tinh"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:id="@+id/tv_user_email"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir_light_oblique"
+                                android:text="Checklist owner"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="9dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="100dp"
+                        android:layout_height="1.5dp"
+                        android:layout_below="@id/container_infor"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/home_red" />
+
+                    <LinearLayout
+                        android:id="@+id/container_time_created"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_task_name"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toRightOf="@id/container_user"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@mipmap/clock_ic_detail" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@id/img_user_avatar"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="@+id/img_user_avatar"
+                            app:layout_constraintStart_toEndOf="@+id/img_user_avatar"
+                            app:layout_constraintTop_toTopOf="@+id/img_user_avatar">
+
+                            <TextView
+                                android:id="@+id/tv_time_created"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir_heavy"
+                                android:text="June 06"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/avenir_light_oblique"
+                                android:text="Time created"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="9dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/container_infor"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/gray" />
+
+            <TextView
+                android:id="@+id/tv_task_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:fontFamily="@font/avenir_light"
+                android:justificationMode="inter_word"
+                android:lineSpacingMultiplier="1.25"
+                android:text=""
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="15sp" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_checklist_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_task_description"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="100dp"
+                android:nestedScrollingEnabled="false"></androidx.recyclerview.widget.RecyclerView>
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+    <ImageButton
+        android:id="@+id/bt_complete_checklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:src="@mipmap/complete_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--android:id="@+id/bt_complete_checklist"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginEnd="32dp"-->
+<!--android:layout_marginRight="32dp"-->
+<!--android:layout_marginBottom="32dp"-->
+<!--android:backgroundTint="@color/colorPrimary"-->
+<!--android:src="@mipmap/checkmark_ic_white"-->
+<!--app:borderWidth="0dp"-->
+<!--app:fabSize="normal"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent" />-->

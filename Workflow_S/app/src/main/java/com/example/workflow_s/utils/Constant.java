@@ -1,0 +1,16 @@
+package com.example.workflow_s.utils;
+
+/**
+ * Workflow_S
+ * Created by TinhPV on 2019-06-15
+ * Copyright © 2019 TinhPV. All rights reserved
+ **/
+
+
+public abstract class Constant {
+    public static final int CODE_LENGTH = 6;
+    public static final String PREFS_NAME = "WORKFLOW_S_PREFERENCE";
+    public static final String IMG_BASE_URL = "https://workflowmanagement20190705102617.azurewebsites.net/img/";
+    public static final String FIREBASE_MSG = "com.google.firebase.MESSAGING_EVENT";
+}
+

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hi there!"
+            android:fontFamily="@font/avenir_heavy"
+            android:textSize="30dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginTop="15dp"
+            android:layout_marginHorizontal="18dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Let's get works done"
+            android:fontFamily="@font/avenir_light"
+            android:textSize="22dp"
+            android:textColor="@color/colorPrimaryText"
+            android:layout_marginHorizontal="18dp"/>
+
+
+        <!--Three main dashboard button-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="15sp">
+
+            <Button
+                android:id="@+id/btn_template"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/template_rounded_ic"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/avenir_heavy"
+                android:text="@string/button_template"
+                android:textAllCaps="false"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/btn_checklist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/checklist_rounded_ic"
+                android:fontFamily="@font/avenir_heavy"
+                android:text="@string/button_checklist"
+                android:drawablePadding="5dp"
+                android:textAllCaps="false"
+                android:textSize="18dp"/>
+
+            <Button
+                android:id="@+id/btn_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/activity_rounded_ic"
+                android:text="@string/button_activity"
+                android:fontFamily="@font/avenir_heavy"
+                android:drawablePadding="5dp"
+                android:textAllCaps="false"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <!--checklist summary-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/container_radius_white_home">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Checklist Summary"
+                    android:fontFamily="@font/avenir_light"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorPrimaryText"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/container_radius_light_blue">
+
+                        <TextView
+                            android:id="@+id/tv_completed_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Completed"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/container_radius_yellow_home">
+
+                        <TextView
+                            android:id="@+id/tv_progress_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="In-progress"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/container_radius_red_home">
+
+                        <TextView
+                            android:id="@+id/tv_overdue_checklist_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="--"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textSize="50dp"
+                            android:textColor="@android:color/white"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Overdue"
+                            android:fontFamily="@font/avenir_light"
+                            android:textSize="15dp"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <!--Checklist progress section-->
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--title-->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IN-PROGRESS CHECKLISTS"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/avenir_light"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/bt_view_all_checklist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="view all"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/avenir_light"
+                    android:background="@drawable/button_radius_dark"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="20dp"/>
+
+            </LinearLayout>
+
+            <!--the list below => RecyclerView-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/checklist_shimmer_view_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    shimmer:duration="800">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/placeholder_checklist_data"/>
+                        <include layout="@layout/placeholder_checklist_data"/>
+                        <include layout="@layout/placeholder_checklist_data"/>
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/checklist_data_notfound_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/nodata_task_checklsit_ic"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_data_checklist_message"
+                        android:gravity="center"
+                        android:layout_marginVertical="18dp"
+                        android:layout_marginHorizontal="70dp"
+                        android:fontFamily="@font/avenir_heavy"
+                        android:textColor="@color/gray"
+                        android:textSize="17dp"/>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_checklist_progress"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:nestedScrollingEnabled="false">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!--today's task section-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--title-->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TODAY TASKS"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/avenir_light"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/bt_view_all_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="view all"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/avenir_light"
+                    android:background="@drawable/button_radius_dark"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="20dp"/>
+
+            </LinearLayout>
+            <!--the list below => RecyclerView-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/task_shimmer_view_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    shimmer:duration="800"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/placeholder_checklist_data"/>
+                        <include layout="@layout/placeholder_checklist_data"/>
+                        <include layout="@layout/placeholder_checklist_data"/>
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/task_data_notfound_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginTop="22dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/nodata_task_checklsit_ic"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_data_task_message"
+                        android:gravity="center"
+                        android:layout_marginVertical="18dp"
+                        android:layout_marginHorizontal="70dp"
+                        android:fontFamily="@font/avenir_heavy"
+                        android:textColor="@color/gray"
+                        android:textSize="17dp"/>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_today_task"
+                    android:scrollbars="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+
+

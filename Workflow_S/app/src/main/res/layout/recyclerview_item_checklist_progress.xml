@@ -1,13 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_checklist_name"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:layout_height="match_parent"
+        android:id="@+id/item_checklist_progress">
 
-</LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_day_created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/avenir_heavy"
+            android:text="18"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="22dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_month_created"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/avenir_heavy"
+            android:text="Nov"
+            android:textColor="@color/light_blue"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_day_created"
+            app:layout_constraintStart_toStartOf="@+id/tv_day_created"
+            app:layout_constraintTop_toBottomOf="@+id/tv_day_created" />
+
+
+
+        <!--separator-->
+        <View
+            android:id="@+id/view"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:background="@color/backgroundColor"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_month_created"
+            app:layout_constraintStart_toEndOf="@+id/tv_day_created"
+            app:layout_constraintTop_toTopOf="@+id/tv_day_created" />
+
+
+        <!--checklist name-->
+        <TextView
+            android:id="@+id/tv_checklist_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/avenir_heavy"
+            android:text="Working Shift_1"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/pb_checklist_home"
+            app:layout_constraintStart_toEndOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/view" />
+
+
+        <!--task number done and total-->
+
+
+        <!--separator-->
+
+        <!--time created-->
+
+        <!--total assigned people-->
+
+
+        <!--template name-->
+        <TextView
+            android:id="@+id/tv_template_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/avenir_light_oblique"
+            android:text="Template's Name here"
+            android:textColor="#666666"
+            android:textSize="12dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_checklist_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_checklist_name" />
+
+        <!--due time-->
+        <TextView
+            android:id="@+id/tv_due_time_checklist"
+            android:layout_width="80dp"
+            android:layout_height="15dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/container_radius_yellow_home"
+            android:fontFamily="@font/avenir_heavy"
+            android:gravity="center"
+            android:text="May 28 "
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_month_created"
+            app:layout_constraintTop_toBottomOf="@+id/tv_template_name" />
+
+
+        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+            android:id="@+id/pb_checklist_home"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="20dp"
+
+            android:layout_marginRight="20dp"
+            app:direction="clockwise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_checklist_name"
+            app:progressColor="@color/home_yellow"
+            app:progressStrokeWidth="3.5dp"
+            app:textColor="@color/colorPrimaryText"
+            app:textSize="9dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
+
+
+    <!--the 3rd line, including just progress bar-->
+    <!--<antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator-->
+    <!--android:id="@+id/circular_progress"-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="200dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginTop="8dp" />-->
+
+
+<!--<ProgressBar-->
+<!--android:id="@+id/pb_checklist_home"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--style="@style/ChecklistProgressBar"-->
+<!--android:theme="@style/ChecklistProgressBar"-->
+<!--android:layout_marginRight="20dp"-->
+<!--android:layout_marginLeft="20dp"-->
+<!--android:layout_marginTop="5dp"-->
+<!--android:max="100"-->
+<!--android:progress="50"-->
+<!--android:minWidth="400dp" />-->

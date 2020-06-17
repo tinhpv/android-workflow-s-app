@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.authentication.AuthenticationActivity">
+
+    <LinearLayout
+        android:id="@+id/phone_submit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My number is"
+            android:fontFamily="@font/avenir_heavy"
+            android:textSize="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp" />
+
+        <EditText
+            android:id="@+id/edt_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Phone Number"
+            android:fontFamily="@font/avenir_light"
+            android:textSize="30dp"
+            android:inputType="phone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="You're still not in our system. For security reason, you need to pass over this authentication step. When you tap Continue. Workflow S! will send you a text with verify code. Your phone number can be used multiples times, the point is your verify code"
+            android:fontFamily="@font/avenir_light"
+            android:textSize="15dp"
+            android:layout_gravity="end" />
+
+        <Button
+            android:id="@+id/bt_phone_continue"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="Continue"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:background="@drawable/button_radius_dark"
+            android:fontFamily="@font/avenir_black"
+            android:onClick="handleContinueButtonTapped"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/code_submit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My code is"
+                android:fontFamily="@font/avenir_heavy"
+                android:textSize="40dp"
+                android:layout_marginLeft="20dp"
+                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Resend"
+                android:fontFamily="@font/avenir_heavy_oblique"
+                android:textSize="18dp"
+                android:layout_marginLeft="16dp"
+                android:textColor="@color/gray"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="160dp"
+            android:layout_height="1.5dp"
+            android:layout_below="@id/container_infor"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/light_blue" />
+
+        <com.goodiebag.pinview.Pinview
+            android:id="@+id/pinView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:pinWidth="45dp"
+            app:pinHeight="45dp"
+            app:pinLength="6"
+            app:cursorVisible="false"
+            app:forceKeyboard="true"
+            app:inputType="number"
+            app:password="false"
+            app:textSize="10dp" />
+
+
+       <Button
+           android:id="@+id/bt_code_continue"
+           android:layout_width="300dp"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_marginTop="30dp"
+           android:text="Continue"
+           android:textColor="@android:color/white"
+           android:textSize="20dp"
+           android:background="@drawable/button_radius_dark"
+           android:fontFamily="@font/avenir_black"
+           android:onClick="handleContinueButtonTapped"/>
+   </LinearLayout>
+
+
+
+</LinearLayout>

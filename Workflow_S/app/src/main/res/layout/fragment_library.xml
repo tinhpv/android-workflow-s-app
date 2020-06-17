@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The third-party libraries and sources were employed during the development of this app. We gratefully acknowledge the authors for their excellent work made on these libraries and resources."
+        android:gravity="left"
+        android:textSize="18dp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_light"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Third-party libraries and resources has been used in the Workflow S! app:"
+        android:gravity="left"
+        android:textSize="18dp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_light"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Firebase (Notification)"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_medium"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Picasso (Loading and Caching images)"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_medium"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Lotties by Airbnb (Animation by JSON)"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_medium"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- ShimmeringLayout by Facebook (Loading effect)"
+        android:gravity="left"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimaryText"
+        android:fontFamily="@font/avenir_medium"
+        android:paddingHorizontal="20dp"
+        android:lineSpacingMultiplier="1.35"
+        android:layout_marginTop="6dp"/>
+
+</LinearLayout>

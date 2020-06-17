@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Choose your picture"
+    android:layout_marginHorizontal="25dp"
+    android:layout_marginTop="10dp"
+    android:textSize="15sp"
+    android:fontFamily="@font/avenir_heavy"
+    android:textColor="@color/colorPrimaryText"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

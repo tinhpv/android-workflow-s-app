@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog_radius"
+    android:id="@+id/dialog_error">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/container_alert_dialog_red">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/permission_warning_ic"
+            android:layout_gravity="center"
+            android:paddingVertical="22dp" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:padding="10dp"
+        android:gravity="center"
+        android:fontFamily="@font/avenir_light"
+        android:text="You're not assigned to this task. So you dont have permission to check it out."
+        android:lines="3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="18sp"/>
+
+    <Button
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/avenir_medium"
+        android:id="@+id/btn_ok"
+        android:layout_width="100dp"
+        android:layout_gravity="center"
+        android:text="OK"
+        android:textColor="#fafafa"
+        android:layout_height="40dp"
+        android:background="@drawable/button_radius_red"/>
+
+</LinearLayout>

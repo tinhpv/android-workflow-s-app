@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    android:id="@+id/parent_container">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_template_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:fontFamily="@font/avenir_heavy"
+                android:padding="17dp"
+                android:text="Student Registration Process"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tv_template_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:fontFamily="@font/avenir_light"
+                android:justificationMode="inter_word"
+                android:lineSpacingMultiplier="1.25"
+                android:text="@string/description_task_demo"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="15sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_template_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="70dp"
+                android:nestedScrollingEnabled="false"></androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bt_run_checklist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@mipmap/running_icon_white"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+<!--<LinearLayout-->
+<!--android:id="@+id/button_block"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="0dp"-->
+<!--android:orientation="vertical"-->
+<!--android:layout_weight="1"-->
+<!--android:gravity="center|bottom"-->
+<!--android:layout_marginBottom="15dp"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--&gt;-->
+
+<!--<Button-->
+    <!--android:id="@+id/bt_run_checklist"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/run_checklist"-->
+    <!--android:textSize="14sp"-->
+    <!--android:paddingVertical="15dp"-->
+    <!--android:paddingHorizontal="30dp"-->
+    <!--android:layout_marginBottom="14dp"-->
+    <!--android:drawableLeft="@mipmap/running_icon_white"-->
+    <!--android:drawablePadding="15dp"-->
+    <!--android:fontFamily="@font/avenir_black"-->
+    <!--android:background="@drawable/button_radius_dark"-->
+    <!--android:textColor="@android:color/white"-->
+    <!--android:layout_gravity="center" />-->
+
+<!--</LinearLayout>-->

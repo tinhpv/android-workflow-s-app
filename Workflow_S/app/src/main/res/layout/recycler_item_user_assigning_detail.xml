@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp">
+
+    <!--avatar user-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/img_user_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:civ_border_width="0dp"
+            android:layout_marginLeft="15dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@id/img_user_avatar">
+
+            <TextView
+                android:id="@+id/tv_user_display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phan Vu Tinh"
+                android:fontFamily="@font/avenir_medium"
+                android:textSize="15sp"
+                android:layout_marginLeft="12dp"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/tv_user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vutinh1998@gmail.com"
+                android:fontFamily="@font/avenir_light_oblique"
+                android:textSize="12sp"
+                android:layout_marginLeft="12dp"
+                android:textColor="@color/colorPrimaryDark" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp">
+
+        <ImageButton
+            android:id="@+id/bt_assign_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_user_ic"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/bt_unassign_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/unadd_user_ic"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent" />
+
+    </FrameLayout>
+
+
+</LinearLayout>
