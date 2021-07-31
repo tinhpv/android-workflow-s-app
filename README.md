@@ -1,5 +1,6 @@
 # Workflow S Mobile App
-This is app for the purpose of managing multiple tasks, people, workflow management is easy to get cumbersome. Considering the need of a solution for managing stuff in a corporation, we provide a solution for workflow management to scale up the productivity of business. 
+Managing multiple tasks, people, workflow management is easy to get cumbersome. Considering the need of a solution for managing stuff in a corporation, 
+WorkflowS system is a solution for workflow management to scale up the productivity of business. 
 
 <img src="https://github.com/tinhpv/workflow-app-android/blob/master/images/screenshot.png?raw=true" />
 
