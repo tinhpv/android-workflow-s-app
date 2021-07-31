@@ -17,4 +17,4 @@ This is app for the purpose of managing multiple tasks, people, workflow managem
 
 ## Contributions
 - Backend, APIs developed and provided by [Phat Lam](https://github.com/lamthanhphat98 "Phat Lam")
-- Mobile app (Android) was designed and developed by [Tinh Phan](https://github.com/tinhpv "Tinh Phan") and Tien Nguyen
+- Mobile app (Android) was designed and developed by [Tinh Phan](https://github.com/tinhpv "Tinh Phan") and [Tien Nguyen](https://github.com/neit98 "Tien Nguyen")
